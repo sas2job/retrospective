@@ -13,10 +13,13 @@
   </head>
 
   <body>
-    <div class="column has-background-light">
+    <% if current_user %>
+      <%= render 'layouts/header' %>
+    <% end %>
+    <div class="column has-background-light content">
       <p id="notice"><%= notice %></p>
       <p id="alert"><%= alert %></p>
-          
+
       <%= yield %>
     </div>
   </body>

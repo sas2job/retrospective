@@ -1,0 +1,13 @@
+<div class="header" id="sticky-header">
+  <div class='has-text-right'>
+    <div class="dropdown">
+      <span class='profile'><img src="<%= asset_path( 'profile1.png' ) %>" /></span>
+      <div class="dropdown-content">
+        <p><%= link_to 'My boards', boards_path %></p>
+      </div>
+      <div class="dropdown-content">
+        <p><%= link_to 'Logout', destroy_user_session_path, method: :delete %></p>
+      </div>
+    </div>
+  </div>
+</div>

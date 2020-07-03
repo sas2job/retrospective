@@ -10,6 +10,23 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
-//= require activestorage
-//= require_tree .
+// = require rails-ujs
+// = require activestorage
+// = require_tree .
+
+document.addEventListener('DOMContentLoaded', function(_) {
+  window.addEventListener('scroll', function() {
+    handleStickyHeader();
+  });
+
+  const header = document.querySelector('#sticky-header');
+  const sticky = header.offsetTop;
+
+  function handleStickyHeader() {
+    if (window.pageYOffset > sticky) {
+      header.classList.add('sticky');
+    } else {
+      header.classList.remove('sticky');
+    }
+  }
+});

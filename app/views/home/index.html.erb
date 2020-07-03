@@ -3,8 +3,6 @@
 <div class='box'>
   <% if user_signed_in? %>
     <p>Logged in as <strong><%= current_user.email %></strong></p>
-    <p> <%= link_to 'See your boards', boards_path %></p>
-    <p class='has-text-right'> <%= link_to 'Logout', destroy_user_session_path, method: :delete %></p>
   <% else %>
     <%= link_to 'Sign in with Alfred', user_alfred_omniauth_authorize_path %>
   <% end %>
