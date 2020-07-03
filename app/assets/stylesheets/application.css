@@ -60,3 +60,14 @@
   width: 30px;
   margin: 9px 9px 0 0;
 }
+
+.float-left {
+  float: left;
+  margin-top: 10px;
+
+}
+
+.float-left h2 {
+  font-size: x-large;
+  color: #484848;
+}
