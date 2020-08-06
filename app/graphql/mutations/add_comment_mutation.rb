@@ -6,7 +6,7 @@ module Mutations
 
     field :comment, Types::CommentType, null: true
 
-    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def resolve(attributes:)
       params = attributes.to_h
       comment = Comment.new(params.merge(author: context[:current_user]))
@@ -21,6 +21,6 @@ module Mutations
         { errors: { full_messages: comment.errors.full_messages } }
       end
     end
-    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
   end
 end
