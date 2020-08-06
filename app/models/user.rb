@@ -4,7 +4,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :recoverable,
-         :rememberable, :validatable, :omniauthable, omniauth_providers: %i[alfred]
+         :rememberable, :validatable, :omniauthable, omniauth_providers: %i[alfred developer]
   has_many :cards, foreign_key: :author_id
   has_many :comments, foreign_key: :author_id
   has_and_belongs_to_many :teams

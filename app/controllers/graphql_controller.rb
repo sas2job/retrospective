@@ -6,7 +6,7 @@ class GraphqlController < ActionController::Base
   # but you'll have to authenticate your user separately
   protect_from_forgery with: :null_session, if: proc { |c| c.request.format == 'application/json' }
 
-  # rubocop:disable Metrics/LineLength, Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/LineLength, Metrics/MethodLength
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
@@ -21,7 +21,7 @@ class GraphqlController < ActionController::Base
 
     handle_error_in_development e
   end
-  # rubocop:enable Metrics/LineLength, Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/LineLength, Metrics/MethodLength
 
   private
 
