@@ -1,14 +1,29 @@
-<h1 class='title'>Welcome to Retro</h1>
-
-<div class='box'>
-  <% if user_signed_in? %>
-    <p>Logged in as <strong><%= current_user.email %></strong></p>
-    <p> <%= link_to 'See your boards', boards_path %></p>
-    <p class='has-text-right'> <%= link_to 'Logout', destroy_user_session_path, method: :delete %></p>
-  <% else %>
-    <% if ENV.fetch('SKIP_ALFRED', false) == 'true' %>
-      <%= link_to 'Sign in as Developer', user_developer_omniauth_callback_path %> |
+<div class='xl:container xl:mx-auto py-8'>
+  <h1 class='text-4xl font-bold text-gray-700 py-8'>
+    Welcome to Retro
+  </h1>
+  <section class='rounded-lg border border-gray-200 p-10 flex flex-col bg-white shadow-lg w-4/12 mx-auto text-center'>
+    <header>
+      <h2 class='text-2xl font-bold text-gray-600 pb-3'>
+        Login
+      </h2>
+    </header>
+    <% if user_signed_in? %>
+      <p>Logged in as <strong><%= current_user.email %></strong></p>
+      <p> <%= link_to 'See your boards', boards_path, class: 'transition-colors ease-in-out duration-300 hover:text-blue-700'%></p>
+      <p class='has-text-right'> <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'transition-colors ease-in-out duration-300 hover:text-blue-700' %></p>
+    <% else %>
+      <% if ENV.fetch('SKIP_ALFRED', false) == 'true' %>
+        <%= link_to user_developer_omniauth_callback_path, class: 'transition-colors ease-in-out duration-300 hover:text-blue-700 p-2' do %>
+          <i class="fab fa-dev"></i>
+          Sign in as Developer
+        <% end %>
+        <hr class="h-px bg-blue-200 my-2" />
+      <% end %>
+      <%= link_to user_alfred_omniauth_authorize_path, class: 'transition-colors ease-in-out duration-300 hover:text-blue-700 p-2' do %>
+        <i class="fas fa-sign-in-alt"></i>
+        Sign in with Alfred
+      <% end %>
     <% end %>
-    <%= link_to 'Sign in with Alfred', user_alfred_omniauth_authorize_path %>
-  <% end %>
+  </section>
 </div>
