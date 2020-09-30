@@ -453,6 +453,7 @@ DEPENDENCIES
   rails-assets-bulma!
   rails-controller-testing
   rails-erd
+  rake
   react-rails
   redis (~> 4.0)
   rspec-rails (~> 4.0.0.beta2)

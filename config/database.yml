@@ -40,5 +40,3 @@ staging:
 production:
   <<: *default
   database: retrospective_production
-  username: retrospective
-  password: <%= ENV['RETROSPECTIVE_DATABASE_PASSWORD'] %>
