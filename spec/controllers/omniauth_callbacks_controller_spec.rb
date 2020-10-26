@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Users::OmniauthCallbacksController do
+  # RSpec.shared_examples :oauth_provider do |provider|
+  #   let(:something) { parameter }
+
+  # end
   before do
     OmniAuth.config.test_mode = true
 
