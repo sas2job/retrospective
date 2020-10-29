@@ -88,12 +88,7 @@ const MembershipList = () => {
       />
     );
   });
-  return (
-    <>
-      <p>users on this board:</p>
-      <div className="tags">{usersListComponent}</div>
-    </>
-  );
+  return <div className="tags">{usersListComponent}</div>;
 };
 
 export default MembershipList;
