@@ -46,7 +46,7 @@ const ReadyButton = () => {
 
   return (
     <button
-      className={`button is-large ${isReady ? 'is-success' : ''}`}
+      className={`board-button ${isReady ? 'is-success' : ''}`}
       type="button"
       onClick={() => {
         toggleReadyStatus({

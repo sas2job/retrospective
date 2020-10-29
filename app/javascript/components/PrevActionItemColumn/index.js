@@ -67,7 +67,7 @@ const PrevActionItemColumn = props => {
 
   return (
     <>
-      <h2 className="subtitle">PREVIOUS BOARD</h2>
+      <h2 className="board-subtitle">PREVIOUS BOARD</h2>
       {actionItems.map(item => {
         return (
           <ActionItem
