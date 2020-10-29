@@ -119,7 +119,7 @@ const ActionItemColumn = props => {
 
   return (
     <>
-      <h2 className="subtitle">ACTION ITEMS</h2>
+      <h2 className="board-subtitle">ACTION ITEMS</h2>
       <div className="box">
         <form onSubmit={submitHandler}>
           <Textarea

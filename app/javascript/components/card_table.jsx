@@ -17,7 +17,7 @@ const CardTable = props => {
   } = props;
 
   const [columnClass, setColumnClass] = useState(
-    initPrevItems.length > 0 ? 'column is-one-fifth' : 'column is-one-fourth'
+    'column board-column light-gray'
   );
 
   const [displayPrevItems, setDisplayPrevItems] = useState(
@@ -34,7 +34,7 @@ const CardTable = props => {
     for (const [columnName, cards] of Object.entries(cardTypePairs)) {
       content.push(
         <div key={`${columnName}_column`} className={columnClass}>
-          <h2 className="subtitle">{columnName.toUpperCase()}</h2>
+          <h2 className="board-subtitle">{columnName.toUpperCase()}</h2>
           <CardColumn key={columnName} kind={columnName} initCards={cards} />
         </div>
       );
@@ -47,7 +47,7 @@ const CardTable = props => {
     <Provider>
       <BoardSlugContext.Provider value={window.location.pathname.split('/')[2]}>
         <UserContext.Provider value={user}>
-          <div className="columns">
+          <div className="board-columns">
             {displayPrevItems ? (
               <div className={columnClass}>
                 <PrevActionItemColumn
