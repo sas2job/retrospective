@@ -52,10 +52,6 @@
   margin-top: -0.75rem;
 }
 
-.board-column:last-child {
-  margin-right: 0%;
-}
-
 .board-columns:not(.is-desktop) {
   display: flex;
 }
@@ -65,10 +61,46 @@
   border-radius: 6px!important;
   border-color: #fafbfc;
   border: 1px solid #e1e4e8!important;
-  margin-right: 1%;
+  margin-right: 0.5%;
+  margin-left: 0.5%;
 }
 
 .box {
   padding: 0.5rem;
   margin-bottom: 1.5rem;
+}
+
+.board-users {
+  float: left;
+  padding-right: 10px;
+  margin-top: 13px;
+}
+
+.straight-border {
+  border-radius: 0px;
+}
+
+.board-avatar {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  margin-top: 4px;
+}
+
+.outer-circle {
+  background: #385a94;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin-left: 10px;
+}
+
+.is-success {
+  background-color: #23d160;
+  color: #fff;
+}
+
+.is-info {
+  background-color: #209cee;
+  color: #fff;
 }

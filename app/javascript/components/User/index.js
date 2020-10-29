@@ -5,7 +5,7 @@ import {destroyMembershipMutation} from './operations.gql';
 const User = props => {
   const {membership, shouldDisplayReady, shouldHandleDelete} = props;
   const {ready, id, user} = membership;
-  const {email} = user;
+  const {email, avatar} = user;
   const [style, setStyle] = useState({});
   const [destroyMember] = useMutation(destroyMembershipMutation);
   const deleteUser = () => {
@@ -28,9 +28,13 @@ const User = props => {
     <div
       key={email}
       style={style}
-      className={shouldDisplayReady && ready ? 'tag is-success' : 'tag is-info'}
+      className={
+        shouldDisplayReady && ready
+          ? 'outer-circle is-success'
+          : 'outer-circle is-info'
+      }
     >
-      <p>{email}</p>
+      <img src={avatar.thumb.url} className="board-avatar" alt={email} />
       {shouldHandleDelete && (
         <a className="delete is-small" onClick={deleteUser} />
       )}

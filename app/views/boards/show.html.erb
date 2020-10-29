@@ -7,16 +7,17 @@
 
 <% end %>
 
-<div class='box has-text-centered light-gray'>
-  <div class='level'>
-    <div id='cyber-logo'>
-      <%= link_to "cybergizer", 'https://cybergizer.com/', class: 'cyber-logo-link' %>
+<div class='box has-text-centered light-gray straight-border'>
+  <div class='level' style='height: 75px;'>
+    <div>
+      <div style='float: left;'>
+        <h1 class='board-title'>
+          <%= @board.title %>
+        </h1>
+      </div>
+
     </div>
-    <div class='level-item has-text-centered'>
-      <h1 class='board-title'>
-        <%= @board.title %>
-      </h1>
-    </div>
+    <%= react_component('membership_list_container')%>
     <div class='level-right'>
       <%if allowed_to?(:edit?, @board)%>
         <div id='settings-button'>
@@ -33,13 +34,8 @@
     </div>
 
   </div>
-</div>
 
-<% if allowed_to?(:invite?, @board) %>
-  <div class="box light-gray">
-    <%= react_component('membership_list_container')%>
-  </div>
-<% end %>
+</div>
 
 <% if @previous_action_items %>
   <% column_class_name = 'column is-one-fifth' %>
