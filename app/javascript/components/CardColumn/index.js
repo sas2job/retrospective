@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {useMutation, useSubscription} from '@apollo/react-hooks';
 import Card from './Card';
 import {
@@ -82,6 +82,7 @@ const CardColumn = props => {
 
   const submitHandler = e => {
     e.preventDefault();
+    setOpened(opened => !opened);
     addCard({
       variables: {
         boardSlug,
@@ -97,6 +98,17 @@ const CardColumn = props => {
     });
   };
 
+  const cancelHandler = e => {
+    e.preventDefault();
+    setOpened(opened => !opened);
+    setNewCard('');
+  };
+
+  const [isOpened, setOpened] = useState(false);
+  const handleOpenBox = useCallback(() => {
+    setOpened(opened => !opened);
+  }, [setOpened]);
+
   const handleKeyPress = e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       submitHandler(e);
@@ -105,28 +117,42 @@ const CardColumn = props => {
 
   return (
     <>
-      <div className="box">
-        <form onSubmit={submitHandler}>
-          <h2> Add new {kind} card</h2>
-          <Textarea
-            className="input"
-            autoComplete="off"
-            id={`card_${kind}_body`}
-            value={newCard}
-            onChange={e => setNewCard(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          <div className="btn-save">
-            <button
-              className="tag is-info button"
-              type="submit"
-              onSubmit={submitHandler}
-            >
-              Add
-            </button>
-          </div>
-        </form>
+      <div className="board-column-title">
+        <h2 className="float_left">{kind.toUpperCase()}</h2>
+        <div className="float_right card-new" onClick={handleOpenBox}>
+          +
+        </div>
       </div>
+      {isOpened && (
+        <div>
+          <form onSubmit={submitHandler}>
+            <Textarea
+              className="input"
+              autoComplete="off"
+              id={`card_${kind}_body`}
+              value={newCard}
+              onChange={e => setNewCard(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            <div className="card-buttons">
+              <button
+                className="tag is-success button card-add"
+                type="submit"
+                onSubmit={submitHandler}
+              >
+                Add
+              </button>
+              <button
+                className="tag button card-cancel"
+                type="submit"
+                onClick={cancelHandler}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {cards.map(card => {
         return (

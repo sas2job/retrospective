@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {useMutation, useSubscription} from '@apollo/react-hooks';
 import ActionItem from '../ActionItem';
 import UserContext from '../../utils/user_context';
@@ -94,6 +94,7 @@ const ActionItemColumn = props => {
 
   const submitHandler = e => {
     e.preventDefault();
+    setOpened(opened => !opened);
     addActionItem({
       variables: {
         boardSlug,
@@ -109,6 +110,12 @@ const ActionItemColumn = props => {
     });
   };
 
+  const cancelHandler = e => {
+    e.preventDefault();
+    setOpened(opened => !opened);
+    setNewActionItemBody('');
+  };
+
   const handleKeyPress = e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       submitHandler(e);
@@ -117,23 +124,33 @@ const ActionItemColumn = props => {
 
   const {creators, users} = props;
 
+  const [isOpened, setOpened] = useState(false);
+  const handleOpenBox = useCallback(() => {
+    setOpened(opened => !opened);
+  }, [setOpened]);
+
   return (
     <>
-      <h2 className="board-subtitle">ACTION ITEMS</h2>
-      <div className="box">
-        <form onSubmit={submitHandler}>
-          <Textarea
-            className="input"
-            value={newActionItemBody}
-            id="action_item_body`"
-            onChange={e => setNewActionItemBody(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
+      <div className="board-column-title">
+        <h2 className="float_left">ACTION ITEMS</h2>
+        <div className="float_right card-new" onClick={handleOpenBox}>
+          +
+        </div>
+      </div>
+      {isOpened && (
+        <div>
+          <form onSubmit={submitHandler}>
+            <Textarea
+              className="input"
+              value={newActionItemBody}
+              id="action_item_body`"
+              onChange={e => setNewActionItemBody(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
 
-          <div className="columns is-multiline columns-footer">
-            <div className="column column-select">
+            <div className="board-select-column">
               <select
-                className="select"
+                className="select width_100"
                 onChange={e => setNewActionItemAssignee(e.target.value)}
               >
                 <option value=" ">Assigned to ...</option>
@@ -146,18 +163,25 @@ const ActionItemColumn = props => {
                 })}
               </select>
             </div>
-            <div className="column column-btn-save">
+            <div className="card-buttons">
               <button
-                className="tag is-info button"
+                className="tag is-success button card-add"
                 type="submit"
                 onSubmit={submitHandler}
               >
                 Add
               </button>
+              <button
+                className="tag button card-cancel"
+                type="submit"
+                onClick={cancelHandler}
+              >
+                Cancel
+              </button>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
       {items.map(item => {
         return (
           <ActionItem

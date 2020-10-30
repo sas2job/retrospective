@@ -104,3 +104,53 @@
   background-color: #209cee;
   color: #fff;
 }
+
+.board-column-title {
+  font-size: 14px!important;
+  font-weight: 600;
+  padding-bottom: 10px;
+  height: 30px;
+}
+
+.float_left {
+  float: left;
+}
+
+.float_right {
+  float: right;
+}
+
+.card-buttons {
+  padding-top: 5px;
+  width: 100%;
+  height: 40px;
+}
+
+.card-cancel {
+  float: right;
+  width: 49%;
+}
+
+.card-add {
+  float: left;
+  width: 49%;
+}
+
+.card-new {
+  cursor: pointer;
+  font-size: 20px;
+  margin-top: -6px;
+}
+
+.board-select-column {
+  display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.2rem;
+}
+
+.width_100 {
+  width: 100%;
+}
