@@ -34,7 +34,6 @@ const CardTable = props => {
     for (const [columnName, cards] of Object.entries(cardTypePairs)) {
       content.push(
         <div key={`${columnName}_column`} className={columnClass}>
-          <h2 className="board-subtitle">{columnName.toUpperCase()}</h2>
           <CardColumn key={columnName} kind={columnName} initCards={cards} />
         </div>
       );

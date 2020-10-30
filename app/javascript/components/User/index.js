@@ -34,7 +34,12 @@ const User = props => {
           : 'outer-circle is-info'
       }
     >
-      <img src={avatar.thumb.url} className="board-avatar" alt={email} />
+      <img
+        src={avatar.thumb.url}
+        className="board-avatar"
+        alt={email}
+        title={email}
+      />
       {shouldHandleDelete && (
         <a className="delete is-small" onClick={deleteUser} />
       )}
