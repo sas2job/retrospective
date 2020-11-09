@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
+  validates :provider, presence: true
+  validates :uid, presence: true, uniqueness: { scope: :provider }
   validates :nickname, uniqueness: true, if: :nickname?
 
   mount_uploader :avatar, AvatarUploader

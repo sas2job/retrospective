@@ -8,10 +8,7 @@ FactoryBot.define do
     password_confirmation { 'password' }
     first_name { 'Name' }
     last_name { 'Surname' }
-
-    trait :github do
-      provider { 'github' }
-      uid { 1234 }
-    end
+    provider { Faker::App.name.downcase }
+    uid { Faker::Number.number }
   end
 end
