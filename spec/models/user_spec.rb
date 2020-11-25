@@ -38,11 +38,12 @@ RSpec.describe User, type: :model do
 
     context 'when the user exists in the database' do
       let_it_be(:user) do
-        create(:user, provider: 'provider', uid: 'uid', email: 'whoever@wherever.com')
+        create(:user, provider: 'provider', uid: 'uid',
+                      email: 'whoever@wherever.com', nickname: 'user_nick')
       end
 
-      context 'when method receives args with matching provider & uid & email' do
-        let(:args) { ['provider', 'uid', { email: 'whoever@wherever.com' }] }
+      context 'when method receives args with matching provider & uid & email & nickname' do
+        let(:args) { ['provider', 'uid', { email: 'whoever@wherever.com', nickname: 'user_nick' }] }
 
         it 'returns db user' do
           expect { subject }.not_to change { described_class.count }
@@ -50,7 +51,8 @@ RSpec.describe User, type: :model do
           expect(subject).to eq user
           expect(subject.persisted?).to eq true
           expect(subject).to have_attributes(provider: 'provider', uid: 'uid',
-                                             email: 'whoever@wherever.com')
+                                             email: 'whoever@wherever.com',
+                                             nickname: 'user_nick')
         end
       end
 
@@ -83,7 +85,7 @@ RSpec.describe User, type: :model do
 
     context 'when the user does not exist in the database' do
       context 'when method receives valid args' do
-        let(:args) { ['provider', 'uid', { email: 'whoever@wherever.com' }] }
+        let(:args) { ['provider', 'uid', { email: 'whoever@wherever.com', nickname: 'user_nick' }] }
 
         it 'creates db user' do
           expect { subject }.to change { described_class.count }.by(1)
@@ -91,7 +93,8 @@ RSpec.describe User, type: :model do
           expect(subject).to be_a described_class
           expect(subject.persisted?).to eq true
           expect(subject).to have_attributes(provider: 'provider', uid: 'uid',
-                                             email: 'whoever@wherever.com')
+                                             email: 'whoever@wherever.com',
+                                             nickname: 'user_nick')
         end
       end
 
