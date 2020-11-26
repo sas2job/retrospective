@@ -30,19 +30,12 @@ const CardBody = props => {
   };
 
   const handleKeyPress = e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      editModeToggle();
-      editCard({
-        variables: {
-          id,
-          body: inputValue
-        }
-      }).then(({data}) => {
-        if (!data.updateCard.card) {
-          console.log(data.updateCard.errors.fullMessages.join(' '));
-        }
-      });
-      e.preventDefault();
+    if (navigator.platform.includes('Mac')) {
+      if (e.key === 'Enter' && e.metaKey) {
+        handleSaveClick();
+      }
+    } else if (e.key === 'Enter' && e.ctrlKey) {
+      handleSaveClick();
     }
   };
 
@@ -115,23 +108,26 @@ const CardBody = props => {
       >
         {body}
       </div>
-      <div hidden={!editMode}>
-        <Textarea
-          className="input"
-          value={inputValue}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-        />
-        <div className="btn-add">
-          <button
-            className="tag is-info button"
-            type="button"
-            onClick={handleSaveClick}
-          >
-            Save
-          </button>
-        </div>
-      </div>
+      {editMode && (
+        <>
+          <Textarea
+            autoFocus
+            className="input"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyPress}
+          />
+          <div className="btn-add">
+            <button
+              className="tag is-info button"
+              type="button"
+              onClick={handleSaveClick}
+            >
+              Save
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
