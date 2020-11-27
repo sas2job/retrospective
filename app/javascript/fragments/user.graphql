@@ -6,5 +6,6 @@ fragment User on User {
       url
     }
   }
+  nickname
   name
 }
