@@ -7,5 +7,4 @@ fragment User on User {
     }
   }
   nickname
-  name
 }
