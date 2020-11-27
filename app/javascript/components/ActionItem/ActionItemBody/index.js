@@ -55,7 +55,12 @@ const ActionItemBody = props => {
   };
 
   const handleKeyPress = e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (navigator.platform.includes('Mac')) {
+      if (e.key === 'Enter' && e.metaKey) {
+        editModeToggle();
+        handleItemEdit(props.id, inputValue);
+      }
+    } else if (e.key === 'Enter' && e.ctrlKey) {
       editModeToggle();
       handleItemEdit(props.id, inputValue);
     }
@@ -140,10 +145,11 @@ const ActionItemBody = props => {
       {editable && (
         <div hidden={!editMode}>
           <Textarea
+            autoFocus
             className="input"
             value={inputValue}
             onChange={handleChange}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
           />
           <div className="columns is-multiline columns-footer">
             <div className="column column-select">

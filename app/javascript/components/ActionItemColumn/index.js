@@ -41,7 +41,7 @@ const ActionItemColumn = props => {
       const {data} = opts.subscriptionData;
       const {actionItemAdded} = data;
       if (actionItemAdded) {
-        setItems(oldItems => [...oldItems, actionItemAdded]);
+        setItems(oldItems => [actionItemAdded, ...oldItems]);
       }
     },
     variables: {boardSlug}
@@ -94,7 +94,7 @@ const ActionItemColumn = props => {
 
   const submitHandler = e => {
     e.preventDefault();
-    setOpened(opened => !opened);
+    setOpened(isOpened => !isOpened);
     addActionItem({
       variables: {
         boardSlug,
@@ -112,22 +112,32 @@ const ActionItemColumn = props => {
 
   const cancelHandler = e => {
     e.preventDefault();
-    setOpened(opened => !opened);
+    setOpened(isOpened => !isOpened);
     setNewActionItemBody('');
-  };
-
-  const handleKeyPress = e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      submitHandler(e);
-    }
   };
 
   const {creators, users} = props;
 
   const [isOpened, setOpened] = useState(false);
   const handleOpenBox = useCallback(() => {
-    setOpened(opened => !opened);
+    setOpened(isOpened => !isOpened);
   }, [setOpened]);
+
+  const handleKeyPress = e => {
+    if (navigator.platform.includes('Mac')) {
+      if (e.key === 'Enter' && e.metaKey) {
+        submitHandler(e);
+      }
+    } else if (e.key === 'Enter' && e.ctrlKey) {
+      submitHandler(e);
+    }
+
+    if (e.key === 'Escape') {
+      setOpened(isOpened => !isOpened);
+      setNewActionItemBody('');
+    }
+  };
+
   return (
     <>
       <div className="board-column-title">
@@ -140,11 +150,12 @@ const ActionItemColumn = props => {
         <div>
           <form onSubmit={submitHandler}>
             <Textarea
+              autoFocus
               className="input"
               value={newActionItemBody}
               id="action_item_body`"
               onChange={e => setNewActionItemBody(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
             />
 
             <div className="board-select-column">
