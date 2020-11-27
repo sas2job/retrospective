@@ -36,7 +36,10 @@
       "unicorn/filename-case": [
         "error",
         {
-          "case": "snakeCase"
+          "cases": {
+            "camelCase": true,
+            "kebabCase": true
+          }
         }
       ]
     }

@@ -4,39 +4,32 @@ import CardBody from './CardBody';
 import CardFooter from './CardFooter';
 import './Card.css';
 
-class Card extends React.Component {
-  render() {
-    const {
-      id,
-      body,
-      deletable,
-      editable,
-      author,
-      avatar,
-      likes,
-      type,
-      comments
-    } = this.props;
-
-    return (
-      <div className="box">
-        <CardBody
-          id={id}
-          editable={editable}
-          deletable={deletable}
-          body={body}
-        />
-        <CardFooter
-          id={id}
-          author={author}
-          avatar={avatar}
-          likes={likes}
-          type={type}
-          comments={comments}
-        />
-      </div>
-    );
-  }
-}
+const Card = ({
+  id,
+  body,
+  deletable,
+  editable,
+  author,
+  avatar,
+  commentsNumber,
+  likes,
+  type,
+  onCommentButtonClick
+}) => {
+  return (
+    <div className="box">
+      <CardBody id={id} editable={editable} deletable={deletable} body={body} />
+      <CardFooter
+        id={id}
+        author={author}
+        avatar={avatar}
+        likes={likes}
+        type={type}
+        commentsNumber={commentsNumber}
+        onCommentButtonClick={onCommentButtonClick}
+      />
+    </div>
+  );
+};
 
 export default Card;

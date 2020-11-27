@@ -128,7 +128,6 @@ const ActionItemColumn = props => {
   const handleOpenBox = useCallback(() => {
     setOpened(opened => !opened);
   }, [setOpened]);
-
   return (
     <>
       <div className="board-column-title">
@@ -157,7 +156,7 @@ const ActionItemColumn = props => {
                 {users.map(user => {
                   return (
                     <option key={user.id} value={user.id}>
-                      {user.name}
+                      {user.nickname}
                     </option>
                   );
                 })}
@@ -192,7 +191,7 @@ const ActionItemColumn = props => {
             timesMoved={item.times_moved}
             editable={creators.includes(user)}
             deletable={creators.includes(user)}
-            assignee={item?.assignee?.name}
+            assignee={item?.assignee?.nickname}
             avatar={item.assignee_avatar_url}
             users={users}
           />

@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {useMutation, useSubscription} from '@apollo/react-hooks';
 import Card from './Card';
+import CardPopup from './Card/card-popup/card-popup.jsx';
 import {
   cardAddedSubscription,
   cardDestroyedSubscription,
@@ -11,16 +12,21 @@ import Textarea from 'react-textarea-autosize';
 import UserContext from '../../utils/user_context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
-const CardColumn = props => {
+
+const CardColumn = ({kind, initCards}) => {
   const user = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
-  const {kind, initCards} = props;
 
   const [cards, setCards] = useState(initCards);
   const [newCard, setNewCard] = useState('');
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
 
+  const [popupShownId, setPopupShownId] = useState(null);
+
   const [addCard] = useMutation(addCardMutation);
+
+  const handleCommentButtonClick = id => () => setPopupShownId(id);
+  const handlePopupClose = () => setPopupShownId(null);
 
   useSubscription(cardAddedSubscription, {
     skip,
@@ -124,6 +130,7 @@ const CardColumn = props => {
     }
   };
 
+  const card = cards.find(it => it.id === popupShownId);
   return (
     <>
       <div className="board-column-title">
@@ -169,17 +176,35 @@ const CardColumn = props => {
           <Card
             key={card.id}
             id={card.id}
-            author={card.author.email.split('@')[0]}
+            author={card.author.nickname}
             avatar={card.author.avatar.thumb.url}
             body={card.body}
-            comments={card.comments}
             likes={card.likes}
             type={kind}
+            commentsNumber={card.comments.length}
             editable={user === card.author.email}
             deletable={user === card.author.email}
+            onCommentButtonClick={handleCommentButtonClick(card.id)}
           />
         );
       })}
+
+      {popupShownId && (
+        <CardPopup
+          id={card.id}
+          author={card.author.nickname}
+          avatar={card.author.avatar.thumb.url}
+          body={card.body}
+          likes={card.likes}
+          type={kind}
+          commentsNumber={card.comments.length}
+          editable={user === card.author.email}
+          deletable={user === card.author.email}
+          comments={card.comments}
+          onCommentButtonClick={() => {}}
+          onClickClosed={handlePopupClose}
+        />
+      )}
     </>
   );
 };

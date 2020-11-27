@@ -156,7 +156,7 @@ const ActionItemBody = props => {
                 {users.map(user => {
                   return (
                     <option key={user.id} value={user.id}>
-                      {user.name}
+                      {user.nickname}
                     </option>
                   );
                 })}
