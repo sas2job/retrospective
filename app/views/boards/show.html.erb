@@ -21,7 +21,7 @@
     <div class='level-right'>
       <%if allowed_to?(:edit?, @board)%>
         <div id='settings-button'>
-            <%= link_to "SETTINGS", edit_board_path(@board), class: 'board-button link-as-button' %>
+          <%= link_to "SETTINGS", edit_board_path(@board), class: 'board-button link-as-button' %>
         </div>
       <%end%>
       <% if !current_user %>
@@ -44,14 +44,12 @@
 <% end %>
 
 <%= react_component('card_table', {
-              actionItems: @action_items,
-              board: @board,
-              cardsByType: @cards_by_type,
-              creators: @board_creators,
-              initPrevItems: @previous_action_items || [],
-              user: current_user&.email,
-              users: @users
-            })
+  actionItems: @action_items,
+  board: @board,
+  cardsByType: @cards_by_type,
+  creators: @board_creators,
+  initPrevItems: @previous_action_items || [],
+  user: current_user&.email,
+  users: @users
+})
 %>
-
-</div>

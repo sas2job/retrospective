@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   # rubocop:disable Metrics/LineLength
   mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
@@ -23,6 +24,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'my_boards', to: 'boards#my'
+  get 'participating_boards', to: 'boards#participating'
+
   resources :action_items, only: :index do
     member do
       put 'close'
@@ -37,3 +41,4 @@ Rails.application.routes.draw do
 
   mount ActionCable.server, at: '/cable'
 end
+# rubocop:enable Metrics/BlockLength

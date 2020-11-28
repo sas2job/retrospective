@@ -1,17 +1,15 @@
-<div class='box'>
-  <h1 class='title'>Action items</h1>
-</div>
-<table class='table is-fullwidth'>
-  <thead>
+<div class="column is-9">
+  <table class='table'>
+    <thead>
     <tr>
       <th>Item</th>
       <th></th>
       <th></th>
       <th>Created at</th>
     </tr>
-  </thead>
+    </thead>
 
-  <tbody>
+    <tbody>
     <% @action_items.each do |item| %>
       <tr>
         <td><%= item.body %></td>
@@ -30,5 +28,7 @@
         <th><%= item.created_at %></th>
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
+
