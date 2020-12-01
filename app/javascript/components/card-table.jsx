@@ -6,7 +6,7 @@ import BoardSlugContext from '../utils/board_slug_context';
 import UserContext from '../utils/user_context';
 import Provider from './Provider';
 
-const CardTable = props => {
+const CardTable = (props) => {
   const {
     actionItems,
     cardsByType,
@@ -24,16 +24,16 @@ const CardTable = props => {
     'column board-column light-gray'
   );
 
-  const [displayPrevItems, setDisplayPrevItems] = useState(
+  const [displayPreviousItems, setDisplayPreviousItems] = useState(
     initPrevItems.length > 0
   );
 
-  const prevActionsEmptyHandler = () => {
-    setDisplayPrevItems(false);
+  const previousActionsEmptyHandler = () => {
+    setDisplayPreviousItems(false);
     setColumnClass('column is-one-fourth');
   };
 
-  const generateColumns = cardTypePairs => {
+  const generateColumns = (cardTypePairs) => {
     const content = [];
     for (const [columnName, cards] of Object.entries(cardTypePairs)) {
       content.push(
@@ -56,11 +56,11 @@ const CardTable = props => {
       <BoardSlugContext.Provider value={window.location.pathname.split('/')[2]}>
         <UserContext.Provider value={user}>
           <div className="board-columns">
-            {displayPrevItems ? (
+            {displayPreviousItems ? (
               <div className={columnClass}>
                 <PrevActionItemColumn
                   creators={creators}
-                  handleEmpty={prevActionsEmptyHandler}
+                  handleEmpty={previousActionsEmptyHandler}
                   initItems={initPrevItems || []}
                 />
               </div>

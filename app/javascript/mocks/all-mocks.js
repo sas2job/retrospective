@@ -1,68 +1,41 @@
-// Const ASSIGNEE = {
-//   id: 1,
-//   email: "tu1@mail.com",
-//   firstName: "tu1@mail",
-//   lastName: "petroff",
-//   nickname: "petr",
-//   avatar: null,
-//   // avatar: "/assets/default_avatar.jpg",
-// }
+// Here is described what we need to change in initial data
 
 export const USER = {
-  id: 1,
+  id: '1',
   email: 'tu1@mail.com',
   firstName: 'tu1@mail',
   lastName: 'ivanoff',
   nickname: 'ivan',
-  avatar: null
-  // Avatar: "/assets/default_avatar.jpg",
+  avatar: null || `11.png`,
+  avatarCompressed: null || `11.png`,
+  permissions: []
 };
 
-export const ACTION_ITEMS = [
-  {
-    id: 7,
-    body: `text`,
-    timesMoved: 1,
-    status: `pending`,
-    assignee: USER
-  },
-  {
-    id: 8,
-    body: `text`,
-    timesMoved: 5,
-    status: `pending`,
-    assignee: USER
-  }
-];
-
-export const BOARD = {
-  columnNames: ['mad', 'sad', 'glad'],
-  created: '2020-11-30T11:09:48.327Z',
-  id: 13,
-  previousBoardId: 6,
-  private: false,
-  slug: '8-o_YHkmY4', /// wtf?
-  title: '30-11-2020',
-  updated: '2020-11-30T11:09:48.327Z',
-  usersAmount: 2
+export const ACTION_ITEM = {
+  id: '7',
+  body: `text`,
+  timesMoved: 1,
+  status: `pending`,
+  assignee: USER
 };
 
 export const CARD = {
+  type: `mad`,
   author: USER,
   body: 'some text',
-  comments: [],
-  id: 89,
+  comments: [
+    {
+      author: USER,
+      cardId: '327',
+      content: '1',
+      id: '36',
+      likes: 0
+    }
+  ],
+  id: '89',
   kind: 'sad',
   likes: 0
 };
-
-export const CARDS_BY_TYPE = {
-  mad: [CARD, CARD, CARD],
-  sad: [CARD],
-  glad: []
-};
-
-export const CREATORS = [USER.email]; // ????
 
 export const PREVIOUS_ITEMS = [
   {
@@ -81,18 +54,16 @@ export const PREVIOUS_ITEMS = [
   }
 ];
 
-export const BOARD_USER = [USER.email];
+// In users shouldn't be permissions
 
-export const BOARD_USERS = [
-  USER,
+export const USERS = [
   {
-    id: 3,
+    id: '3',
     email: 'tu2@mail.com',
     firstName: 'tu1@mail',
     lastName: 'ivanoff',
     nickname: 'ivan',
-    avatar: null
+    avatar: null || `11.png`,
+    avatarCompressed: null || `11.png`
   }
 ];
-
-// ___________________________\\
