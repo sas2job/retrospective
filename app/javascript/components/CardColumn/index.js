@@ -176,7 +176,9 @@ const CardColumn = ({kind, initCards}) => {
           <Card
             key={card.id}
             id={card.id}
-            author={card.author.nickname}
+            nickname={card.author.nickname}
+            lastName={card.author.last_name} // TO DO: will be rewritten
+            firstName={card.author.first_name} // TO DO: will be rewritten
             avatar={card.author.avatar.thumb.url}
             body={card.body}
             likes={card.likes}
@@ -192,7 +194,9 @@ const CardColumn = ({kind, initCards}) => {
       {popupShownId && (
         <CardPopup
           id={card.id}
-          author={card.author.nickname}
+          nickname={card.author.nickname}
+          lastName={card.author.last_name} // TO DO: will be rewritten
+          firstName={card.author.first_name} // TO DO: will be rewritten
           avatar={card.author.avatar.thumb.url}
           body={card.body}
           likes={card.likes}

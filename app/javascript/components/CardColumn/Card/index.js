@@ -2,6 +2,7 @@ import React from 'react';
 
 import CardBody from './CardBody';
 import CardFooter from './CardFooter';
+import CardUser from './card-user/card-user.jsx';
 import './Card.css';
 
 const Card = ({
@@ -9,7 +10,9 @@ const Card = ({
   body,
   deletable,
   editable,
-  author,
+  nickname,
+  firstName,
+  lastName,
   avatar,
   commentsNumber,
   likes,
@@ -18,11 +21,16 @@ const Card = ({
 }) => {
   return (
     <div className="box">
+      <CardUser
+        avatar={avatar}
+        name={nickname}
+        firstName={firstName}
+        lastName={lastName}
+        nickname={nickname}
+      />
       <CardBody id={id} editable={editable} deletable={deletable} body={body} />
       <CardFooter
         id={id}
-        author={author}
-        avatar={avatar}
         likes={likes}
         type={type}
         commentsNumber={commentsNumber}

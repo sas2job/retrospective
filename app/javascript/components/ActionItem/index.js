@@ -3,6 +3,7 @@ import React from 'react';
 import ActionItemBody from './ActionItemBody';
 import ActionItemFooter from './ActionItemFooter';
 import './ActionItem.css';
+import CardUser from '../CardColumn/Card/card-user/card-user.jsx';
 
 class ActionItem extends React.Component {
   pickColor = () => {
@@ -28,13 +29,24 @@ class ActionItem extends React.Component {
       assignee,
       assigneeId,
       avatar,
-      users
+      users,
+      lastName,
+      firstName
     } = this.props;
     const footerNotEmpty =
       movable || transitionable || timesMoved !== 0 || assignee !== null;
 
     return (
       <div className={`box ${this.pickColor()}_bg`}>
+        {assignee && (
+          <CardUser
+            avatar={avatar}
+            nickname={assignee}
+            firstName={firstName}
+            lastName={lastName}
+          />
+        )}
+
         <ActionItemBody
           id={id}
           assigneeId={assigneeId}
@@ -50,7 +62,6 @@ class ActionItem extends React.Component {
             movable={movable}
             transitionable={transitionable}
             assignee={assignee}
-            avatar={avatar}
           />
         )}
       </div>
