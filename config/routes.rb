@@ -35,6 +35,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: %i[edit update] do
+    member do
+      delete 'avatar_destroy', to: 'users#avatar_destroy'
+    end
+  end
+
   resources :teams
 
   resources :boardsql, param: :slug, only: :show
