@@ -18,7 +18,7 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def edit?
-    user_is_creator?
+    user_is_creator? || user_is_admin?
   end
 
   def create?
@@ -26,7 +26,7 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def update?
-    user_is_creator?
+    user_is_creator? || user_is_admin?
   end
 
   def destroy?
@@ -34,7 +34,7 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def continue?
-    user_is_creator? && can_continue?
+    (user_is_creator? || user_is_host?) && can_continue?
   end
 
   def create_cards?
@@ -42,19 +42,27 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def suggestions?
-    check?(:user_is_member?)
+    user_is_creator? || user_is_admin?
   end
 
   def invite?
-    check?(:user_is_member?)
+    user_is_creator? || user_is_admin?
   end
 
   def user_is_creator?
-    record.creator?(user)
+    record.memberships.exists?(user_id: user.id, role: 'creator')
+  end
+
+  def user_is_admin?
+    record.memberships.exists?(user_id: user.id, role: 'admin')
+  end
+
+  def user_is_host?
+    record.memberships.exists?(user_id: user.id, role: 'host')
   end
 
   def user_is_member?
-    record.member?(user)
+    record.memberships.where(user_id: user.id).exists?
   end
 
   def can_continue?

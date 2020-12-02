@@ -39,42 +39,4 @@ RSpec.describe Board, type: :model do
       expect(board).to respond_to(:users)
     end
   end
-
-  describe '#member?' do
-    subject { board.member?(test_user) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_a_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#creator?' do
-    subject { board.creator?(test_user) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_a_member }
-      it { is_expected.to eq false }
-    end
-  end
 end
