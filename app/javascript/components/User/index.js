@@ -1,11 +1,19 @@
 import React, {useState} from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import {destroyMembershipMutation} from './operations.gql';
+import {getUserInitials} from '../../utils/helpers';
+import './style.css';
 
 const User = props => {
-  const {membership, shouldDisplayReady, shouldHandleDelete} = props;
-  const {ready, id, user} = membership;
-  const {email, avatar} = user;
+  const {
+    membership: {
+      ready,
+      id,
+      user: {email, avatar, lastName, firstName}
+    },
+    shouldDisplayReady,
+    shouldHandleDelete
+  } = props;
   const [style, setStyle] = useState({});
   const [destroyMember] = useMutation(destroyMembershipMutation);
   const deleteUser = () => {
@@ -24,6 +32,25 @@ const User = props => {
     });
   };
 
+  const renderBoardAvatar = (userAvatar, userName, userSurname) => {
+    if (userAvatar) {
+      return (
+        <img
+          src={avatar.thumb.url}
+          className="board-avatar"
+          alt={email}
+          title={email}
+        />
+      );
+    }
+
+    return (
+      <div className="board-avatar board-avatar--text">
+        {getUserInitials(userName, userSurname)}
+      </div>
+    );
+  };
+
   return (
     <div
       key={email}
@@ -34,12 +61,13 @@ const User = props => {
           : 'outer-circle is-info'
       }
     >
-      <img
-        src={avatar.thumb.url}
-        className="board-avatar"
-        alt={email}
-        title={email}
-      />
+      <div className="avatar-wrapper">
+        {renderBoardAvatar(avatar.thumb.url, firstName, lastName)}
+        <div className="board-avatar__tooltip">
+          {firstName} {lastName}
+        </div>
+      </div>
+
       {shouldHandleDelete && (
         <a className="delete is-small" onClick={deleteUser} />
       )}

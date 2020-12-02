@@ -80,11 +80,31 @@
   border-radius: 0px;
 }
 
+.avatar-wrapper {
+  position: relative;
+}
+
 .board-avatar {
   border-radius: 50%;
   width: 42px;
   height: 42px;
   margin-top: 4px;
+}
+
+.board-avatar__tooltip {
+  display: none;
+}
+
+.board-avatar:hover ~ .board-avatar__tooltip {
+  display: block;
+  color: black;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: auto;
+  white-space: nowrap;
+  margin-top: 15px;
+  z-index: 5;
 }
 
 .outer-circle {
