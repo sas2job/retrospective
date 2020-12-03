@@ -4,7 +4,7 @@ class ActionItemPolicy < ApplicationPolicy
   authorize :board, allow_nil: true
 
   def create?
-    check?(:user_is_creator?)
+    check?(:user_is_member?)
   end
 
   def update?
@@ -32,6 +32,14 @@ class ActionItemPolicy < ApplicationPolicy
   end
 
   def user_is_creator?
-    board ? board.creator?(user) : record.board.creator?(user)
+    if board
+      board.memberships.exists?(user_id: user.id, role: 'creator')
+    else
+      record.board.memberships.exists?(user_id: user.id, role: 'creator')
+    end
+  end
+
+  def user_is_member?
+    board.memberships.where(user_id: user.id).exists?
   end
 end
