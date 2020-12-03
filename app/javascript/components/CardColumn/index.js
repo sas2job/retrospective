@@ -12,7 +12,7 @@ import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
 import CardColumnHeader from './card-column-header/card-column-header.jsx';
 
-const CardColumn = ({kind, initCards}) => {
+const CardColumn = ({kind, initCards, currentUser}) => {
   const user = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [cards, setCards] = useState(initCards);
@@ -83,7 +83,13 @@ const CardColumn = ({kind, initCards}) => {
   const card = cards.find(it => it.id === popupShownId);
   return (
     <>
-      <CardColumnHeader kind={kind} />
+      <CardColumnHeader
+        kind={kind}
+        currentUser={currentUser}
+        onCardAdded={cardAdded => {
+          setCards(oldCards => [cardAdded, ...oldCards]);
+        }}
+      />
 
       {cards.map(card => {
         return (

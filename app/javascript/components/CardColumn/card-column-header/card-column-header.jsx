@@ -4,7 +4,7 @@ import Textarea from 'react-textarea-autosize';
 import {addCardMutation} from '../operations.gql';
 import BoardSlugContext from '../../../utils/board_slug_context';
 
-const CardColumnHeader = ({kind}) => {
+const CardColumnHeader = ({kind, onCardAdded, currentUser}) => {
   const textInput = useRef();
   const [isOpened, setOpened] = useState(false);
   const [newCard, setNewCard] = useState('');
@@ -25,6 +25,15 @@ const CardColumnHeader = ({kind}) => {
     setNewCard('');
   };
 
+  const buildNewCard = card => {
+    card.likes = 0;
+    card.comments = [];
+    card.kind = kind;
+    card.author = currentUser;
+    card.body = newCard;
+    return card;
+  };
+
   const submitHandler = e => {
     e.preventDefault();
     addCard({
@@ -35,6 +44,7 @@ const CardColumnHeader = ({kind}) => {
       }
     }).then(({data}) => {
       if (data.addCard.card) {
+        onCardAdded(buildNewCard(data.addCard.card));
         setNewCard('');
       } else {
         console.log(data.addCard.errors.fullMessages.join(' '));

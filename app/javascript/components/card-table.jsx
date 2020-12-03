@@ -16,6 +16,12 @@ const CardTable = props => {
     users
   } = props;
 
+  // User now is just email ? of current users. i think it's better to take full user object from backend
+
+  const findCurrentUser = (userEmail, allUsers) => {
+    return allUsers.find(it => it.email === userEmail);
+  };
+
   const [columnClass, setColumnClass] = useState(
     'column board-column light-gray'
   );
@@ -34,7 +40,12 @@ const CardTable = props => {
     for (const [columnName, cards] of Object.entries(cardTypePairs)) {
       content.push(
         <div key={`${columnName}_column`} className={columnClass}>
-          <CardColumn key={columnName} kind={columnName} initCards={cards} />
+          <CardColumn
+            key={columnName}
+            kind={columnName}
+            initCards={cards}
+            currentUser={findCurrentUser(user, users)}
+          />
         </div>
       );
     }
