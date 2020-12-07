@@ -83,9 +83,9 @@ const PrevActionItemColumn = props => {
                 creators.includes(user) && item.status === 'pending',
               can_reopen: creators.includes(user) && item.status !== 'pending'
             }}
-            assignee={item.assignee_nickname}
-            firstName={item.assignee.first_name}
-            lastName={item.assignee.last_name}
+            assignee={item.assignee?.nickname}
+            firstName={item.assignee?.first_name}
+            lastName={item.assignee?.last_name}
             avatar={item.assignee_avatar_url}
           />
         );
