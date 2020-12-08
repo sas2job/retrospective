@@ -37,26 +37,25 @@ const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
     return card;
   };
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     const card = buildNewCard();
     e.preventDefault();
 
     onCardAdded(card);
 
-    addCard({
+    const {data} = await addCard({
       variables: {
         boardSlug,
         kind,
         body: newCard
       }
-    }).then(({data}) => {
-      if (data.addCard.card) {
-        onGetIdNewCard(card.id, data.addCard.card.id);
-        setNewCard('');
-      } else {
-        console.log(data.addCard.errors.fullMessages.join(' '));
-      }
     });
+    if (data.addCard.card) {
+      onGetIdNewCard(card.id, data.addCard.card.id);
+      setNewCard('');
+    } else {
+      console.log(data.addCard.errors.fullMessages.join(' '));
+    }
   };
 
   const handleKeyPress = e => {
