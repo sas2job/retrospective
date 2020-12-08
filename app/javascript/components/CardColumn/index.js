@@ -28,10 +28,7 @@ const CardColumn = ({kind, initCards, currentUser}) => {
       const {data} = opts.subscriptionData;
       const {cardAdded} = data;
       if (cardAdded) {
-        if (
-          cardAdded.kind === kind &&
-          cards.findIndex(element => element.id === cardAdded.id) === -1
-        ) {
+        if (cardAdded.kind === kind && cardAdded.author.email !== user) {
           setCards(oldCards => [cardAdded, ...oldCards]);
         }
       }
@@ -81,6 +78,10 @@ const CardColumn = ({kind, initCards, currentUser}) => {
   }, []);
 
   const card = cards.find(it => it.id === popupShownId);
+  const checkTestId = id => {
+    return id.toString().startsWith('tmp-');
+  };
+
   return (
     <>
       <CardColumnHeader
@@ -88,6 +89,14 @@ const CardColumn = ({kind, initCards, currentUser}) => {
         currentUser={currentUser}
         onCardAdded={cardAdded => {
           setCards(oldCards => [cardAdded, ...oldCards]);
+        }}
+        onGetIdNewCard={(cardMockid, cardId) => {
+          setCards(oldCards => {
+            oldCards[
+              oldCards.findIndex(it => it.id === cardMockid)
+            ].id = cardId;
+            return oldCards;
+          });
         }}
       />
 
@@ -97,14 +106,14 @@ const CardColumn = ({kind, initCards, currentUser}) => {
             key={card.id}
             id={card.id}
             nickname={card.author.nickname}
-            lastName={card.author.last_name} // TO DO: will be rewritten
-            firstName={card.author.first_name} // TO DO: will be rewritten
+            lastName={card.author.last_name}
+            firstName={card.author.first_name}
             avatar={card.author.avatar.thumb.url}
             body={card.body}
             likes={card.likes}
             type={kind}
             commentsNumber={card.comments.length}
-            editable={user === card.author.email}
+            editable={!checkTestId(card.id) && user === card.author.email}
             deletable={user === card.author.email}
             onCommentButtonClick={handleCommentButtonClick(card.id)}
           />
@@ -115,8 +124,8 @@ const CardColumn = ({kind, initCards, currentUser}) => {
         <CardPopup
           id={card.id}
           nickname={card.author.nickname}
-          lastName={card.author.last_name} // TO DO: will be rewritten
-          firstName={card.author.first_name} // TO DO: will be rewritten
+          lastName={card.author.last_name}
+          firstName={card.author.first_name}
           avatar={card.author.avatar.thumb.url}
           body={card.body}
           likes={card.likes}

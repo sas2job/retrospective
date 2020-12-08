@@ -4,11 +4,12 @@ import Textarea from 'react-textarea-autosize';
 import {addCardMutation} from '../operations.gql';
 import BoardSlugContext from '../../../utils/board_slug_context';
 
-const CardColumnHeader = ({kind, onCardAdded, currentUser}) => {
+const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
   const textInput = useRef();
   const [isOpened, setOpened] = useState(false);
   const [newCard, setNewCard] = useState('');
   const [addCard] = useMutation(addCardMutation);
+
   const boardSlug = useContext(BoardSlugContext);
 
   const toggleOpen = () => setOpened(!isOpened);
@@ -25,17 +26,23 @@ const CardColumnHeader = ({kind, onCardAdded, currentUser}) => {
     setNewCard('');
   };
 
-  const buildNewCard = card => {
+  const buildNewCard = () => {
+    const card = {};
     card.likes = 0;
     card.comments = [];
     card.kind = kind;
     card.author = currentUser;
     card.body = newCard;
+    card.id = `tmp-${Math.random()}`;
     return card;
   };
 
   const submitHandler = e => {
+    const card = buildNewCard();
     e.preventDefault();
+
+    onCardAdded(card);
+
     addCard({
       variables: {
         boardSlug,
@@ -44,7 +51,7 @@ const CardColumnHeader = ({kind, onCardAdded, currentUser}) => {
       }
     }).then(({data}) => {
       if (data.addCard.card) {
-        onCardAdded(buildNewCard(data.addCard.card));
+        onGetIdNewCard(card.id, data.addCard.card.id);
         setNewCard('');
       } else {
         console.log(data.addCard.errors.fullMessages.join(' '));
