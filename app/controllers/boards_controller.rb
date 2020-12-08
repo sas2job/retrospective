@@ -106,7 +106,8 @@ class BoardsController < ApplicationController
   end
 
   def boards_by_role(role)
-    Board.joins(:memberships).where(memberships: { user_id: current_user.id, role: role })
+    Board.where.not(id: Board.select(:previous_board_id).where.not(previous_board_id: nil))
+         .joins(:memberships).where(memberships: { user_id: current_user.id, role: role })
          .includes(:users, :cards, :action_items)
          .order(created_at: :desc)
          .group_by { |record| record.created_at.strftime('%B, %Y') }
