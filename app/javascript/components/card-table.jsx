@@ -16,10 +16,8 @@ const CardTable = props => {
     users
   } = props;
 
-  // User now is just email ? of current users. i think it's better to take full user object from backend
-
   const findCurrentUser = (userEmail, allUsers) => {
-    return allUsers.find(it => it.email === userEmail);
+    return allUsers.find(it => it.email === userEmail); // TO DO : rewrite after changes in back
   };
 
   const [columnClass, setColumnClass] = useState(

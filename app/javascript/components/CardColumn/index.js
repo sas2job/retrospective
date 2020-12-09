@@ -10,7 +10,7 @@ import {
 import UserContext from '../../utils/user_context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
-import CardColumnHeader from './card-column-header/card-column-header.jsx';
+import NewCardBody from '../new-card-body/new-card-body.jsx';
 
 const CardColumn = ({kind, initCards, currentUser}) => {
   const user = useContext(UserContext);
@@ -78,19 +78,16 @@ const CardColumn = ({kind, initCards, currentUser}) => {
   }, []);
 
   const card = cards.find(it => it.id === popupShownId);
-  const checkTestId = id => {
-    return id.toString().startsWith('tmp-');
-  };
 
   return (
     <>
-      <CardColumnHeader
+      <NewCardBody
         kind={kind}
         currentUser={currentUser}
         onCardAdded={cardAdded => {
           setCards(oldCards => [cardAdded, ...oldCards]);
         }}
-        onGetIdNewCard={(cardMockid, cardId) => {
+        onGetNewCardID={(cardMockid, cardId) => {
           setCards(oldCards => {
             oldCards[
               oldCards.findIndex(it => it.id === cardMockid)
@@ -104,17 +101,8 @@ const CardColumn = ({kind, initCards, currentUser}) => {
         return (
           <Card
             key={card.id}
-            id={card.id}
-            nickname={card.author.nickname}
-            lastName={card.author.last_name}
-            firstName={card.author.first_name}
-            avatar={card.author.avatar.thumb.url}
-            body={card.body}
-            likes={card.likes}
+            card={card}
             type={kind}
-            commentsNumber={card.comments.length}
-            editable={!checkTestId(card.id) && user === card.author.email}
-            deletable={user === card.author.email}
             onCommentButtonClick={handleCommentButtonClick(card.id)}
           />
         );

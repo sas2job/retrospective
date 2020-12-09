@@ -1,10 +1,11 @@
+import {nanoid} from 'nanoid';
 import React, {useState, useContext, useEffect, useRef} from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import Textarea from 'react-textarea-autosize';
-import {addCardMutation} from '../operations.gql';
-import BoardSlugContext from '../../../utils/board_slug_context';
+import {addCardMutation} from './operations.gql';
+import BoardSlugContext from '../../utils/board_slug_context';
 
-const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
+const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
   const textInput = useRef();
   const [isOpened, setOpened] = useState(false);
   const [newCard, setNewCard] = useState('');
@@ -26,16 +27,14 @@ const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
     setNewCard('');
   };
 
-  const buildNewCard = () => {
-    const card = {};
-    card.likes = 0;
-    card.comments = [];
-    card.kind = kind;
-    card.author = currentUser;
-    card.body = newCard;
-    card.id = `tmp-${Math.random()}`;
-    return card;
-  };
+  const buildNewCard = () => ({
+    likes: 0,
+    comments: [],
+    kind,
+    author: currentUser,
+    body: newCard,
+    id: `tmp-${nanoid()}`
+  });
 
   const submitHandler = async e => {
     const card = buildNewCard();
@@ -51,7 +50,7 @@ const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
       }
     });
     if (data.addCard.card) {
-      onGetIdNewCard(card.id, data.addCard.card.id);
+      onGetNewCardID(card.id, data.addCard.card.id);
       setNewCard('');
     } else {
       console.log(data.addCard.errors.fullMessages.join(' '));
@@ -116,4 +115,4 @@ const CardColumnHeader = ({kind, onCardAdded, onGetIdNewCard, currentUser}) => {
   );
 };
 
-export default CardColumnHeader;
+export default NewCardBody;
