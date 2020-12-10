@@ -4,8 +4,8 @@ import {useMutation} from '@apollo/react-hooks';
 import {updateCardMutation, destroyCardMutation} from './operations.gql';
 
 import './CardBody.css';
-const CardBody = props => {
-  const {id, editable, deletable, body} = props;
+const CardBody = (props) => {
+  const {id, editable, body} = props;
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,19 +22,19 @@ const CardBody = props => {
   };
 
   const editModeToggle = () => {
-    setEditMode(isEdited => !isEdited);
+    setEditMode((isEdited) => !isEdited);
   };
 
-  const handleChange = e => {
-    setInputValue(e.target.value);
+  const handleChange = (evt) => {
+    setInputValue(evt.target.value);
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (evt) => {
     if (navigator.platform.includes('Mac')) {
-      if (e.key === 'Enter' && e.metaKey) {
+      if (evt.key === 'Enter' && evt.metaKey) {
         handleSaveClick();
       }
-    } else if (e.key === 'Enter' && e.ctrlKey) {
+    } else if (evt.key === 'Enter' && evt.ctrlKey) {
       handleSaveClick();
     }
   };
@@ -55,7 +55,7 @@ const CardBody = props => {
 
   return (
     <div>
-      {editable && deletable && (
+      {editable && (
         <div className="dropdown">
           <div
             className="dropdown-btn"
@@ -70,7 +70,7 @@ const CardBody = props => {
               <div>
                 <a
                   onClick={handleEditClick}
-                  onMouseDown={event => {
+                  onMouseDown={(event) => {
                     event.preventDefault();
                   }}
                 >
@@ -92,7 +92,7 @@ const CardBody = props => {
                   }
                 })
               }
-              onMouseDown={event => {
+              onMouseDown={(event) => {
                 event.preventDefault();
               }}
             >

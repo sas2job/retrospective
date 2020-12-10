@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
 import Card from './Card';
-import CardPopup from './Card/card-popup/card-popup.jsx';
+import CardPopup from './Card/card-popup/card-popup';
 import {
   cardAddedSubscription,
   cardDestroyedSubscription,
@@ -10,7 +10,7 @@ import {
 import UserContext from '../../utils/user_context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
-import NewCardBody from '../new-card-body/new-card-body.jsx';
+import NewCardBody from '../new-card-body/new-card-body';
 
 const CardColumn = ({kind, initCards, currentUser}) => {
   const user = useContext(UserContext);
@@ -19,17 +19,17 @@ const CardColumn = ({kind, initCards, currentUser}) => {
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
   const [popupShownId, setPopupShownId] = useState(null);
 
-  const handleCommentButtonClick = id => () => setPopupShownId(id);
+  const handleCommentButtonClick = (id) => () => setPopupShownId(id);
   const handlePopupClose = () => setPopupShownId(null);
 
   useSubscription(cardAddedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {cardAdded} = data;
       if (cardAdded) {
         if (cardAdded.kind === kind && cardAdded.author.email !== user) {
-          setCards(oldCards => [cardAdded, ...oldCards]);
+          setCards((oldCards) => [cardAdded, ...oldCards]);
         }
       }
     },
@@ -38,11 +38,13 @@ const CardColumn = ({kind, initCards, currentUser}) => {
 
   useSubscription(cardDestroyedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {cardDestroyed} = data;
       if (cardDestroyed && cardDestroyed.kind === kind) {
-        setCards(oldCards => oldCards.filter(el => el.id !== cardDestroyed.id));
+        setCards((oldCards) =>
+          oldCards.filter((element) => element.id !== cardDestroyed.id)
+        );
       }
     },
     variables: {boardSlug}
@@ -50,13 +52,13 @@ const CardColumn = ({kind, initCards, currentUser}) => {
 
   useSubscription(cardUpdatedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {cardUpdated} = data;
       if (cardUpdated && cardUpdated.kind === kind) {
-        setCards(oldCards => {
+        setCards((oldCards) => {
           const cardIdIndex = oldCards.findIndex(
-            element => element.id === cardUpdated.id
+            (element) => element.id === cardUpdated.id
           );
           if (cardIdIndex >= 0) {
             return [
@@ -77,31 +79,31 @@ const CardColumn = ({kind, initCards, currentUser}) => {
     setSkip(false);
   }, []);
 
-  const card = cards.find(it => it.id === popupShownId);
+  const card = cards.find((it) => it.id === popupShownId);
 
   return (
     <>
       <NewCardBody
         kind={kind}
         currentUser={currentUser}
-        onCardAdded={cardAdded => {
-          setCards(oldCards => [cardAdded, ...oldCards]);
+        onCardAdded={(cardAdded) => {
+          setCards((oldCards) => [cardAdded, ...oldCards]);
         }}
         onGetNewCardID={(cardMockid, cardId) => {
-          setCards(oldCards => {
+          setCards((oldCards) => {
             oldCards[
-              oldCards.findIndex(it => it.id === cardMockid)
+              oldCards.findIndex((it) => it.id === cardMockid)
             ].id = cardId;
             return oldCards;
           });
         }}
       />
 
-      {cards.map(card => {
+      {cards.map((card) => {
         return (
           <Card
             key={card.id}
-            card={card}
+            {...card}
             type={kind}
             onCommentButtonClick={handleCommentButtonClick(card.id)}
           />

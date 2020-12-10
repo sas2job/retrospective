@@ -16,6 +16,17 @@
     "rules": {
       "camelcase": 0,
       "default-case": 0,
+      "import/extensions": [
+        "error",
+        {
+          "js": "never",
+          "jsx": "never",
+          "json": "always",
+          "svg": "always",
+          "css": "always",
+          "gql": "always"
+        }
+      ],
       "import/no-unassigned-import": [
         "error",
         {
