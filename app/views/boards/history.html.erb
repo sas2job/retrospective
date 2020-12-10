@@ -1,27 +1,25 @@
 <div class='columns' style="margin-top: -25px;">
   <div class='column is-9'>
-    <span class="subtitle is-2">Boards where I am</span>
-    <a class='button new_board_button' href= <%= new_board_path%>>
-      <%= image_tag 'icon-plus.svg', class: 'inline-icon'%>
-      Create new board
-    </a>
+    <span class="subtitle is-2">History of <%= @board.title %></span>
     <% @boards_by_date.each_with_index do |arr, index| %>
-      <% month, records = arr%>
+      <% month, records = arr %>
       <div class='board-date <%= 'animated-board' if index > 2%>' style="margin-top: 20px;">
-        <%= month%>
+        <%= month %>
       </div>
       <div class="columns is-3 is-variable is-multiline <%= 'animated-board' if index > 2%>">
-        <% records.each do |board|%>
+        <% records.each do |board| %>
           <%= render 'board_card', board: board  %>
-        <% end%>
+        <% end %>
       </div>
     <% end %>
-    <% if @boards_by_date.length > 3%>
+    <% if @boards_by_date.length > 3 %>
       <div class='load-more-boards-container'>
-        <%= image_tag 'chevron-down.svg', class: 'load-more-boards-button'%>
+        <%= image_tag 'chevron-down.svg', class: 'load-more-boards-button' %>
       </div>
     <% end %>
   </div>
 </div>
 
-<%= javascript_pack_tag 'boards_index_animation'%>
+<%= link_to 'Back', board_path(@board) %>
+
+<%= javascript_pack_tag 'boards_index_animation' %>
