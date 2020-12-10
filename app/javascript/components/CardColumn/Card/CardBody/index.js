@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import Textarea from 'react-textarea-autosize';
 import {useMutation} from '@apollo/react-hooks';
 import {updateCardMutation, destroyCardMutation} from './operations.gql';
-
 import './CardBody.css';
-const CardBody = (props) => {
-  const {id, editable, body} = props;
+
+const CardBody = ({id, editable, body}) => {
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -14,7 +13,7 @@ const CardBody = (props) => {
 
   useEffect(() => {
     setInputValue(body);
-  }, [body, props.body]);
+  }, [body]);
 
   const handleEditClick = () => {
     editModeToggle();

@@ -43,16 +43,7 @@
         }
       ],
       "promise/prefer-await-to-then": 1,
-      "react/prop-types": 0,
-      "unicorn/filename-case": [
-        "error",
-        {
-          "cases": {
-            "camelCase": true,
-            "kebabCase": true
-          }
-        }
-      ]
+      "react/prop-types": 0
     }
   },
   "husky": {

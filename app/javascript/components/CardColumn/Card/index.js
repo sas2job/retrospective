@@ -9,7 +9,7 @@ const Card = ({
   id,
   body,
   author,
-  commentsNumber,
+  comments,
   likes,
   type,
   onCommentButtonClick
@@ -32,7 +32,7 @@ const Card = ({
         id={id}
         likes={likes}
         type={type}
-        commentsNumber={commentsNumber}
+        commentsNumber={comments.length}
         onCommentButtonClick={onCommentButtonClick}
       />
     </div>

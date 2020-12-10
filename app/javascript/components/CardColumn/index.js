@@ -112,18 +112,8 @@ const CardColumn = ({kind, initCards, currentUser}) => {
 
       {popupShownId && (
         <CardPopup
-          id={card.id}
-          nickname={card.author.nickname}
-          lastName={card.author.last_name}
-          firstName={card.author.first_name}
-          avatar={card.author.avatar.thumb.url}
-          body={card.body}
-          likes={card.likes}
           type={kind}
-          commentsNumber={card.comments.length}
-          editable={user === card.author.email}
-          deletable={user === card.author.email}
-          comments={card.comments}
+          card={card}
           onCommentButtonClick={() => {}}
           onClickClosed={handlePopupClose}
         />
