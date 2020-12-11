@@ -38,8 +38,7 @@ class BoardsController < ApplicationController
     end.reduce({}, :merge).as_json
     @action_items = ActiveModelSerializers::SerializableResource.new(@board.action_items.order(created_at: :desc)).as_json
     @action_item = ActionItem.new(board_id: @board.id)
-    @board_creators = User.find(@board.memberships.where(role: 'creator').pluck(:user_id))
-                          .pluck(:email)
+    @board_creators = @board.memberships.where(role: 'creator').pluck(:user_id)
     @previous_action_items = if @board.previous_board&.action_items&.any?
                                ActiveModelSerializers::SerializableResource.new(@board.previous_board.action_items).as_json
                              end

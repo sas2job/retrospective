@@ -2,13 +2,13 @@ import React, {useRef, useState, useContext} from 'react';
 import Picker from 'emoji-picker-react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSmile} from '@fortawesome/free-regular-svg-icons';
-import UserContext from '../../../../utils/user_context';
+import UserContext from '../../../../utils/user-context';
 import Comment from './Comment';
 import {useMutation} from '@apollo/react-hooks';
 import {addCommentMutation} from './operations.gql';
 
 const CommentsDropdown = ({id, comments}) => {
-  const controlEl = useRef(null);
+  const controlElement = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isError, setIsError] = useState(false);
   const user = useContext(UserContext);
@@ -25,8 +25,8 @@ const CommentsDropdown = ({id, comments}) => {
     setIsError(false);
   };
 
-  const handleSubmit = commentContent => {
-    controlEl.current.disabled = true;
+  const handleSubmit = (commentContent) => {
+    controlElement.current.disabled = true;
     addComment({
       variables: {
         cardId: id,
@@ -40,16 +40,16 @@ const CommentsDropdown = ({id, comments}) => {
         handleErrorSubmit();
       }
     });
-    controlEl.current.disabled = false;
+    controlElement.current.disabled = false;
     setShowEmojiPicker(false);
   };
 
   const handleSmileClick = () => {
-    setShowEmojiPicker(isShown => !isShown);
+    setShowEmojiPicker((isShown) => !isShown);
   };
 
   const handleEmojiPickerClick = (_, emoji) => {
-    setNewComment(comment => `${comment}${emoji.emoji}`);
+    setNewComment((comment) => `${comment}${emoji.emoji}`);
   };
 
   return (
@@ -61,14 +61,14 @@ const CommentsDropdown = ({id, comments}) => {
               className="textarea"
               value={newComment}
               style={isError ? {outline: 'solid 1px red'} : {}}
-              onChange={e => setNewComment(e.target.value)}
+              onChange={(evt) => setNewComment(evt.target.value)}
             />
             <div className="edit-panel-wrapper">
               <a className="has-text-info" onClick={handleSmileClick}>
                 <FontAwesomeIcon icon={faSmile} />
               </a>
               <button
-                ref={controlEl}
+                ref={controlElement}
                 className="button is-small"
                 type="button"
                 onClick={() => handleSubmit(newComment)}
@@ -83,7 +83,7 @@ const CommentsDropdown = ({id, comments}) => {
               onEmojiClick={handleEmojiPickerClick}
             />
           )}
-          {comments.map(item => (
+          {comments.map((item) => (
             <Comment
               key={item.id}
               id={item.id}

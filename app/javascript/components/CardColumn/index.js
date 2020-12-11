@@ -7,13 +7,13 @@ import {
   cardDestroyedSubscription,
   cardUpdatedSubscription
 } from './operations.gql';
-import UserContext from '../../utils/user_context';
+import UserContext from '../../utils/user-context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
 import NewCardBody from '../new-card-body/new-card-body';
 
-const CardColumn = ({kind, initCards, currentUser}) => {
-  const user = useContext(UserContext);
+const CardColumn = ({kind, initCards}) => {
+  const currentUser = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [cards, setCards] = useState(initCards);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
@@ -28,7 +28,10 @@ const CardColumn = ({kind, initCards, currentUser}) => {
       const {data} = options.subscriptionData;
       const {cardAdded} = data;
       if (cardAdded) {
-        if (cardAdded.kind === kind && cardAdded.author.email !== user) {
+        if (
+          cardAdded.kind === kind &&
+          cardAdded.author.id !== currentUser.id.toString()
+        ) {
           setCards((oldCards) => [cardAdded, ...oldCards]);
         }
       }
@@ -85,7 +88,6 @@ const CardColumn = ({kind, initCards, currentUser}) => {
     <>
       <NewCardBody
         kind={kind}
-        currentUser={currentUser}
         onCardAdded={(cardAdded) => {
           setCards((oldCards) => [cardAdded, ...oldCards]);
         }}

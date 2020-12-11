@@ -5,26 +5,28 @@ import {
   actionItemUpdatedSubscription
 } from './operations.gql';
 import {useSubscription} from '@apollo/react-hooks';
-import UserContext from '../../utils/user_context';
+import UserContext from '../../utils/user-context';
 import BoardSlugContext from '../../utils/board_slug_context';
 
-const PrevActionItemColumn = props => {
+const PreviousActionItemColumn = (props) => {
   const {creators, handleEmpty, initItems} = props;
 
   const [actionItems, setActionItems] = useState(initItems);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
 
-  const user = useContext(UserContext);
+  const currentUser = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
 
   useSubscription(actionItemMovedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemMoved} = data;
       if (actionItemMoved) {
-        setActionItems(oldItems => {
-          const newItems = oldItems.filter(el => el.id !== actionItemMoved.id);
+        setActionItems((oldItems) => {
+          const newItems = oldItems.filter(
+            (element) => element.id !== actionItemMoved.id
+          );
           if (newItems.length === 0) {
             handleEmpty();
           }
@@ -38,13 +40,13 @@ const PrevActionItemColumn = props => {
 
   useSubscription(actionItemUpdatedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemUpdated} = data;
       if (actionItemUpdated) {
-        setActionItems(oldItems => {
+        setActionItems((oldItems) => {
           const cardIdIndex = oldItems.findIndex(
-            element => element.id === actionItemUpdated.id
+            (element) => element.id === actionItemUpdated.id
           );
           if (cardIdIndex >= 0) {
             return [
@@ -65,10 +67,13 @@ const PrevActionItemColumn = props => {
     setSkip(false);
   }, []);
 
+  // Restart here
+
+  const isAccssible = creators.includes(currentUser.id);
   return (
     <>
       <h2 className="board-subtitle">PREVIOUS BOARD</h2>
-      {actionItems.map(item => {
+      {actionItems.map((item) => {
         return (
           <ActionItem
             key={item.id}
@@ -76,12 +81,11 @@ const PrevActionItemColumn = props => {
             body={item.body}
             status={item.status}
             times_moved={item.times_moved}
-            movable={creators.includes(user) && item.status === 'pending'}
+            movable={isAccssible && item.status === 'pending'}
             transitionable={{
-              can_close: creators.includes(user) && item.status === 'pending',
-              can_complete:
-                creators.includes(user) && item.status === 'pending',
-              can_reopen: creators.includes(user) && item.status !== 'pending'
+              can_close: isAccssible && item.status === 'pending',
+              can_complete: isAccssible && item.status === 'pending',
+              can_reopen: isAccssible && item.status !== 'pending'
             }}
             assignee={item.assignee?.nickname}
             firstName={item.assignee?.first_name}
@@ -94,4 +98,4 @@ const PrevActionItemColumn = props => {
   );
 };
 
-export default PrevActionItemColumn;
+export default PreviousActionItemColumn;

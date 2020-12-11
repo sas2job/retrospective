@@ -1,8 +1,8 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
-import ActionItemColumnHeader from './action-item-column-header/action-item-column-header.jsx';
+import ActionItemColumnHeader from './action-item-column-header/action-item-column-header';
 import ActionItem from '../ActionItem';
-import UserContext from '../../utils/user_context';
+import UserContext from '../../utils/user-context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import {
   actionItemAddedSubscription,
@@ -20,8 +20,8 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemUpdatedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemUpdated} = data;
       if (actionItemUpdated) {
         updateItem(actionItemUpdated);
@@ -32,11 +32,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemAddedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemAdded} = data;
       if (actionItemAdded) {
-        setItems(oldItems => [actionItemAdded, ...oldItems]);
+        setItems((oldItems) => [actionItemAdded, ...oldItems]);
       }
     },
     variables: {boardSlug}
@@ -44,11 +44,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemMovedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemMoved} = data;
       if (actionItemMoved) {
-        setItems(oldItems => [...oldItems, actionItemMoved]);
+        setItems((oldItems) => [...oldItems, actionItemMoved]);
       }
     },
     variables: {boardSlug}
@@ -56,12 +56,12 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemDestroyedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemDestroyed} = data;
       if (actionItemDestroyed) {
-        setItems(oldItems =>
-          oldItems.filter(el => el.id !== actionItemDestroyed.id)
+        setItems((oldItems) =>
+          oldItems.filter((element) => element.id !== actionItemDestroyed.id)
         );
       }
     },
@@ -72,9 +72,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
     setSkip(false);
   }, []);
 
-  const updateItem = item => {
-    setItems(oldItems => {
-      const cardIdIndex = oldItems.findIndex(element => element.id === item.id);
+  const updateItem = (item) => {
+    setItems((oldItems) => {
+      const cardIdIndex = oldItems.findIndex(
+        (element) => element.id === item.id
+      );
       if (cardIdIndex >= 0) {
         return [
           ...oldItems.slice(0, cardIdIndex),
@@ -90,7 +92,7 @@ const ActionItemColumn = ({creators, users, initItems}) => {
   return (
     <>
       <ActionItemColumnHeader users={users} />
-      {items.map(item => {
+      {items.map((item) => {
         return (
           <ActionItem
             key={item.id}
