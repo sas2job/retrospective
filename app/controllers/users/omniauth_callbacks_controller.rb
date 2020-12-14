@@ -56,7 +56,7 @@ module Users
     end
 
     def alfred_info
-      { 
+      {
         email: auth.info.email,
         image: auth.info.avatar_url,
         nickname: auth.info.nickname,
