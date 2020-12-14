@@ -1,13 +1,22 @@
-import React from 'react';
-
+import React, {useContext} from 'react';
 import ActionItemBody from './ActionItemBody';
 import ActionItemFooter from './ActionItemFooter';
 import './ActionItem.css';
-import CardUser from '../CardColumn/Card/card-user/card-user.jsx';
+import UserContext from '../../utils/user-context';
+import CardUser from '../CardColumn/Card/card-user/card-user';
 
-class ActionItem extends React.Component {
-  pickColor = () => {
-    switch (this.props.status) {
+const ActionItem = ({
+  creators,
+  id,
+  body,
+  status,
+  times_moved,
+  assignee,
+  users,
+  isPrevious
+}) => {
+  const pickColor = (cardStatus) => {
+    switch (cardStatus) {
       case 'done':
         return 'green';
       case 'closed':
@@ -17,56 +26,32 @@ class ActionItem extends React.Component {
     }
   };
 
-  render() {
-    const {
-      id,
-      body,
-      timesMoved,
-      deletable,
-      editable,
-      movable,
-      transitionable,
-      assignee,
-      assigneeId,
-      avatar,
-      users,
-      lastName,
-      firstName
-    } = this.props;
-    const footerNotEmpty =
-      movable || transitionable || timesMoved !== 0 || assignee !== null;
+  const currentUser = useContext(UserContext);
+  const isAccssible = creators.includes(currentUser.id);
+  const isStatusPending = status === 'pending';
 
-    return (
-      <div className={`box ${this.pickColor()}_bg`}>
-        {assignee && (
-          <CardUser
-            avatar={avatar}
-            nickname={assignee}
-            firstName={firstName}
-            lastName={lastName}
-          />
-        )}
+  return (
+    <div className={`box ${pickColor(status)}_bg`}>
+      {assignee && <CardUser {...assignee} />}
 
-        <ActionItemBody
+      <ActionItemBody
+        id={id}
+        assigneeId={assignee?.id}
+        editable={isAccssible}
+        deletable={isAccssible}
+        body={body}
+        users={users}
+      />
+      {isPrevious && (
+        <ActionItemFooter
           id={id}
-          assigneeId={assigneeId}
-          editable={editable}
-          deletable={deletable}
-          body={body}
-          users={users}
+          timesMoved={times_moved}
+          isReopanable={isAccssible && !isStatusPending}
+          isCompletable={isAccssible && isStatusPending}
         />
-        {footerNotEmpty && (
-          <ActionItemFooter
-            id={id}
-            timesMoved={timesMoved}
-            movable={movable}
-            transitionable={transitionable}
-            assignee={assignee}
-          />
-        )}
-      </div>
-    );
-  }
-}
+      )}
+    </div>
+  );
+};
 
 export default ActionItem;

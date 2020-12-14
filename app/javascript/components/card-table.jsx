@@ -39,7 +39,6 @@ const CardTable = ({
 
     return content;
   };
-  // Debugger;
 
   return (
     <Provider>
@@ -52,6 +51,7 @@ const CardTable = ({
                   creators={creators}
                   handleEmpty={previousActionsEmptyHandler}
                   initItems={initPrevItems || []}
+                  users={users}
                 />
               </div>
             ) : null}

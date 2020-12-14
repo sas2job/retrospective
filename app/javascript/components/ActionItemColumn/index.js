@@ -2,7 +2,6 @@ import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
 import ActionItemColumnHeader from './action-item-column-header/action-item-column-header';
 import ActionItem from '../ActionItem';
-import UserContext from '../../utils/user-context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import {
   actionItemAddedSubscription,
@@ -13,7 +12,6 @@ import {
 import '../table.css';
 
 const ActionItemColumn = ({creators, users, initItems}) => {
-  const user = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [items, setItems] = useState(initItems);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
@@ -96,16 +94,8 @@ const ActionItemColumn = ({creators, users, initItems}) => {
         return (
           <ActionItem
             key={item.id}
-            assigneeId={item?.assignee?.id}
-            id={item.id}
-            body={item.body}
-            timesMoved={item.times_moved}
-            editable={creators.includes(user)}
-            deletable={creators.includes(user)}
-            assignee={item.assignee?.nickname}
-            firstName={item.assignee?.first_name} // TO DO: will be rewritten
-            lastName={item.assignee?.last_name} // TO DO: will be rewritten
-            avatar={item.assignee_avatar_url}
+            {...item}
+            creators={creators}
             users={users}
           />
         );

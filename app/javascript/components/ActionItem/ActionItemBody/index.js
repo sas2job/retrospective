@@ -7,7 +7,7 @@ import {
 } from './operations.gql';
 import {useMutation} from '@apollo/react-hooks';
 
-const ActionItemBody = props => {
+const ActionItemBody = (props) => {
   const {assigneeId, editable, deletable, body, users} = props;
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
@@ -43,24 +43,24 @@ const ActionItemBody = props => {
   };
 
   const editModeToggle = () => {
-    setEditMode(editMode => !editMode);
+    setEditMode(!editMode);
   };
 
-  const handleChange = e => {
-    setInputValue(e.target.value);
+  const handleChange = (evt) => {
+    setInputValue(evt.target.value);
   };
 
   const resetTextChanges = () => {
     setInputValue(props.body);
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (evt) => {
     if (navigator.platform.includes('Mac')) {
-      if (e.key === 'Enter' && e.metaKey) {
+      if (evt.key === 'Enter' && evt.metaKey) {
         editModeToggle();
         handleItemEdit(props.id, inputValue);
       }
-    } else if (e.key === 'Enter' && e.ctrlKey) {
+    } else if (evt.key === 'Enter' && evt.ctrlKey) {
       editModeToggle();
       handleItemEdit(props.id, inputValue);
     }
@@ -82,7 +82,7 @@ const ActionItemBody = props => {
   };
 
   const toggleDropdown = () => {
-    setShowDropdown(isShown => !isShown);
+    setShowDropdown(!showDropdown);
   };
 
   const hideDropdown = () => {
@@ -111,8 +111,8 @@ const ActionItemBody = props => {
               <div>
                 <a
                   onClick={handleEditClick}
-                  onMouseDown={event => {
-                    event.preventDefault();
+                  onMouseDown={(evt) => {
+                    evt.preventDefault();
                   }}
                 >
                   Edit
@@ -126,8 +126,8 @@ const ActionItemBody = props => {
                   'Are you sure you want to delete this ActionItem?'
                 ) && handleDeleteClick();
               }}
-              onMouseDown={event => {
-                event.preventDefault();
+              onMouseDown={(evt) => {
+                evt.preventDefault();
               }}
             >
               Delete
@@ -156,10 +156,10 @@ const ActionItemBody = props => {
               <select
                 className="select"
                 value={actionItemAssignee}
-                onChange={e => setActionItemAssignee(e.target.value)}
+                onChange={(evt) => setActionItemAssignee(evt.target.value)}
               >
                 <option value=" ">Assigned to ...</option>
-                {users.map(user => {
+                {users.map((user) => {
                   return (
                     <option key={user.id} value={user.id}>
                       {user.nickname}
