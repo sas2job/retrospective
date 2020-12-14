@@ -40,6 +40,12 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
 gem 'sentry-raven'
 
+# Authentication
+gem 'devise'
+gem 'omniauth-alfred', git: 'https://github.com/cybergizer-hq/omniauth-alfred', branch: 'master'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-facebook'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'rubocop', '~> 1.6.1', require: false
@@ -76,8 +82,6 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'devise'
-gem 'omniauth-alfred', git: 'https://github.com/cybergizer-hq/omniauth-alfred', branch: 'master'
 gem 'webpacker', '~> 4.x'
 gem 'rails-assets-bulma', source: 'https://rails-assets.org'
 gem 'fog-aws', require: false

@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Users::OmniauthCallbacksController do
+RSpec.shared_examples :omniauth_callback do |provider|
+  let!(:auth_hash) { build(:"#{provider}_auth_hash") }
+
   before do
     OmniAuth.config.test_mode = true
 
@@ -13,53 +15,44 @@ RSpec.describe Users::OmniauthCallbacksController do
     allow_any_instance_of(AvatarUploader).to receive(:download!) # remote_avatar_url
   end
 
+  context 'when provider sent invalid oauth data for user authentication' do
+    it 'redirects to root path' do
+      auth_hash.info.email = nil
+
+      expect { get provider }.to_not change { User.count }
+      expect(response).to redirect_to new_user_session_path
+    end
+  end
+
+  context 'when provider sent valid oauth data' do
+    context 'when user is not in the database' do
+      it 'creates new user and redirects' do
+        expect { get provider }.to change { User.count }.by(1)
+        expect(response).to redirect_to('/wherever')
+      end
+    end
+
+    context 'when user is in the database' do
+      it 'logs in existing user and redirects' do
+        create(:user, provider: auth_hash.provider, uid: auth_hash.uid)
+
+        expect { get provider }.to_not change { User.count }
+        expect(response).to redirect_to('/wherever')
+      end
+    end
+  end
+end
+
+RSpec.describe Users::OmniauthCallbacksController do
   describe '/alfred' do
-    let!(:auth_hash) { build(:alfred_auth_hash) }
+    it_behaves_like :omniauth_callback, :alfred
+  end
 
-    context 'when provider did not send uid' do
-      it 'redirects to the login page' do
-        auth_hash.uid = nil
+  describe '/google' do
+    it_behaves_like :omniauth_callback, :google
+  end
 
-        get :alfred
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when provider did not send provider' do
-      it 'redirects to the login page' do
-        auth_hash.provider = nil
-
-        get :alfred
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when provider sent valid auth data' do
-      context 'when user is not in the database' do
-        it 'creates new user and redirects' do
-          expect { get :alfred }.to change { User.count }.by(1)
-          expect(response).to redirect_to('/wherever')
-        end
-      end
-
-      context 'when user is in the database' do
-        it 'logs in existing user and redirects' do
-          auth_hash.uid = 'some_uid'
-          create(:user, provider: 'alfred', uid: 'some_uid')
-
-          expect { get :alfred }.to_not change { User.count }
-          expect(response).to redirect_to('/wherever')
-        end
-      end
-
-      context 'when user has not persisted' do
-        it 'redirects to root path' do
-          auth_hash.info.email = nil
-
-          expect { get :alfred }.to_not change { User.count }
-          expect(response).to redirect_to new_user_session_path
-        end
-      end
-    end
+  describe '/facebook' do
+    it_behaves_like :omniauth_callback, :facebook
   end
 end

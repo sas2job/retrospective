@@ -9,11 +9,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.create([
-              { email: 'tu1@mail.com', password: '123456', nickname: 'tu1' },
-              { email: 'tu2@mail.com', password: '123456', nickname: 'tu2' },
-              { email: 'tu3@mail.com', password: '123456', nickname: 'tu3' },
-              { email: 'tu4@mail.com', password: '123456', nickname: 'tu4' },
-              { email: 'tu5@mail.com', password: '123456', nickname: 'tu5' }
+              { email: 'tu1@mail.com', password: '123456', nickname: 'tu1', provider: 'provider', uid: 'uid1' },
+              { email: 'tu2@mail.com', password: '123456', nickname: 'tu2', provider: 'provider', uid: 'uid2' },
+              { email: 'tu3@mail.com', password: '123456', nickname: 'tu3', provider: 'provider', uid: 'uid3' },
+              { email: 'tu4@mail.com', password: '123456', nickname: 'tu4', provider: 'provider', uid: 'uid4' },
+              { email: 'tu5@mail.com', password: '123456', nickname: 'tu5', provider: 'provider', uid: 'uid5' }
             ])
 
 Team.create([

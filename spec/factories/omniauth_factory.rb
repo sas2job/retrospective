@@ -15,4 +15,12 @@ FactoryBot.define do
       )
     end
   end
+
+  factory :google_auth_hash, class: OmniAuth::AuthHash do
+    initialize_with { new(Faker::Omniauth.google) }
+  end
+
+  factory :facebook_auth_hash, class: OmniAuth::AuthHash do
+    initialize_with { new(Faker::Omniauth.facebook) }
+  end
 end

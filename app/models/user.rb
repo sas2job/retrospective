@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[alfred developer]
+         :omniauthable, omniauth_providers: %i[alfred google facebook developer]
 
   has_many :cards, foreign_key: :author_id
   has_many :comments, foreign_key: :author_id
@@ -12,7 +12,9 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
-  validates :nickname, uniqueness: true
+  validates :provider, presence: true
+  validates :uid, presence: true, uniqueness: { scope: :provider }
+  validates :nickname, uniqueness: true, if: :nickname?
 
   mount_uploader :avatar, AvatarUploader
 
@@ -23,7 +25,7 @@ class User < ApplicationRecord
       u.provider = provider
       u.uid = uid
       u.email = info[:email]
-      u.remote_avatar_url = info[:avatar_url] if u.changed?
+      u.remote_avatar_url = info[:image] if u.changed?
 
       u.send :new_user_settings, info
       u.save
