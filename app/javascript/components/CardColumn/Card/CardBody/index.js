@@ -3,6 +3,7 @@ import Textarea from 'react-textarea-autosize';
 import {useMutation} from '@apollo/react-hooks';
 import {updateCardMutation, destroyCardMutation} from './operations.gql';
 import './CardBody.css';
+import {Linkify, linkifyOptions} from '../../../../utils/linkify';
 
 const CardBody = ({id, editable, body}) => {
   const [inputValue, setInputValue] = useState(body);
@@ -105,7 +106,7 @@ const CardBody = ({id, editable, body}) => {
         hidden={editMode}
         onDoubleClick={editable ? editModeToggle : undefined}
       >
-        {body}
+        <Linkify options={linkifyOptions}> {body} </Linkify>
       </div>
       {editMode && (
         <>
