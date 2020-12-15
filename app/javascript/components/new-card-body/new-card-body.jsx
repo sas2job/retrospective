@@ -4,14 +4,16 @@ import {useMutation} from '@apollo/react-hooks';
 import Textarea from 'react-textarea-autosize';
 import {addCardMutation} from './operations.gql';
 import BoardSlugContext from '../../utils/board_slug_context';
+import UserContext from '../../utils/user-context';
 
-const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
+const NewCardBody = ({kind, onCardAdded, onGetNewCardID}) => {
   const textInput = useRef();
   const [isOpened, setOpened] = useState(false);
   const [newCard, setNewCard] = useState('');
   const [addCard] = useMutation(addCardMutation);
 
   const boardSlug = useContext(BoardSlugContext);
+  const currentUser = useContext(UserContext);
 
   const toggleOpen = () => setOpened(!isOpened);
 
@@ -21,9 +23,9 @@ const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
     }
   }, [isOpened]);
 
-  const cancelHandler = e => {
-    e.preventDefault();
-    setOpened(isOpened => !isOpened);
+  const cancelHandler = (evt) => {
+    evt.preventDefault();
+    setOpened(!isOpened);
     setNewCard('');
   };
 
@@ -36,9 +38,9 @@ const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
     id: `tmp-${nanoid()}`
   });
 
-  const submitHandler = async e => {
+  const submitHandler = async (evt) => {
     const card = buildNewCard();
-    e.preventDefault();
+    evt.preventDefault();
 
     onCardAdded(card);
 
@@ -57,17 +59,17 @@ const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
     }
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (evt) => {
     if (navigator.platform.includes('Mac')) {
-      if (e.key === 'Enter' && e.metaKey) {
-        submitHandler(e);
+      if (evt.key === 'Enter' && evt.metaKey) {
+        submitHandler(evt);
       }
-    } else if (e.key === 'Enter' && e.ctrlKey) {
-      submitHandler(e);
+    } else if (evt.key === 'Enter' && evt.ctrlKey) {
+      submitHandler(evt);
     }
 
-    if (e.key === 'Escape') {
-      setOpened(isOpened => !isOpened);
+    if (evt.key === 'Escape') {
+      setOpened(!isOpened);
       setNewCard('');
     }
   };
@@ -89,7 +91,7 @@ const NewCardBody = ({kind, onCardAdded, onGetNewCardID, currentUser}) => {
               autoComplete="off"
               id={`card_${kind}_body`}
               value={newCard}
-              onChange={e => setNewCard(e.target.value)}
+              onChange={(evt) => setNewCard(evt.target.value)}
               onKeyDown={handleKeyPress}
             />
             <div className="card-buttons">

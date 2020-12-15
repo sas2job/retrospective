@@ -4,8 +4,8 @@ import {useMutation} from '@apollo/react-hooks';
 import TransitionButton from '../TransitionButton';
 import BoardSlugContext from '../../../utils/board_slug_context';
 import './ActionItemFooter.css';
-const ActionItemFooter = props => {
-  const {id, movable, transitionable, timesMoved} = props;
+const ActionItemFooter = (props) => {
+  const {id, isReopanable, isCompletable, timesMoved} = props;
   const boardSlug = useContext(BoardSlugContext);
   const [moveActionItem] = useMutation(moveActionItemMutation);
   const handleMoveClick = () => {
@@ -21,11 +21,11 @@ const ActionItemFooter = props => {
     });
   };
 
-  const pickColor = num => {
+  const pickColor = (number) => {
     switch (true) {
-      case [1, 2].includes(num):
+      case [1, 2].includes(number):
         return 'green';
-      case [3].includes(num):
+      case [3].includes(number):
         return 'yellow';
       default:
         return 'red';
@@ -47,16 +47,14 @@ const ActionItemFooter = props => {
       <hr style={{margin: '0.5rem'}} />
       <div className="chevrons">{generateChevrons()}</div>
 
-      {transitionable && transitionable.can_close && (
-        <TransitionButton id={id} action="close" />
+      {isCompletable && (
+        <>
+          <TransitionButton id={id} action="close" />
+          <TransitionButton id={id} action="complete" />
+        </>
       )}
-      {transitionable && transitionable.can_complete && (
-        <TransitionButton id={id} action="complete" />
-      )}
-      {transitionable && transitionable.can_reopen && (
-        <TransitionButton id={id} action="reopen" />
-      )}
-      {movable && (
+      {isReopanable && <TransitionButton id={id} action="reopen" />}
+      {isCompletable && (
         <button
           type="button"
           onClick={() => {

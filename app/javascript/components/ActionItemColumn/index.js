@@ -1,8 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
-import ActionItemColumnHeader from './action-item-column-header/action-item-column-header.jsx';
+import ActionItemColumnHeader from './action-item-column-header/action-item-column-header';
 import ActionItem from '../ActionItem';
-import UserContext from '../../utils/user_context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import {
   actionItemAddedSubscription,
@@ -13,15 +12,14 @@ import {
 import '../table.css';
 
 const ActionItemColumn = ({creators, users, initItems}) => {
-  const user = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [items, setItems] = useState(initItems);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
 
   useSubscription(actionItemUpdatedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemUpdated} = data;
       if (actionItemUpdated) {
         updateItem(actionItemUpdated);
@@ -32,11 +30,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemAddedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemAdded} = data;
       if (actionItemAdded) {
-        setItems(oldItems => [actionItemAdded, ...oldItems]);
+        setItems((oldItems) => [actionItemAdded, ...oldItems]);
       }
     },
     variables: {boardSlug}
@@ -44,11 +42,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemMovedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemMoved} = data;
       if (actionItemMoved) {
-        setItems(oldItems => [...oldItems, actionItemMoved]);
+        setItems((oldItems) => [...oldItems, actionItemMoved]);
       }
     },
     variables: {boardSlug}
@@ -56,12 +54,12 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   useSubscription(actionItemDestroyedSubscription, {
     skip,
-    onSubscriptionData: opts => {
-      const {data} = opts.subscriptionData;
+    onSubscriptionData: (options) => {
+      const {data} = options.subscriptionData;
       const {actionItemDestroyed} = data;
       if (actionItemDestroyed) {
-        setItems(oldItems =>
-          oldItems.filter(el => el.id !== actionItemDestroyed.id)
+        setItems((oldItems) =>
+          oldItems.filter((element) => element.id !== actionItemDestroyed.id)
         );
       }
     },
@@ -72,9 +70,11 @@ const ActionItemColumn = ({creators, users, initItems}) => {
     setSkip(false);
   }, []);
 
-  const updateItem = item => {
-    setItems(oldItems => {
-      const cardIdIndex = oldItems.findIndex(element => element.id === item.id);
+  const updateItem = (item) => {
+    setItems((oldItems) => {
+      const cardIdIndex = oldItems.findIndex(
+        (element) => element.id === item.id
+      );
       if (cardIdIndex >= 0) {
         return [
           ...oldItems.slice(0, cardIdIndex),
@@ -90,20 +90,12 @@ const ActionItemColumn = ({creators, users, initItems}) => {
   return (
     <>
       <ActionItemColumnHeader users={users} />
-      {items.map(item => {
+      {items.map((item) => {
         return (
           <ActionItem
             key={item.id}
-            assigneeId={item?.assignee?.id}
-            id={item.id}
-            body={item.body}
-            timesMoved={item.times_moved}
-            editable={creators.includes(user)}
-            deletable={creators.includes(user)}
-            assignee={item.assignee?.nickname}
-            firstName={item.assignee?.first_name} // TO DO: will be rewritten
-            lastName={item.assignee?.last_name} // TO DO: will be rewritten
-            avatar={item.assignee_avatar_url}
+            {...item}
+            creators={creators}
             users={users}
           />
         );

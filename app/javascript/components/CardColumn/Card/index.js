@@ -1,5 +1,5 @@
 import React, {useContext, useMemo} from 'react';
-import UserContext from '../../../utils/user_context';
+import UserContext from '../../../utils/user-context';
 import CardBody from './CardBody';
 import CardFooter from './CardFooter';
 import CardUser from './card-user/card-user';
@@ -14,15 +14,16 @@ const Card = ({
   type,
   onCommentButtonClick
 }) => {
-  const {email} = author;
-
-  const user = useContext(UserContext);
+  const currentUser = useContext(UserContext);
 
   const isTemporaryId = (id) => {
     return id.toString().startsWith('tmp-');
   };
 
-  const editable = useMemo(() => !isTemporaryId(id) && user === email, [id]);
+  const editable = useMemo(
+    () => !isTemporaryId(id) && currentUser.id === author.id,
+    [id, currentUser.id, author.id]
+  );
 
   return (
     <div className="box">
