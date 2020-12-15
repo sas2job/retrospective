@@ -27,7 +27,7 @@ const ActionItem = ({
   };
 
   const currentUser = useContext(UserContext);
-  const isAccssible = creators.includes(currentUser.id);
+  const isAccessible = creators.includes(currentUser.id);
   const isStatusPending = status === 'pending';
 
   return (
@@ -37,8 +37,8 @@ const ActionItem = ({
       <ActionItemBody
         id={id}
         assigneeId={assignee?.id}
-        editable={isAccssible}
-        deletable={isAccssible}
+        editable={isAccessible}
+        deletable={isAccessible}
         body={body}
         users={users}
       />
@@ -46,8 +46,8 @@ const ActionItem = ({
         <ActionItemFooter
           id={id}
           timesMoved={times_moved}
-          isReopanable={isAccssible && !isStatusPending}
-          isCompletable={isAccssible && isStatusPending}
+          isReopanable={isAccessible && !isStatusPending}
+          isCompletable={isAccessible && isStatusPending}
         />
       )}
     </div>
