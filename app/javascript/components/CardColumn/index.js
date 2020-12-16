@@ -12,7 +12,7 @@ import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
 import NewCardBody from '../new-card-body/new-card-body';
 
-const CardColumn = ({kind, initCards}) => {
+const CardColumn = ({kind, initCards, creators}) => {
   const currentUser = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [cards, setCards] = useState(initCards);
@@ -107,6 +107,7 @@ const CardColumn = ({kind, initCards}) => {
             key={card.id}
             {...card}
             type={kind}
+            creators={creators}
             onCommentButtonClick={handleCommentButtonClick(card.id)}
           />
         );

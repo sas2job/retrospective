@@ -5,7 +5,7 @@ import {updateCardMutation, destroyCardMutation} from './operations.gql';
 import './CardBody.css';
 import {Linkify, linkifyOptions} from '../../../../utils/linkify';
 
-const CardBody = ({id, editable, body}) => {
+const CardBody = ({id, editable, body, deletable}) => {
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -55,7 +55,7 @@ const CardBody = ({id, editable, body}) => {
 
   return (
     <div>
-      {editable && (
+      {deletable && (
         <div className="dropdown">
           <div
             className="dropdown-btn"
@@ -66,7 +66,7 @@ const CardBody = ({id, editable, body}) => {
             …
           </div>
           <div hidden={!showDropdown} className="dropdown-content">
-            {!editMode && (
+            {!editMode && editable && (
               <div>
                 <a
                   onClick={handleEditClick}

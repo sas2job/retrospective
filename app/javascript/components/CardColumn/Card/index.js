@@ -12,7 +12,8 @@ const Card = ({
   comments,
   likes,
   type,
-  onCommentButtonClick
+  onCommentButtonClick,
+  creators
 }) => {
   const currentUser = useContext(UserContext);
 
@@ -20,15 +21,25 @@ const Card = ({
     return id.toString().startsWith('tmp-');
   };
 
-  const editable = useMemo(
-    () => !isTemporaryId(id) && currentUser.id === author.id,
-    [id, currentUser.id, author.id]
+  const isCurrentUserAuthor =
+    currentUser.id.toString() === author.id.toString(); // Temporary solution for matching data types (after edit card it will still availible to edit)
+
+  const isCurrentUserCreator = creators.includes(currentUser.id);
+
+  const editable = useMemo(() => !isTemporaryId(id) && isCurrentUserAuthor, [
+    id,
+    isCurrentUserAuthor
+  ]);
+
+  const deletable = useMemo(
+    () => !isTemporaryId(id) && (isCurrentUserAuthor || isCurrentUserCreator),
+    [id, isCurrentUserCreator, isCurrentUserAuthor]
   );
 
   return (
     <div className="box">
       <CardUser {...author} />
-      <CardBody id={id} editable={editable} body={body} />
+      <CardBody id={id} editable={editable} deletable={deletable} body={body} />
       <CardFooter
         id={id}
         likes={likes}

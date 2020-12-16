@@ -32,7 +32,12 @@ const CardTable = ({
     for (const [columnName, cards] of Object.entries(cardTypePairs)) {
       content.push(
         <div key={`${columnName}_column`} className={columnClass}>
-          <CardColumn key={columnName} kind={columnName} initCards={cards} />
+          <CardColumn
+            key={columnName}
+            kind={columnName}
+            initCards={cards}
+            creators={creators}
+          />
         </div>
       );
     }
