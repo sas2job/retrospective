@@ -6,7 +6,6 @@ import UserContext from '../../utils/user-context';
 import CardUser from '../CardColumn/Card/card-user/card-user';
 
 const ActionItem = ({
-  creators,
   id,
   body,
   status,
@@ -27,7 +26,6 @@ const ActionItem = ({
   };
 
   const currentUser = useContext(UserContext);
-  const isAccessible = creators.includes(currentUser.id);
   const isStatusPending = status === 'pending';
 
   return (
@@ -37,8 +35,8 @@ const ActionItem = ({
       <ActionItemBody
         id={id}
         assigneeId={assignee?.id}
-        editable={isAccessible}
-        deletable={isAccessible}
+        editable={currentUser.isCreator}
+        deletable={currentUser.isCreator}
         body={body}
         users={users}
       />
@@ -46,8 +44,8 @@ const ActionItem = ({
         <ActionItemFooter
           id={id}
           timesMoved={times_moved}
-          isReopanable={isAccessible && !isStatusPending}
-          isCompletable={isAccessible && isStatusPending}
+          isReopanable={currentUser.isCreator && !isStatusPending}
+          isCompletable={currentUser.isCreator && isStatusPending}
         />
       )}
     </div>

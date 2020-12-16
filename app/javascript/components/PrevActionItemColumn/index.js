@@ -8,12 +8,11 @@ import {useSubscription} from '@apollo/react-hooks';
 import BoardSlugContext from '../../utils/board_slug_context';
 
 const PreviousActionItemColumn = (props) => {
-  const {creators, users, handleEmpty, initItems} = props;
+  const {users, handleEmpty, initItems} = props;
 
   const [actionItems, setActionItems] = useState(initItems);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
 
-  // const currentUser = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
 
   useSubscription(actionItemMovedSubscription, {
@@ -71,15 +70,7 @@ const PreviousActionItemColumn = (props) => {
     <>
       <h2 className="board-subtitle">PREVIOUS BOARD</h2>
       {actionItems.map((item) => {
-        return (
-          <ActionItem
-            key={item.id}
-            isPrevious
-            creators={creators}
-            users={users}
-            {...item}
-          />
-        );
+        return <ActionItem key={item.id} isPrevious users={users} {...item} />;
       })}
     </>
   );

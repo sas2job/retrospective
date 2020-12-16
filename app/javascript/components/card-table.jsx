@@ -40,30 +40,26 @@ const CardTable = ({
     return content;
   };
 
+  user.isCreator = creators.includes(user.id);
   return (
     <Provider>
       <BoardSlugContext.Provider value={window.location.pathname.split('/')[2]}>
         <UserContext.Provider value={user}>
           <div className="board-columns">
-            {displayPreviousItems ? (
+            {displayPreviousItems && (
               <div className={columnClass}>
                 <PrevActionItemColumn
-                  creators={creators}
                   handleEmpty={previousActionsEmptyHandler}
                   initItems={initPrevItems || []}
                   users={users}
                 />
               </div>
-            ) : null}
+            )}
 
             {generateColumns(cardsByType)}
 
             <div className={columnClass}>
-              <ActionItemColumn
-                creators={creators}
-                initItems={actionItems || []}
-                users={users}
-              />
+              <ActionItemColumn initItems={actionItems || []} users={users} />
             </div>
           </div>
         </UserContext.Provider>
