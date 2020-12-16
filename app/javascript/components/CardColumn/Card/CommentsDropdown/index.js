@@ -7,7 +7,7 @@ import Comment from './Comment';
 import {useMutation} from '@apollo/react-hooks';
 import {addCommentMutation} from './operations.gql';
 
-const CommentsDropdown = ({id, comments}) => {
+const CommentsDropdown = ({id, comments, onClickClosed}) => {
   const controlElement = useRef(null);
   const textInput = useRef();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -64,6 +64,10 @@ const CommentsDropdown = ({id, comments}) => {
       }
     } else if (evt.key === 'Enter' && evt.ctrlKey) {
       handleSubmit(evt);
+    }
+
+    if (evt.key === 'Escape') {
+      onClickClosed();
     }
   };
 

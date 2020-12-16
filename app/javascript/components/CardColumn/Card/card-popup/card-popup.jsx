@@ -19,7 +19,11 @@ const CardPopup = ({card, type, onCommentButtonClick, onClickClosed}) => {
           type={type}
           onCommentButtonClick={onCommentButtonClick}
         />
-        <CommentsDropdown id={id} comments={comments} />
+        <CommentsDropdown
+          id={id}
+          comments={comments}
+          onClickClosed={onClickClosed}
+        />
       </div>
     </div>
   );
