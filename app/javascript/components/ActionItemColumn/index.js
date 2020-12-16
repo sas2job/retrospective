@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
-import ActionItemColumnHeader from './action-item-column-header/action-item-column-header';
+import NewActionItemBody from '../new-action-item-body/new-action-item-body';
 import ActionItem from '../ActionItem';
 import BoardSlugContext from '../../utils/board_slug_context';
 import {
@@ -46,7 +46,7 @@ const ActionItemColumn = ({creators, users, initItems}) => {
       const {data} = options.subscriptionData;
       const {actionItemMoved} = data;
       if (actionItemMoved) {
-        setItems((oldItems) => [...oldItems, actionItemMoved]);
+        setItems((oldItems) => [actionItemMoved, ...oldItems]);
       }
     },
     variables: {boardSlug}
@@ -89,7 +89,7 @@ const ActionItemColumn = ({creators, users, initItems}) => {
 
   return (
     <>
-      <ActionItemColumnHeader users={users} />
+      <NewActionItemBody users={users} />
       {items.map((item) => {
         return (
           <ActionItem
