@@ -15,10 +15,10 @@
   position: absolute;
   left: 25%;
   right: 25%;
-  top: 25%;
-  bottom: 25%;
+  top: 15%;
+  bottom: 15%;
   margin: auto;
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 20px;
   background: #fafbfc;
   overflow: auto;
