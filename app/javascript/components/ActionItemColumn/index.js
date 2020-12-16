@@ -11,7 +11,7 @@ import {
 } from './operations.gql';
 import '../table.css';
 
-const ActionItemColumn = ({creators, users, initItems}) => {
+const ActionItemColumn = ({users, initItems}) => {
   const boardSlug = useContext(BoardSlugContext);
   const [items, setItems] = useState(initItems);
   const [skip, setSkip] = useState(true); // Workaround for https://github.com/apollographql/react-apollo/issues/3802
@@ -91,14 +91,7 @@ const ActionItemColumn = ({creators, users, initItems}) => {
     <>
       <ActionItemColumnHeader users={users} />
       {items.map((item) => {
-        return (
-          <ActionItem
-            key={item.id}
-            {...item}
-            creators={creators}
-            users={users}
-          />
-        );
+        return <ActionItem key={item.id} {...item} users={users} />;
       })}
     </>
   );
