@@ -6,7 +6,7 @@ import {
   updateActionItemMutation
 } from './operations.gql';
 import {useMutation} from '@apollo/react-hooks';
-import {Linkify, linkifyOptions} from '../../../utils/linkify';
+import {Linkify, linkifyOptions} from '../../utils/linkify';
 
 const ActionItemBody = (props) => {
   const {assigneeId, editable, deletable, body, users} = props;
