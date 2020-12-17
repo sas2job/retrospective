@@ -1,0 +1,11 @@
+#import '../../fragments/membership.graphql'
+mutation destroyMembershipMutation($id: ID!) {
+  destroyMembership(
+    input: { id: $id }
+  ) {
+    id
+    errors {
+      fullMessages
+    }
+  }
+}
