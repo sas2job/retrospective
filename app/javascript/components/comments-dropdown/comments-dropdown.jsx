@@ -3,7 +3,7 @@ import Picker from 'emoji-picker-react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSmile} from '@fortawesome/free-regular-svg-icons';
 import UserContext from '../../utils/user-context';
-import Comment from '../comment/comment';
+import {Comment} from '../comment';
 import {useMutation} from '@apollo/react-hooks';
 import {addCommentMutation} from './operations.gql';
 

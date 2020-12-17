@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
-import Card from '../card/card';
-import CardPopup from '../card-popup/card-popup';
+import {Card} from '../card';
+import {CardPopup} from '../card-popup';
 import {
   cardAddedSubscription,
   cardDestroyedSubscription,
@@ -10,7 +10,7 @@ import {
 import UserContext from '../../utils/user-context';
 import BoardSlugContext from '../../utils/board_slug_context';
 import '../table.css';
-import NewCardBody from '../new-card-body/new-card-body';
+import {NewCardBody} from '../new-card-body';
 
 const CardColumn = ({kind, initCards}) => {
   const currentUser = useContext(UserContext);

@@ -1,5 +1,5 @@
 import React from 'react';
-import Likes from '../likes/likes';
+import {Likes} from '../likes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCommentAlt} from '@fortawesome/free-regular-svg-icons';
 import './style.css';

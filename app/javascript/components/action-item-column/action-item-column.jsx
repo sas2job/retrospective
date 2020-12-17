@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {useSubscription} from '@apollo/react-hooks';
-import NewActionItemBody from '../new-action-item-body/new-action-item-body';
-import ActionItem from '../action-item/action-item';
+import {NewActionItemBody} from '../new-action-item-body';
+import {ActionItem} from '../action-item';
 import BoardSlugContext from '../../utils/board_slug_context';
 import {
   actionItemAddedSubscription,

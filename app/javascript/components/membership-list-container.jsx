@@ -1,6 +1,6 @@
 import React from 'react';
-import MembershipList from './membership-list/membership-list';
-import Provider from './provider/provider';
+import {MembershipList} from './membership-list';
+import {Provider} from './provider';
 import BoardSlugContext from '../utils/board_slug_context';
 
 const MembershipListContainer = () => {

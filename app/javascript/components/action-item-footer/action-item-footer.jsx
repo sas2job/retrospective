@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {moveActionItemMutation} from './operations.gql';
 import {useMutation} from '@apollo/react-hooks';
-import TransitionButton from '../transition-button/transition-button';
+import {TransitionButton} from '../transition-button';
 import BoardSlugContext from '../../utils/board_slug_context';
 import './style.css';
 const ActionItemFooter = ({id, isReopanable, isCompletable, timesMoved}) => {

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import PrevActionItemColumn from './prev-action-item-column/prev-action-item-column';
-import CardColumn from './card-column/card-column';
-import ActionItemColumn from './action-item-column/action-item-column';
+import {PrevActionItemColumn} from './prev-action-item-column';
+import {CardColumn} from './card-column';
+import {ActionItemColumn} from './action-item-column';
 import BoardSlugContext from '../utils/board_slug_context';
 import UserContext from '../utils/user-context';
-import Provider from './provider/provider';
+import {Provider} from './provider';
 
 const CardTable = ({
   actionItems,

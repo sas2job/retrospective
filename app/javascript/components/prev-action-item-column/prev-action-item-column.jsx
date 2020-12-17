@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import ActionItem from '../action-item/action-item';
+import {ActionItem} from '../action-item';
 import {
   actionItemMovedSubscription,
   actionItemUpdatedSubscription

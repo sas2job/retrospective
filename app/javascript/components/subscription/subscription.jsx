@@ -39,7 +39,7 @@ const NEW_CARD = gql`
   }
 `;
 
-export class CardsSubscription extends Component {
+class CardsSubscription extends Component {
   _subscribeToNewCards = (subscribeToMore) => {
     subscribeToMore({
       document: NEW_CARD,
@@ -81,3 +81,5 @@ export class CardsSubscription extends Component {
     );
   }
 }
+
+export default CardsSubscription;

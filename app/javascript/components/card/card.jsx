@@ -1,8 +1,8 @@
 import React, {useContext, useMemo} from 'react';
 import UserContext from '../../utils/user-context';
-import CardBody from '../card-body/card-body';
-import CardFooter from '../card-footer/card-footer';
-import CardUser from '../card-user/card-user';
+import {CardBody} from '../card-body';
+import {CardFooter} from '../card-footer';
+import {CardUser} from '../card-user';
 import './style.css';
 
 const Card = ({

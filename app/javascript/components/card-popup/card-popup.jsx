@@ -1,6 +1,6 @@
 import React from 'react';
-import CommentsDropdown from '../comments-dropdown/comments-dropdown';
-import Card from '../card/card';
+import {CommentsDropdown} from '../comments-dropdown';
+import {Card} from '../card';
 import './style.css';
 
 const CardPopup = ({card, type, onCommentButtonClick, onClickClosed}) => {

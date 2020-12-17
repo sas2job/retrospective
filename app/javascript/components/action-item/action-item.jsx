@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
-import ActionItemBody from '../action-item-body/action-item-body';
-import ActionItemFooter from '../action-item-footer/action-item-footer';
+import {ActionItemBody} from '../action-item-body';
+import {ActionItemFooter} from '../action-item-footer';
 import './style.css';
 import UserContext from '../../utils/user-context';
-import CardUser from '../card-user/card-user';
+import {CardUser} from '../card-user';
 
 const ActionItem = ({
   id,

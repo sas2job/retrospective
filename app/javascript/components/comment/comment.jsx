@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import Picker from 'emoji-picker-react';
-import CommentLikes from '../comment-likes/comment-likes';
+import {CommentLikes} from '../comment-likes';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSmile} from '@fortawesome/free-regular-svg-icons';
 import {useMutation} from '@apollo/react-hooks';

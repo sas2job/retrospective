@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReadyButton from '../components/ready-button/ready-button';
+import {ReadyButton} from '../components/ready-button';
 import Provider from '../components/provider/provider';
 import BoardSlugContext from '../utils/board_slug_context';
 
