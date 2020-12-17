@@ -1,10 +1,10 @@
 import React, {useState, useContext, useEffect, useRef} from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import Textarea from 'react-textarea-autosize';
-import {addActionItemMutation} from '../operations.gql';
-import BoardSlugContext from '../../../utils/board_slug_context';
+import {addActionItemMutation} from './operations.gql';
+import BoardSlugContext from '../../utils/board_slug_context';
 
-const ActionItemColumnHeader = ({users}) => {
+const NewActionItemBody = ({users}) => {
   const textInput = useRef();
   const [isOpened, setOpened] = useState(false);
   const [newActionItemBody, setNewActionItemBody] = useState('');
@@ -20,41 +20,40 @@ const ActionItemColumnHeader = ({users}) => {
     }
   }, [isOpened]);
 
-  const cancelHandler = e => {
-    e.preventDefault();
-    setOpened(isOpened => !isOpened);
+  const cancelHandler = (evt) => {
+    evt.preventDefault();
+    setOpened(!isOpened);
     setNewActionItemBody('');
   };
 
-  const submitHandler = e => {
-    e.preventDefault();
-    setOpened(isOpened => !isOpened);
-    addActionItem({
+  const submitHandler = async (evt) => {
+    evt.preventDefault();
+
+    const {data} = await addActionItem({
       variables: {
         boardSlug,
         assigneeId: newActionItemAssignee,
         body: newActionItemBody
       }
-    }).then(({data}) => {
-      if (data.addActionItem.actionItem) {
-        setNewActionItemBody('');
-      } else {
-        console.log(data.addActionItem.errors.fullMessages.join(' '));
-      }
     });
+    if (data.addActionItem.actionItem) {
+      setNewActionItemBody('');
+    } else {
+      console.log(data.addActionItem.errors.fullMessages.join(' '));
+    }
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (evt) => {
     if (navigator.platform.includes('Mac')) {
-      if (e.key === 'Enter' && e.metaKey) {
-        submitHandler(e);
+      if (evt.key === 'Enter' && evt.metaKey) {
+        submitHandler(evt);
       }
-    } else if (e.key === 'Enter' && e.ctrlKey) {
-      submitHandler(e);
+    } else if (evt.key === 'Enter' && evt.ctrlKey) {
+      submitHandler(evt);
     }
 
-    if (e.key === 'Escape') {
-      setOpened(isOpened => !isOpened);
+    if (evt.key === 'Escape') {
+      setOpened(!isOpened);
       setNewActionItemBody('');
     }
   };
@@ -75,17 +74,17 @@ const ActionItemColumnHeader = ({users}) => {
               className="input"
               value={newActionItemBody}
               id="action_item_body`"
-              onChange={e => setNewActionItemBody(e.target.value)}
+              onChange={(evt) => setNewActionItemBody(evt.target.value)}
               onKeyDown={handleKeyPress}
             />
 
             <div className="board-select-column">
               <select
                 className="select width_100"
-                onChange={e => setNewActionItemAssignee(e.target.value)}
+                onChange={(evt) => setNewActionItemAssignee(evt.target.value)}
               >
                 <option value=" ">Assigned to ...</option>
-                {users.map(user => {
+                {users.map((user) => {
                   return (
                     <option key={user.id} value={user.id}>
                       {user.nickname}
@@ -117,4 +116,4 @@ const ActionItemColumnHeader = ({users}) => {
   );
 };
 
-export default ActionItemColumnHeader;
+export default NewActionItemBody;

@@ -1,0 +1,12 @@
+mutation addActionItemMutation($boardSlug: String!, $assigneeId: ID!, $body: String!) {
+  addActionItem(
+    input: { attributes: { boardSlug: $boardSlug, assigneeId: $assigneeId, body: $body } }
+  ) {
+    actionItem {
+      id
+    }
+    errors {
+      fullMessages
+    }
+  }
+}

@@ -1,5 +1,4 @@
 #import '../../fragments/action_item.graphql'
-#import '../../fragments/card.graphql'
 subscription actionItemAddedSubscription($boardSlug: String!) {
   actionItemAdded(boardSlug: $boardSlug) {
    ...ActionItem
@@ -21,25 +20,5 @@ subscription actionItemDestroyedSubscription($boardSlug: String!) {
 subscription actionItemUpdatedSubscription($boardSlug: String!) {
   actionItemUpdated(boardSlug: $boardSlug) {
    ...ActionItem
-  }
-}
-
-
-subscription cardAddedSubscription($boardSlug: String!) {
-  cardAdded(boardSlug: $boardSlug) {
-   ...Card
-  }
-}
-
-mutation addActionItemMutation($boardSlug: String!, $assigneeId: ID!, $body: String!) {
-  addActionItem(
-    input: { attributes: { boardSlug: $boardSlug, assigneeId: $assigneeId, body: $body } }
-  ) {
-    actionItem {
-      id
-    }
-    errors {
-      fullMessages
-    }
   }
 }
