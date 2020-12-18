@@ -2,7 +2,7 @@
   <%= javascript_pack_tag 'application' %>
   <%= stylesheet_pack_tag 'application' %>
   <% if allowed_to?(:create_cards?, @board) %>
-    <%= javascript_pack_tag 'ready_button' %>
+    <%= javascript_pack_tag 'ready-button' %>
   <% end %>
 
 <% end %>
@@ -17,7 +17,7 @@
       </div>
 
     </div>
-    <%= react_component('membership_list_container')%>
+    <%= react_component('membership-list-container')%>
     <div class='level-right'>
       <%if allowed_to?(:edit?, @board)%>
         <div id='settings-button'>

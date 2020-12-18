@@ -1,0 +1,13 @@
+#import '../../fragments/card.graphql'
+mutation likeCardMutation($id: ID!) {
+  likeCard(
+    input: { id: $id }
+  ) {
+    card {
+      id
+    }
+    errors {
+      fullMessages
+    }
+  }
+}
