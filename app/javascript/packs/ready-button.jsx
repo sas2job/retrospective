@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {ReadyButton} from '../components/ready-button';
-import Provider from '../components/provider/provider';
+import {Provider} from '../components/provider';
 import BoardSlugContext from '../utils/board_slug_context';
 
 const element = (
