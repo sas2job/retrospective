@@ -2,8 +2,7 @@ import React, {useContext, useMemo} from 'react';
 import UserContext from '../../utils/user-context';
 import {CardBody} from '../card-body';
 import {CardFooter} from '../card-footer';
-import {CardUser} from '../card-user';
-import './style.css';
+import './style.less';
 
 const Card = ({
   id,
@@ -34,9 +33,15 @@ const Card = ({
   );
 
   return (
-    <div className="box">
-      <CardUser {...author} />
-      <CardBody id={id} editable={editable} deletable={deletable} body={body} />
+    <div className="card">
+      {/* <CardUser {...author} /> */}
+      <CardBody
+        author={author}
+        id={id}
+        editable={editable}
+        deletable={deletable}
+        body={body}
+      />
       <CardFooter
         id={id}
         likes={likes}

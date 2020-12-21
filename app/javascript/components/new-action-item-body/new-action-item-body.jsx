@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect, useRef} from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import Textarea from 'react-textarea-autosize';
 import {addActionItemMutation} from './operations.gql';
-import BoardSlugContext from '../../utils/board_slug_context';
+import BoardSlugContext from '../../utils/board-slug-context';
 
 const NewActionItemBody = ({users}) => {
   const textInput = useRef();

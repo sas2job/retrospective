@@ -6,6 +6,9 @@ environment.loaders.append('graphql', {
   loader: 'graphql-tag/loader'
 });
 
+const less = require('./loaders/less');
+environment.loaders.append('less', less);
+
 module.exports = environment;
 
 // Added due to issues with @rails/actioncable being transpiled by babel-loader

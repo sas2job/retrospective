@@ -8,11 +8,10 @@ import {
   cardUpdatedSubscription
 } from './operations.gql';
 import UserContext from '../../utils/user-context';
-import BoardSlugContext from '../../utils/board_slug_context';
-import '../table.css';
+import BoardSlugContext from '../../utils/board-slug-context';
 import {NewCardBody} from '../new-card-body';
 
-const CardColumn = ({kind, initCards}) => {
+const CardColumn = ({kind, initCards, smile}) => {
   const currentUser = useContext(UserContext);
   const boardSlug = useContext(BoardSlugContext);
   const [cards, setCards] = useState(initCards);
@@ -88,6 +87,7 @@ const CardColumn = ({kind, initCards}) => {
     <>
       <NewCardBody
         kind={kind}
+        smile={smile}
         onCardAdded={(cardAdded) => {
           setCards((oldCards) => [cardAdded, ...oldCards]);
         }}

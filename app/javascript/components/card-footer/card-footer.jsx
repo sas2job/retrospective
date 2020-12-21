@@ -1,8 +1,6 @@
 import React from 'react';
 import {Likes} from '../likes';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCommentAlt} from '@fortawesome/free-regular-svg-icons';
-import './style.css';
+import './style.less';
 
 const CardFooter = ({
   id,
@@ -12,18 +10,14 @@ const CardFooter = ({
   onCommentButtonClick
 }) => {
   return (
-    <div>
-      <hr style={{margin: '0.5rem'}} />
-      <div className="columns is-multiline">
-        <div className="column is-one-quarter">
-          <Likes id={id} likes={likes} type={type} />
-        </div>
-        <div className="column is-one-quarter">
-          <a className="has-text-info" onClick={onCommentButtonClick}>
-            <FontAwesomeIcon fixedWidth icon={faCommentAlt} />
-          </a>
-          <span>{commentsNumber}</span>
-        </div>
+    <div className="card-footer">
+      <div className="card-footer__likes">
+        <Likes id={id} likes={likes} type={type} />
+      </div>
+      <div className="card-footer__comments">
+        <a onClick={onCommentButtonClick}>
+          {commentsNumber ? `add a comment` : `see ${commentsNumber} comments`}
+        </a>
       </div>
     </div>
   );

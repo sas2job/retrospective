@@ -8,17 +8,29 @@ textarea {
   color: hsl(0, 0%, 29%);
 }
 
-.text {
+.card-text {
   overflow-wrap: break-word;
   white-space: pre-line;
+  margin: 0 8px 16px 8px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  height: 24px;
+  margin: 8px 11px 16px 8px;
 }
 
 .dropdown-btn {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   text-align: center;
   vertical-align: middle;
+  font-size: 20px;
+  font-weight: bold;
   outline: none;
+  border-radius: 50%;
   cursor: pointer;
 }
 
@@ -26,7 +38,7 @@ textarea {
   display: flex;
   flex-direction: row-reverse;
   position: relative;
-  float: right;
+  /* float: right; */
 }
 
 .dropdown-content {

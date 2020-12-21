@@ -5,7 +5,7 @@ import {
   actionItemUpdatedSubscription
 } from './operations.gql';
 import {useSubscription} from '@apollo/react-hooks';
-import BoardSlugContext from '../../utils/board_slug_context';
+import BoardSlugContext from '../../utils/board-slug-context';
 
 const PreviousActionItemColumn = (props) => {
   const {users, handleEmpty, initItems} = props;

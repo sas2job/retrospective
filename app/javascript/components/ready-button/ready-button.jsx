@@ -5,7 +5,7 @@ import {
   getMembershipQuery,
   membershipUpdatedSubscription
 } from './operations.gql';
-import BoardSlugContext from '../../utils/board_slug_context';
+import BoardSlugContext from '../../utils/board-slug-context';
 
 const ReadyButton = () => {
   const boardSlug = useContext(BoardSlugContext);

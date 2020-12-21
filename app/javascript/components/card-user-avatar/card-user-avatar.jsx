@@ -1,5 +1,6 @@
 import React from 'react';
 import {getUserInitials} from '../../utils/helpers';
+import './style.less';
 
 const CardUserAvatar = ({avatar, firstName, lastName}) => {
   if (avatar) {

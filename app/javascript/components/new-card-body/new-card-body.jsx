@@ -3,29 +3,30 @@ import React, {useState, useContext, useEffect, useRef} from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import Textarea from 'react-textarea-autosize';
 import {addCardMutation} from './operations.gql';
-import BoardSlugContext from '../../utils/board_slug_context';
+import BoardSlugContext from '../../utils/board-slug-context';
 import UserContext from '../../utils/user-context';
+import './style.less';
 
-const NewCardBody = ({kind, onCardAdded, onGetNewCardID}) => {
+const NewCardBody = ({kind, smile, onCardAdded, onGetNewCardID}) => {
   const textInput = useRef();
-  const [isOpened, setOpened] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [newCard, setNewCard] = useState('');
   const [addCard] = useMutation(addCardMutation);
 
   const boardSlug = useContext(BoardSlugContext);
   const currentUser = useContext(UserContext);
 
-  const toggleOpen = () => setOpened(!isOpened);
+  const toggleOpen = () => setIsEdit(!isEdit);
 
   useEffect(() => {
-    if (isOpened) {
+    if (isEdit) {
       textInput.current.focus();
     }
-  }, [isOpened]);
+  }, [isEdit]);
 
   const cancelHandler = (evt) => {
     evt.preventDefault();
-    setOpened(!isOpened);
+    setIsEdit(!isEdit);
     setNewCard('');
   };
 
@@ -69,51 +70,51 @@ const NewCardBody = ({kind, onCardAdded, onGetNewCardID}) => {
     }
 
     if (evt.key === 'Escape') {
-      setOpened(!isOpened);
+      cancelHandler(evt);
+      setIsEdit(!isEdit);
       setNewCard('');
     }
   };
 
   return (
-    <>
-      <div className="board-column-title">
-        <h2 className="float_left">{kind.toUpperCase()}</h2>
-        <div className="float_right card-new" onClick={toggleOpen}>
-          +
-        </div>
-      </div>
-      {isOpened && (
-        <div>
-          <form onSubmit={submitHandler}>
-            <Textarea
-              ref={textInput}
-              className="input"
-              autoComplete="off"
-              id={`card_${kind}_body`}
-              value={newCard}
-              onChange={(evt) => setNewCard(evt.target.value)}
-              onKeyDown={handleKeyPress}
-            />
-            <div className="card-buttons">
-              <button
-                className="tag is-success button card-add"
-                type="submit"
-                onSubmit={submitHandler}
-              >
-                Add
-              </button>
-              <button
-                className="tag button card-cancel"
-                type="submit"
-                onClick={cancelHandler}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="column-header">
+      <div className="column-header__smile">{smile}</div>
+      {isEdit ? (
+        <form onSubmit={submitHandler}>
+          <Textarea
+            ref={textInput}
+            className="column-header__input"
+            autoComplete="off"
+            id={`card_${kind}_body`}
+            value={newCard}
+            placeholder="Express yourself"
+            onChange={(evt) => setNewCard(evt.target.value)}
+            onKeyDown={handleKeyPress}
+          />
+          {/* <div className="card-buttons">
+            <button
+              className="tag is-success button card-add"
+              type="submit"
+              onSubmit={submitHandler}
+            >
+              Add
+            </button>
+            <button
+              className="tag button card-cancel"
+              type="submit"
+              onClick={cancelHandler}
+            >
+              Cancel
+            </button>
+          </div> */}
+        </form>
+      ) : (
+        <h2 className="column-header__title">{kind}</h2>
       )}
-    </>
+      <div className="column-header__button" onClick={toggleOpen}>
+        +
+      </div>
+    </div>
   );
 };
 
