@@ -33,7 +33,7 @@ const CardTable = ({
     for (const [index, [columnName, cards]] of Object.entries(
       cardTypePairs
     ).entries()) {
-      console.log(index);
+      // Console.log(index);
       content.push(
         <div key={`${columnName}_column`} className={columnClass}>
           <CardColumn

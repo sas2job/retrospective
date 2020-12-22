@@ -16,7 +16,9 @@ const CardFooter = ({
       </div>
       <div className="card-footer__comments">
         <a onClick={onCommentButtonClick}>
-          {commentsNumber ? `add a comment` : `see ${commentsNumber} comments`}
+          {commentsNumber > 0
+            ? `see ${commentsNumber} comments`
+            : `add a comment`}
         </a>
       </div>
     </div>

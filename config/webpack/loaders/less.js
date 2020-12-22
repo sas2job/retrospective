@@ -1,7 +1,19 @@
-const getStyleRule = require('@rails/webpacker/package/utils/get_style_rule');
-module.exports = getStyleRule(/\.less$/i, false, [
-  {
-    loader: 'less-loader',
-    options: {sourceMap: true}
-  }
-]);
+module.exports = {
+  test: /\.less$/,
+  use: [
+    {
+      loader: 'style-loader'
+    },
+    {
+      loader: 'css-loader'
+    },
+    {
+      loader: 'less-loader',
+      options: {
+        lessOptions: {
+          strictMath: true
+        }
+      }
+    }
+  ]
+};

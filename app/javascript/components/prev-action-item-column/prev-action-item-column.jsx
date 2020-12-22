@@ -68,7 +68,7 @@ const PreviousActionItemColumn = (props) => {
   // Restart here
   return (
     <>
-      <h2 className="board-subtitle">PREVIOUS BOARD</h2>
+      <h2 className="column-header column-header__title">PREVIOUS BOARD</h2>
       {actionItems.map((item) => {
         return <ActionItem key={item.id} isPrevious users={users} {...item} />;
       })}

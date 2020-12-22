@@ -14,6 +14,7 @@ const MembershipList = () => {
   const [memberships, setMemberships] = useState([]);
   const [skipMutation, setSkipMutation] = useState(true);
   const [skipQuery, setSkipQuery] = useState(false);
+  // ! const [usersReady, setUsersReady] = useState(0);
   const {loading, data} = useQuery(getMembershipsQuery, {
     variables: {boardSlug},
     skip: skipQuery
