@@ -14,7 +14,9 @@ const ActionItemBody = (props) => {
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [actionItemAssignee, setActionItemAssignee] = useState(assignee.id);
+  const [actionItemAssignee, setActionItemAssignee] = useState(
+    assignee ? assignee.id : ``
+  );
   const [destroyActionItem] = useMutation(destroyActionItemMutation);
   const [updateActionItem] = useMutation(updateActionItemMutation);
 
@@ -73,7 +75,7 @@ const ActionItemBody = (props) => {
       variables: {
         id,
         body,
-        assignee: actionItemAssignee.id
+        assigneeId: actionItemAssignee
       }
     }).then(({data}) => {
       if (!data.updateActionItem.actionItem) {
@@ -120,7 +122,10 @@ const ActionItemBody = (props) => {
   return (
     <div>
       <div className="card-top action-item-top">
-        {assignee && <CardUser {...assignee} />}
+        {
+          assignee && <CardUser {...assignee} />
+          // Заменить на author после того как он появится
+        }
 
         <div className="card-chevrons">{generateChevrons()}</div>
 

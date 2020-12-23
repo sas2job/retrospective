@@ -54,7 +54,7 @@ const ActionItem = ({
       <ActionItemBody
         id={id}
         assignee={assignee}
-        assigneeId={assignee?.id}
+        // ! assigneeId={assignee?.id}
         editable={currentUser.isCreator}
         deletable={currentUser.isCreator}
         body={body}

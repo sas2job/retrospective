@@ -1,7 +1,7 @@
 import {nanoid} from 'nanoid';
 import React, {useState, useContext, useEffect, useRef} from 'react';
 import {useMutation} from '@apollo/react-hooks';
-import Textarea from 'react-textarea-autosize';
+// ! import Textarea from 'react-textarea-autosize';
 import {addCardMutation} from './operations.gql';
 import BoardSlugContext from '../../utils/board-slug-context';
 import UserContext from '../../utils/user-context';
@@ -81,13 +81,14 @@ const NewCardBody = ({kind, smile, onCardAdded, onGetNewCardID}) => {
       <div className="column-header__smile">{smile}</div>
       {isEdit ? (
         <form onSubmit={submitHandler}>
-          <Textarea
+          <textarea
             ref={textInput}
             className="column-header__input"
             autoComplete="off"
             id={`card_${kind}_body`}
             value={newCard}
             placeholder="Express yourself"
+            // ! maxRows={2}
             onChange={(evt) => setNewCard(evt.target.value)}
             onKeyDown={handleKeyPress}
           />
