@@ -6,6 +6,8 @@ module Types
     field :title, String, null: false
     field :slug, String, null: false
     field :cards, [Types::CardType], null: false
+    field :memberships, [Types::MembershipType], null: false
+    field :action_items, [Types::ActionItemType], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/AbcSize
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     def alfred
@@ -56,3 +57,4 @@ module Users
     end
   end
 end
+# rubocop:enable Metrics/AbcSize

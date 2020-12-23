@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/DuplicatedKey
+# rubocop:disable Lint/DuplicateHashKey
 RSpec.describe UserPolicy do
   let_it_be(:user) { create(:user) }
   let_it_be(:another_user) { create(:user) }
@@ -59,4 +59,4 @@ RSpec.describe UserPolicy do
     end
   end
 end
-# rubocop:enable Lint/DuplicatedKey
+# rubocop:enable Lint/DuplicateHashKey
