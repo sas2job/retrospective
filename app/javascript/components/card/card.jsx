@@ -2,6 +2,7 @@ import React, {useContext, useMemo} from 'react';
 import UserContext from '../../utils/user-context';
 import {CardBody} from '../card-body';
 import {CardFooter} from '../card-footer';
+import {CommentsDropdown} from '../comments-dropdown';
 import './style.less';
 
 const Card = ({
@@ -11,6 +12,8 @@ const Card = ({
   comments,
   likes,
   type,
+  isCommentsShown,
+  onClickClosed,
   onCommentButtonClick
 }) => {
   const currentUser = useContext(UserContext);
@@ -49,6 +52,14 @@ const Card = ({
         commentsNumber={comments.length}
         onCommentButtonClick={onCommentButtonClick}
       />
+
+      {isCommentsShown && (
+        <CommentsDropdown
+          id={id}
+          comments={comments}
+          onClickClosed={onClickClosed}
+        />
+      )}
     </div>
   );
 };

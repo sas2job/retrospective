@@ -79,39 +79,41 @@ const NewCardBody = ({kind, smile, onCardAdded, onGetNewCardID}) => {
   return (
     <div className="column-header">
       <div className="column-header__smile">{smile}</div>
-      {isEdit ? (
-        <form onSubmit={submitHandler}>
-          <textarea
-            ref={textInput}
-            className="column-header__input"
-            autoComplete="off"
-            id={`card_${kind}_body`}
-            value={newCard}
-            placeholder="Express yourself"
-            // ! maxRows={2}
-            onChange={(evt) => setNewCard(evt.target.value)}
-            onKeyDown={handleKeyPress}
-          />
-          {/* <div className="card-buttons">
-            <button
-              className="tag is-success button card-add"
-              type="submit"
-              onSubmit={submitHandler}
-            >
-              Add
-            </button>
-            <button
-              className="tag button card-cancel"
-              type="submit"
-              onClick={cancelHandler}
-            >
-              Cancel
-            </button>
-          </div> */}
-        </form>
-      ) : (
-        <h2 className="column-header__title">{kind}</h2>
-      )}
+      <div className="column-header__wrapper">
+        {isEdit ? (
+          <form onSubmit={submitHandler}>
+            <textarea
+              ref={textInput}
+              className="column-header__input"
+              autoComplete="off"
+              id={`card_${kind}_body`}
+              value={newCard}
+              placeholder="Express yourself"
+              // ! maxRows={2}
+              onChange={(evt) => setNewCard(evt.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <div className="column-header__buttons">
+              <button
+                className="column-header__buttons__item"
+                type="submit"
+                onSubmit={submitHandler}
+              >
+                Add
+              </button>
+              <button
+                className="column-header__buttons__item"
+                type="reset"
+                onClick={cancelHandler}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <h2 className="column-header__title">{kind}</h2>
+        )}
+      </div>
       <div className="column-header__button" onClick={toggleOpen}>
         +
       </div>
