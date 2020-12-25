@@ -1,4 +1,5 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
+# @see https://rossta.net/blog/how-to-use-webpacker-yml.html
 
 default: &default
   source_path: app/javascript
@@ -6,7 +7,6 @@ default: &default
   public_root_path: public
   public_output_path: packs
   cache_path: tmp/cache/webpacker
-  check_yarn_integrity: false
   webpack_compile_output: true
 
   # Additional paths webpack should lookup modules
@@ -41,10 +41,10 @@ default: &default
     - .sass
     - .scss
     - .css
-    - .module.less
     - .module.sass
     - .module.scss
     - .module.css
+    - .module.less
     - .png
     - .svg
     - .gif
