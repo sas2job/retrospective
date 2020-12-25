@@ -37,9 +37,11 @@ default: &default
     - .jsx
     - .mjs
     - .js
+    - .less
     - .sass
     - .scss
     - .css
+    - .module.less
     - .module.sass
     - .module.scss
     - .module.css
@@ -52,9 +54,6 @@ default: &default
 development:
   <<: *default
   compile: true
-
-  # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
-  check_yarn_integrity: false
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
