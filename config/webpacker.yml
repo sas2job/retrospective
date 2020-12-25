@@ -1,4 +1,5 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
+# @see https://rossta.net/blog/how-to-use-webpacker-yml.html
 
 default: &default
   source_path: app/javascript
