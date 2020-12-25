@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PopulateAuthorIdToActionItems < ActiveRecord::Migration[6.0]
   def change
     Board.find_each do |board|
