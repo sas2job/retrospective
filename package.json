@@ -96,7 +96,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
-    "css-loader": "^5.0.1",
     "eslint": "^7.15.0",
     "eslint-config-xo-react": "^0.23.0",
     "eslint-plugin-react": "^7.18.0",
@@ -105,7 +104,6 @@
     "less": "^3.13.0",
     "less-loader": "^7.1.0",
     "lint-staged": ">=10.0.6",
-    "style-loader": "^2.0.0",
     "webpack-dev-server": "^3.10.1",
     "xo": "^0.36.1"
   },
