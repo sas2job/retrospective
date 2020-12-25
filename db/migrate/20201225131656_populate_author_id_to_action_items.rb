@@ -7,7 +7,8 @@ class PopulateAuthorIdToActionItems < ActiveRecord::Migration[6.0]
       if creator
         board.action_items.update_all(author_id: creator.user_id)
       else
-        c = board.memberships.first.update(role: 'creator')
+        c = board.memberships.first
+        c.update(role: 'creator')
         board.action_items.update_all(author_id: c.user_id)
       end
     end
