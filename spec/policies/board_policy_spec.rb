@@ -1,24 +1,16 @@
 # frozen_string_literal: true
 
-RSpec.describe BoardPolicy do
-  let_it_be(:creator) { create(:user) }
-  let_it_be(:admin) { create(:user) }
-  let_it_be(:host) { create(:user) }
-  let_it_be(:member) { create(:user) }
-  let(:not_member) { build_stubbed(:user) }
-  let_it_be(:board) { create(:board) }
-  let_it_be(:membership) { create(:membership, user: member, board: board) }
-  let_it_be(:creatorship) { create(:membership, user: creator, board: board, role: 'creator') }
-  let_it_be(:adminship) { create(:membership, user: admin, board: board, role: 'admin') }
-  let_it_be(:hostship) { create(:membership, user: host, board: board, role: 'host') }
+require 'rails_helper'
 
-  let(:policy) { described_class.new(board, user: test_user) }
+RSpec.describe BoardPolicy do
+  let_it_be(:user) { create(:user) }
+  let_it_be(:board) { create(:board) }
+  let(:policy) { described_class.new(board, user: user) }
 
   describe '#my? boards' do
     subject { policy.apply(:my?) }
 
     context 'when user exists' do
-      let(:test_user) { not_member }
       it { is_expected.to eq true }
     end
   end
@@ -27,7 +19,6 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:participating?) }
 
     context 'when user exists' do
-      let(:test_user) { not_member }
       it { is_expected.to eq true }
     end
   end
@@ -36,8 +27,35 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:history?) }
 
     context 'when user exists' do
-      let(:test_user) { not_member }
       it { is_expected.to eq true }
+    end
+  end
+
+  describe '#show?' do
+    subject { policy.apply(:show?) }
+
+    context 'when board is not private' do
+      it { is_expected.to eq true }
+    end
+
+    context 'when board is private' do
+      let_it_be(:private_board) { create(:board, private: true) }
+      let_it_be(:view_private_permission) { create(:permission, identifier: 'view_private_board') }
+      let(:policy) { described_class.new(private_board, user: user) }
+
+      context 'when user has view_private_board permission' do
+        let!(:permissions_user) do
+          create(:permissions_user, permission: view_private_permission,
+                                    user: user,
+                                    board: private_board)
+        end
+
+        it { is_expected.to eq true }
+      end
+
+      context 'when user does not have view_private_board permission' do
+        it { is_expected.to eq false }
+      end
     end
   end
 
@@ -45,36 +63,23 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:new?) }
 
     context 'when user exists' do
-      let(:test_user) { not_member }
       it { is_expected.to eq true }
     end
   end
 
   describe '#edit?' do
+    let_it_be(:edit_permission) { create(:permission, identifier: 'edit_board') }
     subject { policy.apply(:edit?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'when user has edit_board permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: edit_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'when user does not have edit_board permission' do
       it { is_expected.to eq false }
     end
   end
@@ -83,218 +88,116 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:create?) }
 
     context 'when user exists' do
-      let(:test_user) { not_member }
       it { is_expected.to eq true }
     end
   end
 
   describe '#update?' do
+    let_it_be(:update_permission) { create(:permission, identifier: 'update_board') }
     subject { policy.apply(:update?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'when user has update_board permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: update_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'when user does not have update_board permission' do
       it { is_expected.to eq false }
     end
   end
 
   describe '#destroy?' do
+    let_it_be(:destroy_permission) { create(:permission, identifier: 'destroy_board') }
     subject { policy.apply(:destroy?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'when user has destroy_board permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: destroy_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'when user does not have destroy_board permission' do
       it { is_expected.to eq false }
     end
   end
 
   describe '#continue?' do
+    let_it_be(:continue_permission) { create(:permission, identifier: 'continue_board') }
     subject { policy.apply(:continue?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
+    context 'when user has continue_board permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: continue_permission, user: user, board: board)
+      end
+
+      context 'and board has not been continued' do
+        it { is_expected.to eq true }
+      end
+
+      context 'and board has already been continued' do
+        let!(:continued_board) { create(:board, previous_board: board) }
+
+        it { is_expected.to eq false }
+      end
     end
 
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'when user does not have continue_board permission' do
       it { is_expected.to eq false }
     end
   end
 
-  describe '#user_is_creator?' do
-    subject { policy.apply(:user_is_creator?) }
+  describe '#create_cards?' do
+    let_it_be(:create_cards_permission) { create(:permission, identifier: 'create_cards') }
+    subject { policy.apply(:create_cards?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'when user has create_cards permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: create_cards_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is not the board creator' do
-      let(:test_user) { member }
+    context 'when user does not have update_board permission' do
       it { is_expected.to eq false }
     end
   end
 
   describe '#suggestions?' do
+    let_it_be(:get_suggestions_permission) { create(:permission, identifier: 'get_suggestions') }
     subject { policy.apply(:suggestions?) }
 
-    context 'when user is a creator' do
-      let(:test_user) { creator }
+    context 'when user has get_suggestions permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: get_suggestions_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_member }
+    context 'when user does not have get_suggestions permission' do
       it { is_expected.to eq false }
     end
   end
 
   describe '#invite?' do
+    let_it_be(:invite_member_permission) { create(:permission, identifier: 'invite_members') }
     subject { policy.apply(:invite?) }
 
-    context 'when user is a creator' do
-      let(:test_user) { creator }
+    context 'when user has invite_members permission' do
+      let!(:permissions_user) do
+        create(:permissions_user, permission: invite_member_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is a board admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board host' do
-      let(:test_user) { host }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_admin?' do
-    subject { policy.apply(:user_is_admin?) }
-
-    context 'when user is a admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a admin' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_host?' do
-    subject { policy.apply(:user_is_host?) }
-
-    context 'when user is a host' do
-      let(:test_user) { host }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a host' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_member?' do
-    subject { policy.apply(:user_is_member?) }
-
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_member }
+    context 'when user does not have invite_members permission' do
       it { is_expected.to eq false }
     end
   end

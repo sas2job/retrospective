@@ -77,6 +77,26 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
+  create_table "permissions", force: :cascade do |t|
+    t.string "identifier", null: false
+    t.string "description", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["identifier"], name: "index_permissions_on_identifier", unique: true
+  end
+
+  create_table "permissions_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "permission_id"
+    t.bigint "board_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_permissions_users_on_board_id"
+    t.index ["permission_id", "user_id", "board_id"], name: "index_permissions_users_on_user_board_permission", unique: true
+    t.index ["permission_id"], name: "index_permissions_users_on_permission_id"
+    t.index ["user_id"], name: "index_permissions_users_on_user_id"
+  end
+
   create_table "teams", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false

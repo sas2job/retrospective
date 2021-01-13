@@ -7,12 +7,19 @@ module Mutations
     field :id, Int, null: true
 
     # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def resolve(id:)
       membership = Membership.find(id)
       authorize! membership, to: :destroy?,
                              context: { membership: Membership.find_by(user: context[:current_user],
                                                                        board: membership.board) }
-      if membership.destroy
+
+      membership.transaction do
+        membership.board.permissions_users.where(user: membership.user).destroy_all
+        membership.destroy
+      end
+
+      if !membership.persisted?
         RetrospectiveSchema.subscriptions.trigger('membership_destroyed',
                                                   { board_slug: membership.board.slug },
                                                   id: id)
@@ -22,5 +29,6 @@ module Mutations
       end
     end
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
   end
 end

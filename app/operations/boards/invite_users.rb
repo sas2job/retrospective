@@ -11,8 +11,13 @@ module Boards
     end
 
     def call
-      users_array = users.map { |user| { role: 'member', user_id: user.id } }
-      memberships = board.memberships.build(users_array)
+      users_data = users.map { |user| { role: 'member', user_id: user.id } }
+      memberships = board.memberships.build(users_data)
+
+      @users.find_each do |user|
+        BuildPermissions.new(@board, user).call(identifiers_scope: 'member')
+      end
+
       board.save
       Success(memberships)
     end

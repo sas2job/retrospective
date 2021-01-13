@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let_it_be(:user) { build_stubbed(:user) }
+  let_it_be(:board) { build_stubbed(:board) }
 
   context 'validations' do
     it 'is valid with valid attributes' do
@@ -34,6 +35,14 @@ RSpec.describe User, type: :model do
 
     it 'has many action items' do
       expect(user).to respond_to(:action_items)
+    end
+
+    it 'has many permissions users' do
+      expect(user).to respond_to(:permissions_users)
+    end
+
+    it 'has many permissions' do
+      expect(user).to respond_to(:permissions)
     end
   end
 
@@ -112,6 +121,19 @@ RSpec.describe User, type: :model do
           expect(subject.persisted?).to eq false
         end
       end
+    end
+  end
+
+  context '#allowed?' do
+    let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
+
+    it 'returns true if permission for user exists' do
+      create(:permissions_user, user: user, board: board, permission: permission)
+      expect(user.allowed?('some_identifier', board.id)).to eq true
+    end
+
+    it 'returns false if permission for user does not exist' do
+      expect(user.allowed?('some_identifier', board.id)).to eq false
     end
   end
 end
