@@ -54,42 +54,6 @@ RSpec.describe ActionItemPolicy do
     end
   end
 
-  describe '#user_is_creator?' do
-    subject { policy.apply(:user_is_creator?) }
-
-    invalid_users = %i[ author admin host member not_member ]
-
-    context 'when user is board creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    invalid_users.each do |user_key|
-      context "when user is #{user_titles[user_key]}" do
-        let(:test_user) { send(user_key) }
-        it { is_expected.to eq false }
-      end
-    end
-  end
-
-  describe '#user_is_author?' do
-    subject { policy.apply(:user_is_author?) }
-
-    invalid_users = %i[ creator admin host member not_member ]
-
-    context 'when user is the action item author' do
-      let(:test_user) { author }
-      it { is_expected.to eq true }
-    end
-
-    invalid_users.each do |user_key|
-      context "when user is not the action item author and user is #{user_titles[user_key]}" do
-        let(:test_user) { not_author }
-        it { is_expected.to eq false }
-      end
-    end
-  end
-
   describe '#destroy?' do
     subject { policy.apply(:destroy?) }
 
@@ -239,6 +203,56 @@ RSpec.describe ActionItemPolicy do
     end
 
     unpermitted_users.each do |user_key|
+      context "when user is #{user_titles[user_key]}" do
+        let(:test_user) { send(user_key) }
+        it { is_expected.to eq false }
+      end
+    end
+  end
+
+  describe '#user_is_member?' do
+    subject { policy.apply(:user_is_member?) }
+
+    context 'when user is member' do
+      let(:test_user) { member }
+      it { is_expected.to eq true }
+    end
+
+    context 'when user is not member' do
+      let(:test_user) { not_member }
+      it { is_expected.to eq false }
+    end
+  end
+
+  describe '#user_is_author?' do
+    subject { policy.apply(:user_is_author?) }
+
+    invalid_users = %i[ creator admin host member not_member ]
+
+    context 'when user is the action item author' do
+      let(:test_user) { author }
+      it { is_expected.to eq true }
+    end
+
+    invalid_users.each do |user_key|
+      context "when user is not the action item author and user is #{user_titles[user_key]}" do
+        let(:test_user) { not_author }
+        it { is_expected.to eq false }
+      end
+    end
+  end
+
+  describe '#user_is_creator?' do
+    subject { policy.apply(:user_is_creator?) }
+
+    invalid_users = %i[ author admin host member not_member ]
+
+    context 'when user is board creator' do
+      let(:test_user) { creator }
+      it { is_expected.to eq true }
+    end
+
+    invalid_users.each do |user_key|
       context "when user is #{user_titles[user_key]}" do
         let(:test_user) { send(user_key) }
         it { is_expected.to eq false }
