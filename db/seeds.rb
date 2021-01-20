@@ -24,13 +24,11 @@ Team.create(name: 'Wolves', user_ids: [1, 2, 3, 4, 5]) unless Team.where(name: '
 Team.create(name: 'Tigers', user_ids: [1, 5]) unless Team.where(name: 'Tigers').exists?
 Team.create(name: 'Eagles', user_ids: [2, 3, 4]) unless Team.where(name: 'Eagles').exists?
 
-Board.create([
-               { title: 'TestUser1_RetroBoard' },
-               { title: 'TestUser2_RetroBoard' },
-               { title: 'TestUser3_RetroBoard' },
-               { title: 'TestUser4_RetroBoard' },
-               { title: 'TestUser5_RetroBoard' }
-             ])
+Board.create(title: 'TestUser1_RetroBoard') unless Board.where(title: 'TestUser1_RetroBoard').exists?
+Board.create(title: 'TestUser2_RetroBoard') unless Board.where(title: 'TestUser2_RetroBoard').exists?
+Board.create(title: 'TestUser3_RetroBoard') unless Board.where(title: 'TestUser3_RetroBoard').exists?
+Board.create(title: 'TestUser4_RetroBoard') unless Board.where(title: 'TestUser4_RetroBoard').exists?
+Board.create(title: 'TestUser5_RetroBoard') unless Board.where(title: 'TestUser5_RetroBoard').exists?
 
 Membership.create([
                     { user_id: 1, board_id: 1, role: 'creator', ready: false },
@@ -48,48 +46,50 @@ Membership.create([
                     { user_id: 2, board_id: 5, role: 'creator', ready: false }
                   ])
 
-Permission.create([
-                    { identifier: 'view_private_board',
-                      description: 'User can view private board' },
-                    { identifier: 'create_cards',
-                      description: 'User can create cards on board' },
-                    { identifier: 'edit_board', description: 'User can edit board' },
-                    { identifier: 'update_board', description: 'User can update board' },
-                    { identifier: 'destroy_board', description: 'User can destroy board' },
-                    { identifier: 'continue_board',
-                      description: 'User can continue previous board' },
-                    { identifier: 'invite_members',
-                      description: 'User can invite members to board' },
-                    { identifier: 'get_suggestions', description: 'User can get tips with info' }
-                  ])
+permissions_data = {
+  view_private_board: 'User can view private board',
+  create_cards: 'User can create cards on board',
+  edit_board: 'User can edit board',
+  update_board: 'User can update board',
+  destroy_board: 'User can destroy board',
+  continue_board: 'User can continue previous board',
+  invite_members: 'User can invite members to board',
+  get_suggestions: 'User can get tips with info'
+}
 
-Permission.all.find_each do |permission|
+errors = []
+
+(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS).each do |identifier|
+  next if Permission.exists?(identifier: identifier)
+
+  begin
+    Permission.create!(identifier: identifier, description: permissions_data[identifier.to_sym])
+  rescue StandardError => e
+    errors << { identifier => e.message }
+  end
+end
+puts errors
+
+Permission.creator_permissions.each do |permission|
   PermissionsUser.create([
                            { user_id: 1, permission_id: permission.id, board_id: 1 },
                            { user_id: 2, permission_id: permission.id, board_id: 2 }
                          ])
 end
 
-PermissionsUser.create([
-                         { user_id: 2, permission: Permission.find_by(identifier: 'create_cards'), board_id: 1 },
-                         { user_id: 2,
-                           permission: Permission.find_by(identifier: 'view_private_board'),
-                           board_id: 1 }
-                       ])
+Permission.member_permissions.each do |permission|
+  PermissionsUser.create(user_id: 2, permission_id: permission.id, board_id: 1)
+end
 
-Card.create([
-              { kind: 'mad', body: 'user1 is very mad', author_id: 1, board_id: 1 },
-              { kind: 'sad', body: 'user1 is very sad', author_id: 1, board_id: 1 },
-              { kind: 'glad', body: 'user1 is very glad #1', author_id: 1, board_id: 1 },
-              { kind: 'glad', body: 'user1 is very glad #2', author_id: 1, board_id: 1 },
-              { kind: 'sad', body: 'user2 is very sad', author_id: 2, board_id: 1 },
-              { kind: 'mad', body: 'user3 is very mad', author_id: 3, board_id: 1 },
-              { kind: 'mad', body: 'user4 is very mad', author_id: 4, board_id: 1 },
-              { kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1 }
-            ])
+Card.create(kind: 'mad', body: 'user1 is very mad', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very mad').exists?
+Card.create(kind: 'sad', body: 'user1 is very sad', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very sad').exists?
+Card.create(kind: 'glad', body: 'user1 is very glad #1', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very glad #1').exists?
+Card.create(kind: 'glad', body: 'user1 is very glad #2', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very glad #2').exists?
+Card.create(kind: 'sad', body: 'user2 is very sad', author_id: 2, board_id: 1) unless Card.where(body: 'user2 is very sad').exists?
+Card.create(kind: 'mad', body: 'user3 is very mad', author_id: 3, board_id: 1) unless Card.where(body: 'user3 is very mad').exists?
+Card.create(kind: 'mad', body: 'user4 is very mad', author_id: 4, board_id: 1) unless Card.where(body: 'user4 is very mad').exists?
+Card.create(kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1) unless Card.where(body: 'user5 is very mad').exists?
 
-ActionItem.create([
-                    { body: 'issue should be fixed', board_id: 1, author_id: 1 },
-                    { body: 'meetings should be held', board_id: 1, author_id: 1 },
-                    { body: 'actions should be taken', board_id: 1, author_id: 1 }
-                  ])
+ActionItem.create(body: 'issue should be fixed', board_id: 1, author_id: 1) unless ActionItem.where(body: 'issue should be fixed', board_id: 1, author_id: 1).exists?
+ActionItem.create(body: 'meetings should be held', board_id: 1, author_id: 1) unless ActionItem.where(body: 'meetings should be held', board_id: 1, author_id: 1).exists?
+ActionItem.create(body: 'actions should be taken', board_id: 1, author_id: 1) unless ActionItem.where(body: 'actions should be taken', board_id: 1, author_id: 1).exists?
