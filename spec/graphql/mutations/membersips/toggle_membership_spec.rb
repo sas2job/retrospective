@@ -9,7 +9,12 @@ RSpec.describe Mutations::ToggleReadyStatusMutation, type: :request do
     let_it_be(:creatorship) do
       create(:membership, board: board, user: author, role: 'creator')
     end
+    let_it_be(:permission) { create(:permission, identifier: 'toggle_ready_status') }
     let(:request) { post '/graphql', params: { query: query(id: creatorship.id) } }
+
+    before do
+      create(:permissions_user, permission: permission, board: board, user: author)
+    end
 
     before { sign_in author }
 
