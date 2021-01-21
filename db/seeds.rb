@@ -54,7 +54,9 @@ permissions_data = {
   destroy_board: 'User can destroy board',
   continue_board: 'User can continue previous board',
   invite_members: 'User can invite members to board',
-  get_suggestions: 'User can get tips with info'
+  get_suggestions: 'User can get tips with info',
+  toggle_ready_status: 'User can toggle ready status of board membership',
+  destroy_membership: 'User can destroy membership of board'
 }
 
 errors = []

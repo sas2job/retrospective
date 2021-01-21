@@ -6,28 +6,17 @@ class MembershipPolicy
   include ActionPolicy::Policy::Reasons
 
   authorize :membership, allow_nil: true
-
-  def index?
-    check?(:role_is_member?)
-  end
-
-  def ready_status?
-    check?(:role_is_member?)
-  end
+  authorize :user
 
   def ready_toggle?
-    check?(:role_is_member?)
+    user.allowed?('toggle_ready_status', record.board.id)
   end
 
   def destroy?
-    check?(:role_is_creator?) && !record.creator?
+    user.allowed?('destroy_membership', record.board.id) && non_self_membership?
   end
 
-  def role_is_member?
-    membership&.member? || role_is_creator?
-  end
-
-  def role_is_creator?
-    membership&.creator? || false
+  def non_self_membership?
+    record.user != user
   end
 end
