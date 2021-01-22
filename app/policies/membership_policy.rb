@@ -1,22 +1,15 @@
 # frozen_string_literal: true
 
-class MembershipPolicy
-  include ActionPolicy::Policy::Core
-  include ActionPolicy::Policy::Authorization
-  include ActionPolicy::Policy::Reasons
-
+class MembershipPolicy < ApplicationPolicy
   authorize :membership, allow_nil: true
-  authorize :user
 
   def ready_toggle?
-    user.allowed?('toggle_ready_status', record.board.id)
+    user.allowed?('toggle_ready_status', record.board_id)
   end
 
   def destroy?
-    user.allowed?('destroy_membership', record.board.id) && non_self_membership?
-  end
+    return false if record.user_id == user.id
 
-  def non_self_membership?
-    record.user != user
+    user.allowed?('destroy_membership', record.board_id)
   end
 end

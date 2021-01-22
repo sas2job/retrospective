@@ -19,28 +19,47 @@ RSpec.describe Mutations::DestroyMembershipMutation, type: :request do
 
     before do
       create(:permissions_user, permission: member_permission, user: non_author, board: board)
-      create(:permissions_user, permission: destroy_permission, user: author, board: board)
     end
 
     before { sign_in author }
 
-    it 'removes membership' do
-      expect { request }.to change { Membership.count }.by(-1)
+    context 'with permission' do
+      before do
+        create(:permissions_user, permission: destroy_permission, user: author, board: board)
+      end
+
+      it 'removes membership' do
+        expect { request }.to change { Membership.count }.by(-1)
+      end
+
+      it 'removes permission' do
+        expect { request }.to change { non_author.permissions.count }.by(-1)
+      end
+
+      it 'returns a membership' do
+        request
+
+        json = JSON.parse(response.body)
+        data = json.dig('data', 'destroyMembership')
+
+        expect(data).to include(
+          'id' => non_creatorship.id
+        )
+      end
     end
 
-    it 'removes permission' do
-      expect { request }.to change { non_author.permissions.count }.by(-1)
-    end
+    context 'without permission' do
+      it 'does not remove membership' do
+        expect { request }.not_to change { Membership.count }
+      end
 
-    it 'returns a membership' do
-      request
+      it 'returns unauthorized error' do
+        request
+        json = JSON.parse(response.body)
+        message = json['errors'].first['message']
 
-      json = JSON.parse(response.body)
-      data = json.dig('data', 'destroyMembership')
-
-      expect(data).to include(
-        'id' => non_creatorship.id
-      )
+        expect(message).to eq('You are not authorized to perform this action')
+      end
     end
   end
 
