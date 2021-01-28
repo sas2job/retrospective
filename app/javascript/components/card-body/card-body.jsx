@@ -3,7 +3,8 @@ import Textarea from 'react-textarea-autosize';
 import {useMutation} from '@apollo/react-hooks';
 import {updateCardMutation, destroyCardMutation} from './operations.gql';
 import {CardUser} from '../card-user';
-import './style.less';
+import style from './style.module.less';
+import styleButton from '../../less/button.module.less';
 import {Linkify, linkifyOptions} from '../../utils/linkify';
 
 const CardBody = ({author, id, editable, body, deletable}) => {
@@ -54,36 +55,41 @@ const CardBody = ({author, id, editable, body, deletable}) => {
     });
   };
 
+  const handleCancel = (evt) => {
+    evt.preventDefault();
+    setEditMode(false);
+    setInputValue(body);
+  };
+
   return (
-    <div>
-      <div className="card-top">
+    <div className={style.cardBody}>
+      <div className={style.top}>
         <CardUser {...author} />
 
         {deletable && (
-          <div className="dropdown">
+          <div className={style.dropdown}>
             <div
-              className="dropdown-btn"
+              className={style.dropdownButton}
               tabIndex="1"
               onClick={() => setShowDropdown(!showDropdown)}
               onBlur={() => setShowDropdown(false)}
             >
               …
             </div>
-            <div hidden={!showDropdown} className="dropdown-content">
+            <div hidden={!showDropdown} className={style.dropdownContent}>
               {!editMode && editable && (
-                <div>
-                  <a
-                    onClick={handleEditClick}
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                    }}
-                  >
-                    Edit
-                  </a>
-                  <hr style={{margin: '5px 0'}} />
+                <div
+                  className={style.dropdownItem}
+                  onClick={handleEditClick}
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                  }}
+                >
+                  Edit
                 </div>
               )}
-              <a
+              <div
+                className={style.dropdownItem}
                 onClick={() =>
                   window.confirm(
                     'Are you sure you want to delete this card?'
@@ -105,13 +111,13 @@ const CardBody = ({author, id, editable, body, deletable}) => {
                 }}
               >
                 Delete
-              </a>
+              </div>
             </div>
           </div>
         )}
       </div>
       <div
-        className="card-text"
+        className={style.cardText}
         hidden={editMode}
         onDoubleClick={editable ? editModeToggle : undefined}
       >
@@ -121,18 +127,25 @@ const CardBody = ({author, id, editable, body, deletable}) => {
         <>
           <Textarea
             autoFocus
-            className="input"
+            className={style.textarea}
             value={inputValue}
             onChange={handleChange}
             onKeyDown={handleKeyPress}
           />
-          <div className="btn-add">
+          <div className={styleButton.buttons}>
             <button
-              className="tag is-info button"
+              className={styleButton.buttonCancel}
+              type="button"
+              onClick={handleCancel}
+            >
+              cancel
+            </button>
+            <button
+              className={styleButton.buttonPost}
               type="button"
               onClick={handleSaveClick}
             >
-              Save
+              post
             </button>
           </div>
         </>

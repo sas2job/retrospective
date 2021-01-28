@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
 import {ActionItemBody} from '../action-item-body';
 import {ActionItemFooter} from '../action-item-footer';
-import './style.less';
 import UserContext from '../../utils/user-context';
-// ! import {CardUser} from '../card-user';
+import style from './style.module.less';
+import styleCard from '../card/style.module.less';
 
 const ActionItem = ({
   id,
@@ -14,31 +14,19 @@ const ActionItem = ({
   users,
   isPrevious
 }) => {
-  //
-  //  const pickColor = (cardStatus) => {
-  //   switch (cardStatus) {
-  //     case 'done':
-  //       return 'green';
-  //     case 'closed':
-  //       return 'red';
-  //     default:
-  //       return null;
-  //   }
-  // };
-
   const pickColor = (number, isColor) => {
     if (isColor) {
       switch (number) {
         case 0:
-          return 'green';
+          return style.green;
         case 1:
-          return 'green';
+          return style.green;
         case 2:
-          return 'green';
+          return style.green;
         case 3:
-          return 'yellow';
+          return style.yellow;
         default:
-          return 'red';
+          return style.red;
       }
     } else {
       return ``;
@@ -48,13 +36,10 @@ const ActionItem = ({
   const currentUser = useContext(UserContext);
   const isStatusPending = status === 'pending';
   return (
-    <div className={`${pickColor(times_moved, isPrevious)} card`}>
-      {/* {assignee && <CardUser {...assignee} />} */}
-
+    <div className={`${pickColor(times_moved, isPrevious)} ${styleCard.card}`}>
       <ActionItemBody
         id={id}
         assignee={assignee}
-        // ! assigneeId={assignee?.id}
         editable={currentUser.isCreator}
         deletable={currentUser.isCreator}
         body={body}

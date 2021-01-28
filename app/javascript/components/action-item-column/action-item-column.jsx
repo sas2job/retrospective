@@ -9,7 +9,6 @@ import {
   actionItemDestroyedSubscription,
   actionItemUpdatedSubscription
 } from './operations.gql';
-import '../style.less';
 
 const ActionItemColumn = ({users, initItems}) => {
   const boardSlug = useContext(BoardSlugContext);

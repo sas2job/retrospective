@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import Textarea from 'react-textarea-autosize';
-import './style.less';
 import {
   destroyActionItemMutation,
   updateActionItemMutation
@@ -8,15 +7,14 @@ import {
 import {useMutation} from '@apollo/react-hooks';
 import {Linkify, linkifyOptions} from '../../utils/linkify';
 import {CardUser} from '../card-user';
+import style from '../card-body/style.module.less';
 
 const ActionItemBody = (props) => {
   const {assignee, editable, deletable, body, users, timesMoved} = props;
   const [inputValue, setInputValue] = useState(body);
   const [editMode, setEditMode] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [actionItemAssignee, setActionItemAssignee] = useState(
-    assignee ? assignee.id : ``
-  );
+  const [actionItemAssignee, setActionItemAssignee] = useState(assignee?.id);
   const [destroyActionItem] = useMutation(destroyActionItemMutation);
   const [updateActionItem] = useMutation(updateActionItemMutation);
 
@@ -120,8 +118,8 @@ const ActionItemBody = (props) => {
   };
 
   return (
-    <div>
-      <div className="card-top action-item-top">
+    <div className={style.cardBody}>
+      <div className={style.top}>
         {
           assignee && <CardUser {...assignee} />
           // Заменить на author после того как он появится
@@ -130,30 +128,29 @@ const ActionItemBody = (props) => {
         <div className="card-chevrons">{generateChevrons()}</div>
 
         {editable && deletable && (
-          <div className="dropdown">
+          <div className={style.dropdown}>
             <div
-              className="dropdown-btn"
+              className={style.dropdownButton}
               tabIndex="1"
               onClick={toggleDropdown}
               onBlur={hideDropdown}
             >
               …
             </div>
-            <div hidden={!showDropdown} className="dropdown-content">
+            <div hidden={!showDropdown} className={style.dropdownContent}>
               {!editMode && (
-                <div>
-                  <a
-                    onClick={handleEditClick}
-                    onMouseDown={(evt) => {
-                      evt.preventDefault();
-                    }}
-                  >
-                    Edit
-                  </a>
-                  <hr style={{margin: '5px 0'}} />
+                <div
+                  className={style.dropdownItem}
+                  onClick={handleEditClick}
+                  onMouseDown={(evt) => {
+                    evt.preventDefault();
+                  }}
+                >
+                  Edit
                 </div>
               )}
-              <a
+              <div
+                className={style.dropdownItem}
                 onClick={() => {
                   window.confirm(
                     'Are you sure you want to delete this ActionItem?'
@@ -164,14 +161,14 @@ const ActionItemBody = (props) => {
                 }}
               >
                 Delete
-              </a>
+              </div>
             </div>
           </div>
         )}
       </div>
 
       <div
-        className="card-text"
+        className={style.cardText}
         hidden={editMode}
         onDoubleClick={editable ? editModeToggle : undefined}
       >
@@ -181,7 +178,7 @@ const ActionItemBody = (props) => {
         <div hidden={!editMode}>
           <Textarea
             autoFocus
-            className="input"
+            className={style.textarea}
             value={inputValue}
             onChange={handleChange}
             onKeyDown={handleKeyPress}
@@ -209,7 +206,7 @@ const ActionItemBody = (props) => {
                 type="button"
                 onClick={handleSaveClick}
               >
-                Save
+                post
               </button>
             </div>
           </div>
