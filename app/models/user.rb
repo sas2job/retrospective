@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[alfred google facebook developer]
+         :omniauthable, omniauth_providers: %i[alfred google facebook developer github]
 
   has_many :cards, foreign_key: :author_id
   has_many :comments, foreign_key: :author_id

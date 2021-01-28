@@ -262,6 +262,7 @@ Devise.setup do |config|
   config.omniauth :alfred, ENV['ALFRED_KEY'], ENV['ALFRED_SECRET'], scope: 'user'
   config.omniauth :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], name: :google
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'], secure_image_url: true
+  config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET'], scope: 'user'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
