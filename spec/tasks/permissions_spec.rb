@@ -16,13 +16,13 @@ RSpec.describe 'permissions.rake' do
     Rake.application.invoke_task(task_name)
   end
 
-  describe 'membership_permissions' do
+  describe 'create_missing' do
     let(:user) { create(:user) }
     let_it_be(:board) { create(:board) }
     let_it_be(:creator_permission) { create(:permission, identifier: 'destroy_board') }
     let_it_be(:member_permission) { create(:permission, identifier: 'toggle_ready_status') }
     let_it_be(:other_permission) { create(:permission) }
-    let_it_be(:task_name) { 'permissions:membership_permissions' }
+    let_it_be(:task_name) { 'permissions:create_missing' }
 
     context 'for creator membership' do
       before { create(:membership, user: user, board: board, role: 'creator') }
