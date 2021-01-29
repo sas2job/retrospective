@@ -3,9 +3,7 @@
 namespace :permissions do
   desc 'update creators and members with missing permissions'
   task create_missing: :environment do
-    creator_memberships = Membership.creator
-
-    creator_memberships.find_each do |membership|
+    Membership.creator.find_each do |membership|
       # rubocop:disable Metrics/LineLength
       permission_ids = Permission.creator_permissions.where.not(id: PermissionsUser.select(:permission_id)
         .where(user: membership.user, board: membership.board)).ids
@@ -14,8 +12,7 @@ namespace :permissions do
       create_permissions_users(permission_ids, membership) unless permission_ids.empty?
     end
 
-    member_memberships = Membership.member
-    member_memberships.find_each do |membership|
+    Membership.member.find_each do |membership|
       # rubocop:disable Metrics/LineLength
       permission_ids = Permission.member_permissions.where.not(id: PermissionsUser.select(:permission_id)
         .where(user: membership.user, board: membership.board)).ids
