@@ -55,6 +55,7 @@ permissions_data = {
   continue_board: 'User can continue previous board',
   invite_members: 'User can invite members to board',
   get_suggestions: 'User can get tips with info',
+  destroy_cards: 'User can delete any card on a board',
   destroy_card: 'User can delete a card on a board',
   update_card: 'User can update a card on a board'
 }
@@ -95,7 +96,6 @@ Card.create(kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1) u
 Card.find_each do |card|
   destroy_card_permission = Permission.find_by(identifier: 'destroy_card')
   PermissionsUser.create(user_id: card.author.id, permission_id: destroy_card_permission.id, board_id: 1, card_id: card.id)
-  PermissionsUser.create(user_id: 1, permission_id: destroy_card_permission.id, board_id: 1, card_id: card.id)
 
   update_card_permission = Permission.find_by(identifier: 'update_card')
   PermissionsUser.create(user_id: card.author.id, permission_id: update_card_permission.id, board_id: 1, card_id: card.id)

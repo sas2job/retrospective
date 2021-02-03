@@ -11,7 +11,14 @@ module Mutations
       card = Card.new(card_params(params, board))
       authorize! card, to: :create?, context: { user: context[:current_user], board: board }
 
-      if card.save
+      Card.transaction do
+        card.save
+        Boards::BuildPermissions.new(board, current_user, card: card)
+                                .call(identifiers_scope: 'author')
+        board.save
+      end
+
+      if card.persisted?
         RetrospectiveSchema.subscriptions.trigger('card_added', { board_slug: board.slug }, card)
         { card: card }
       else

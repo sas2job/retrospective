@@ -2,14 +2,15 @@
 
 module Boards
   class BuildPermissions
-    IDENTIFIERS_SCOPES = %w[creator member].freeze
+    IDENTIFIERS_SCOPES = %w[creator member author].freeze
 
     include Dry::Monads[:result]
-    attr_reader :board, :user
+    attr_reader :board, :user, :card
 
-    def initialize(board, user)
+    def initialize(board, user, card: nil)
       @board = board
       @user = user
+      @card = card
     end
 
     def call(identifiers_scope:)
@@ -20,7 +21,7 @@ module Boards
       permissions_data = Permission.public_send(
         "#{identifiers_scope}_permissions"
       ).map do |permission|
-        { permission_id: permission.id, user_id: user.id }
+        { permission_id: permission.id, user_id: user.id, card_id: @card&.id }
       end
 
       board.permissions_users.build(permissions_data)

@@ -10,7 +10,8 @@ class CardPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.allowed?('destroy_card', record.board_id, card_id: record.id)
+    user.allowed?('destroy_card', record.board_id, card_id: record.id) ||
+      user.allowed?('destroy_cards', record.board_id)
   end
 
   def like?
