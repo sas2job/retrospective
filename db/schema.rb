@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_131736) do
+ActiveRecord::Schema.define(version: 2021_02_03_042314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,8 +91,10 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
     t.bigint "board_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "card_id"
     t.index ["board_id"], name: "index_permissions_users_on_board_id"
-    t.index ["permission_id", "user_id", "board_id"], name: "index_permissions_users_on_user_board_permission", unique: true
+    t.index ["card_id"], name: "index_permissions_users_on_card_id"
+    t.index ["permission_id", "user_id", "board_id", "card_id"], name: "index_permissions_users_on_user_board_permission_card", unique: true
     t.index ["permission_id"], name: "index_permissions_users_on_permission_id"
     t.index ["user_id"], name: "index_permissions_users_on_user_id"
   end
@@ -139,6 +141,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
   add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "memberships", "boards"
   add_foreign_key "memberships", "users"
+  add_foreign_key "permissions_users", "cards"
   add_foreign_key "teams_users", "teams"
   add_foreign_key "teams_users", "users"
 end

@@ -5,6 +5,7 @@ class Card < ApplicationRecord
   belongs_to :board
 
   has_many :comments, dependent: :destroy
+  has_many :permissions_users, dependent: :destroy
 
   validates_presence_of :kind, :body
 
