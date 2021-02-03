@@ -4,6 +4,7 @@ class Permission < ApplicationRecord
   CREATOR_IDENTIFIERS = %w[view_private_board edit_board update_board get_suggestions
                            destroy_board continue_board create_cards invite_members].freeze
   MEMBER_IDENTIFIERS = %w[view_private_board create_cards].freeze
+  AUTHOR_IDENTIFIERS = %w[update_card destroy_card].freeze
 
   has_many :permissions_users, dependent: :destroy
   has_many :users, through: :permissions_users
@@ -13,4 +14,5 @@ class Permission < ApplicationRecord
 
   scope :creator_permissions, -> { where(identifier: CREATOR_IDENTIFIERS) }
   scope :member_permissions, -> { where(identifier: MEMBER_IDENTIFIERS) }
+  scope :author_permissions, -> { where(identifier: AUTHOR_IDENTIFIERS) }
 end

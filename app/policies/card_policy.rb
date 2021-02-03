@@ -2,30 +2,20 @@
 
 class CardPolicy < ApplicationPolicy
   def create?
-    check?(:user_is_member?)
+    user.allowed?('create_cards', record.board_id)
   end
 
   def update?
-    check?(:user_is_author?)
+    user.allowed?('update_card', record.board_id, card_id: record.id)
   end
 
   def destroy?
-    check?(:user_is_author?) || check?(:user_is_creator?)
+    user.allowed?('destroy_card', record.board_id, card_id: record.id)
   end
 
   def like?
-    !check?(:user_is_author?)
-  end
+    return false if user.allowed?('update_card', card_id: record.id)
 
-  def user_is_member?
-    record.board.memberships.exists?(user_id: user.id)
-  end
-
-  def user_is_author?
-    record.author?(user)
-  end
-
-  def user_is_creator?
-    record.board.memberships.exists?(user: user, role: 'creator')
+    true
   end
 end

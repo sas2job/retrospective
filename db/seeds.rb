@@ -54,12 +54,14 @@ permissions_data = {
   destroy_board: 'User can destroy board',
   continue_board: 'User can continue previous board',
   invite_members: 'User can invite members to board',
-  get_suggestions: 'User can get tips with info'
+  get_suggestions: 'User can get tips with info',
+  destroy_card: 'User can delete a card on a board',
+  update_card: 'User can update a card on a board'
 }
 
 errors = []
 
-(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS).each do |identifier|
+(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::AUTHOR_IDENTIFIERS).each do |identifier|
   next if Permission.exists?(identifier: identifier)
 
   begin
@@ -89,6 +91,15 @@ Card.create(kind: 'sad', body: 'user2 is very sad', author_id: 2, board_id: 1) u
 Card.create(kind: 'mad', body: 'user3 is very mad', author_id: 3, board_id: 1) unless Card.where(body: 'user3 is very mad').exists?
 Card.create(kind: 'mad', body: 'user4 is very mad', author_id: 4, board_id: 1) unless Card.where(body: 'user4 is very mad').exists?
 Card.create(kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1) unless Card.where(body: 'user5 is very mad').exists?
+
+Card.find_each do |card|
+  destroy_card_permission = Permission.find_by(identifier: 'destroy_card')
+  PermissionsUser.create(user_id: card.author.id, permission_id: destroy_card_permission.id, board_id: 1, card_id: card.id)
+  PermissionsUser.create(user_id: 1, permission_id: destroy_card_permission.id, board_id: 1, card_id: card.id)
+
+  update_card_permission = Permission.find_by(identifier: 'update_card')
+  PermissionsUser.create(user_id: card.author.id, permission_id: update_card_permission.id, board_id: 1, card_id: card.id)
+end
 
 ActionItem.create(body: 'issue should be fixed', board_id: 1, author_id: 1) unless ActionItem.where(body: 'issue should be fixed', board_id: 1, author_id: 1).exists?
 ActionItem.create(body: 'meetings should be held', board_id: 1, author_id: 1) unless ActionItem.where(body: 'meetings should be held', board_id: 1, author_id: 1).exists?
