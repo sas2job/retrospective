@@ -57,7 +57,9 @@ permissions_data = {
   get_suggestions: 'User can get tips with info',
   destroy_cards: 'User can delete any card on a board',
   destroy_card: 'User can delete a card on a board',
-  update_card: 'User can update a card on a board'
+  update_card: 'User can update a card on a board',
+  toggle_ready_status: 'User can toggle ready status of board membership',
+  destroy_membership: 'User can destroy membership of board'
 }
 
 errors = []
@@ -76,12 +78,24 @@ puts errors
 Permission.creator_permissions.each do |permission|
   PermissionsUser.create([
                            { user_id: 1, permission_id: permission.id, board_id: 1 },
-                           { user_id: 2, permission_id: permission.id, board_id: 2 }
+                           { user_id: 2, permission_id: permission.id, board_id: 2 },
+                           { user_id: 2, permission_id: permission.id, board_id: 3 },
+                           { user_id: 2, permission_id: permission.id, board_id: 4 },
+                           { user_id: 2, permission_id: permission.id, board_id: 5 }
                          ])
 end
 
 Permission.member_permissions.each do |permission|
-  PermissionsUser.create(user_id: 2, permission_id: permission.id, board_id: 1)
+  PermissionsUser.create([
+                           { user_id: 2, permission_id: permission.id, board_id: 1 },
+                           { user_id: 3, permission_id: permission.id, board_id: 1 },
+                           { user_id: 4, permission_id: permission.id, board_id: 1 },
+                           { user_id: 5, permission_id: permission.id, board_id: 1 },
+                           { user_id: 6, permission_id: permission.id, board_id: 1 },
+                           { user_id: 7, permission_id: permission.id, board_id: 1 },
+                           { user_id: 8, permission_id: permission.id, board_id: 1 },
+                           { user_id: 9, permission_id: permission.id, board_id: 1 }
+                         ])
 end
 
 Card.create(kind: 'mad', body: 'user1 is very mad', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very mad').exists?
