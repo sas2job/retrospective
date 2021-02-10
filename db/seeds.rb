@@ -107,3 +107,5 @@ Card.create(kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1) u
 ActionItem.create(body: 'issue should be fixed', board_id: 1, author_id: 1) unless ActionItem.where(body: 'issue should be fixed', board_id: 1, author_id: 1).exists?
 ActionItem.create(body: 'meetings should be held', board_id: 1, author_id: 1) unless ActionItem.where(body: 'meetings should be held', board_id: 1, author_id: 1).exists?
 ActionItem.create(body: 'actions should be taken', board_id: 1, author_id: 1) unless ActionItem.where(body: 'actions should be taken', board_id: 1, author_id: 1).exists?
+
+Rake::Task['permissions:create_missing'].invoke
