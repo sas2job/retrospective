@@ -8,27 +8,15 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create([
-              { email: 'tu1@mail.com', password: '123456', nickname: 'tu1', provider: 'provider', uid: 'uid1', last_name: 'Sidorov', first_name: 'Ivan' },
-              { email: 'tu2@mail.com', password: '123456', nickname: 'tu2', provider: 'provider', uid: 'uid2', last_name: 'Petrov', first_name: 'Petr' },
-              { email: 'tu3@mail.com', password: '123456', nickname: 'tu3', provider: 'provider', uid: 'uid3', last_name: 'Ivanov', first_name: 'Andrey' },
-              { email: 'tu4@mail.com', password: '123456', nickname: 'tu4', provider: 'provider', uid: 'uid4', last_name: 'Abramov', first_name: 'Dmitriy' },
-              { email: 'tu5@mail.com', password: '123456', nickname: 'tu5', provider: 'provider', uid: 'uid5', last_name: 'Mokhov', first_name: 'Fedor' },
-              { email: 'tu6@mail.com', password: '123456', nickname: 'tu6', provider: 'provider', uid: 'uid6', last_name: 'Sidorova', first_name: 'Marina' },
-              { email: 'tu7@mail.com', password: '123456', nickname: 'tu7', provider: 'provider', uid: 'uid7', last_name: 'Petrova', first_name: 'Anna' },
-              { email: 'tu8@mail.com', password: '123456', nickname: 'tu8', provider: 'provider', uid: 'uid8', last_name: 'Ivanova', first_name: 'Sveta' },
-              { email: 'tu9@mail.com', password: '123456', nickname: 'tu9', provider: 'provider', uid: 'uid9', last_name: 'Mokhova', first_name: 'Lyubov' }
-            ])
-
-user1 = User.find_by(email: 'tu1@mail.com')
-user2 = User.find_by(email: 'tu2@mail.com')
-user3 = User.find_by(email: 'tu3@mail.com')
-user4 = User.find_by(email: 'tu4@mail.com')
-user5 = User.find_by(email: 'tu5@mail.com')
-user6 = User.find_by(email: 'tu6@mail.com')
-user7 = User.find_by(email: 'tu7@mail.com')
-user8 = User.find_by(email: 'tu8@mail.com')
-user9 = User.find_by(email: 'tu9@mail.com')
+user1 = User.find_or_create_by(email: 'tu1@mail.com') { |u| u.password = '123456', u.nickname = 'tu1', u.provider = 'provider', u.uid = 'uid1', u.last_name = 'Sidorov', u.first_name = 'Ivan' }
+user2 = User.find_or_create_by(email: 'tu2@mail.com') { |u| u.password = '123456', u.nickname = 'tu2', u.provider = 'provider', u.uid = 'uid2', u.last_name = 'Petrov', u.first_name = 'Petr' }
+user3 = User.find_or_create_by(email: 'tu3@mail.com') { |u| u.password = '123456', u.nickname = 'tu3', u.provider = 'provider', u.uid = 'uid3', u.last_name = 'Ivanov', u.first_name = 'Andrey' }
+user4 = User.find_or_create_by(email: 'tu4@mail.com') { |u| u.password = '123456', u.nickname = 'tu4', u.provider = 'provider', u.uid = 'uid4', u.last_name = 'Abramov', u.first_name = 'Dmitriy' }
+user5 = User.find_or_create_by(email: 'tu5@mail.com') { |u| u.password = '123456', u.nickname = 'tu5', u.provider = 'provider', u.uid = 'uid5', u.last_name = 'Mokhov', u.first_name = 'Fedor' }
+user6 = User.find_or_create_by(email: 'tu6@mail.com') { |u| u.password = '123456', u.nickname = 'tu6', u.provider = 'provider', u.uid = 'uid6', u.last_name = 'Sidorova', u.first_name = 'Marina' }
+user7 = User.find_or_create_by(email: 'tu7@mail.com') { |u| u.password = '123456', u.nickname = 'tu7', u.provider = 'provider', u.uid = 'uid7', u.last_name = 'Petrova', u.first_name = 'Anna' }
+user8 = User.find_or_create_by(email: 'tu8@mail.com') { |u| u.password = '123456', u.nickname = 'tu8', u.provider = 'provider', u.uid = 'uid8', u.last_name = 'Ivanova', u.first_name = 'Sveta' }
+user9 = User.find_or_create_by(email: 'tu9@mail.com') { |u| u.password = '123456', u.nickname = 'tu9', u.provider = 'provider', u.uid = 'uid9', u.last_name = 'Mokhova', u.first_name = 'Lyubov' }
 
 Team.create(name: 'Wolves', user_ids: [user1.id, user2.id, user3.id, user4.id, user5.id]) unless Team.where(name: 'Wolves').exists?
 Team.create(name: 'Tigers', user_ids: [user1.id, user5.id]) unless Team.where(name: 'Tigers').exists?
@@ -40,11 +28,11 @@ Board.create(title: 'TestUser3_RetroBoard') unless Board.where(title: 'TestUser3
 Board.create(title: 'TestUser4_RetroBoard') unless Board.where(title: 'TestUser4_RetroBoard').exists?
 Board.create(title: 'TestUser5_RetroBoard') unless Board.where(title: 'TestUser5_RetroBoard').exists?
 
-board1 = Board.find_by(title: 'TestUser1_RetroBoard')
-board2 = Board.find_by(title: 'TestUser2_RetroBoard')
-board3 = Board.find_by(title: 'TestUser2_RetroBoard')
-board4 = Board.find_by(title: 'TestUser2_RetroBoard')
-board5 = Board.find_by(title: 'TestUser2_RetroBoard')
+board1 = Board.find_or_create_by(title: 'TestUser1_RetroBoard')
+board2 = Board.find_or_create_by(title: 'TestUser2_RetroBoard')
+board3 = Board.find_or_create_by(title: 'TestUser3_RetroBoard')
+board4 = Board.find_or_create_by(title: 'TestUser4_RetroBoard')
+board5 = Board.find_or_create_by(title: 'TestUser5_RetroBoard')
 
 Membership.create([
                     { user_id: user1.id, board_id: board1.id, role: 'creator', ready: false },
