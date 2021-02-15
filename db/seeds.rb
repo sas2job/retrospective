@@ -8,42 +8,40 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create([
-              { email: 'tu1@mail.com', password: '123456', nickname: 'tu1', provider: 'provider', uid: 'uid1', last_name: 'Sidorov', first_name: 'Ivan' },
-              { email: 'tu2@mail.com', password: '123456', nickname: 'tu2', provider: 'provider', uid: 'uid2', last_name: 'Petrov', first_name: 'Petr' },
-              { email: 'tu3@mail.com', password: '123456', nickname: 'tu3', provider: 'provider', uid: 'uid3', last_name: 'Ivanov', first_name: 'Andrey' },
-              { email: 'tu4@mail.com', password: '123456', nickname: 'tu4', provider: 'provider', uid: 'uid4', last_name: 'Abramov', first_name: 'Dmitriy' },
-              { email: 'tu5@mail.com', password: '123456', nickname: 'tu5', provider: 'provider', uid: 'uid5', last_name: 'Mokhov', first_name: 'Fedor' },
-              { email: 'tu6@mail.com', password: '123456', nickname: 'tu6', provider: 'provider', uid: 'uid6', last_name: 'Sidorova', first_name: 'Marina' },
-              { email: 'tu7@mail.com', password: '123456', nickname: 'tu7', provider: 'provider', uid: 'uid7', last_name: 'Petrova', first_name: 'Anna' },
-              { email: 'tu8@mail.com', password: '123456', nickname: 'tu8', provider: 'provider', uid: 'uid8', last_name: 'Ivanova', first_name: 'Sveta' },
-              { email: 'tu9@mail.com', password: '123456', nickname: 'tu9', provider: 'provider', uid: 'uid9', last_name: 'Mokhova', first_name: 'Lyubov' }
-            ])
+user1 = User.find_or_create_by(email: 'tu1@mail.com') { |u| u.password = '123456', u.nickname = 'tu1', u.provider = 'provider', u.uid = 'uid1', u.last_name = 'Sidorov', u.first_name = 'Ivan' }
+user2 = User.find_or_create_by(email: 'tu2@mail.com') { |u| u.password = '123456', u.nickname = 'tu2', u.provider = 'provider', u.uid = 'uid2', u.last_name = 'Petrov', u.first_name = 'Petr' }
+user3 = User.find_or_create_by(email: 'tu3@mail.com') { |u| u.password = '123456', u.nickname = 'tu3', u.provider = 'provider', u.uid = 'uid3', u.last_name = 'Ivanov', u.first_name = 'Andrey' }
+user4 = User.find_or_create_by(email: 'tu4@mail.com') { |u| u.password = '123456', u.nickname = 'tu4', u.provider = 'provider', u.uid = 'uid4', u.last_name = 'Abramov', u.first_name = 'Dmitriy' }
+user5 = User.find_or_create_by(email: 'tu5@mail.com') { |u| u.password = '123456', u.nickname = 'tu5', u.provider = 'provider', u.uid = 'uid5', u.last_name = 'Mokhov', u.first_name = 'Fedor' }
+user6 = User.find_or_create_by(email: 'tu6@mail.com') { |u| u.password = '123456', u.nickname = 'tu6', u.provider = 'provider', u.uid = 'uid6', u.last_name = 'Sidorova', u.first_name = 'Marina' }
+user7 = User.find_or_create_by(email: 'tu7@mail.com') { |u| u.password = '123456', u.nickname = 'tu7', u.provider = 'provider', u.uid = 'uid7', u.last_name = 'Petrova', u.first_name = 'Anna' }
+user8 = User.find_or_create_by(email: 'tu8@mail.com') { |u| u.password = '123456', u.nickname = 'tu8', u.provider = 'provider', u.uid = 'uid8', u.last_name = 'Ivanova', u.first_name = 'Sveta' }
+user9 = User.find_or_create_by(email: 'tu9@mail.com') { |u| u.password = '123456', u.nickname = 'tu9', u.provider = 'provider', u.uid = 'uid9', u.last_name = 'Mokhova', u.first_name = 'Lyubov' }
 
-Team.create(name: 'Wolves', user_ids: [1, 2, 3, 4, 5]) unless Team.where(name: 'Wolves').exists?
-Team.create(name: 'Tigers', user_ids: [1, 5]) unless Team.where(name: 'Tigers').exists?
-Team.create(name: 'Eagles', user_ids: [2, 3, 4]) unless Team.where(name: 'Eagles').exists?
+Team.create(name: 'Wolves', user_ids: [user1.id, user2.id, user3.id, user4.id, user5.id]) unless Team.where(name: 'Wolves').exists?
+Team.create(name: 'Tigers', user_ids: [user1.id, user5.id]) unless Team.where(name: 'Tigers').exists?
+Team.create(name: 'Eagles', user_ids: [user2.id, user3.id, user4.id]) unless Team.where(name: 'Eagles').exists?
 
-Board.create(title: 'TestUser1_RetroBoard') unless Board.where(title: 'TestUser1_RetroBoard').exists?
-Board.create(title: 'TestUser2_RetroBoard') unless Board.where(title: 'TestUser2_RetroBoard').exists?
-Board.create(title: 'TestUser3_RetroBoard') unless Board.where(title: 'TestUser3_RetroBoard').exists?
-Board.create(title: 'TestUser4_RetroBoard') unless Board.where(title: 'TestUser4_RetroBoard').exists?
-Board.create(title: 'TestUser5_RetroBoard') unless Board.where(title: 'TestUser5_RetroBoard').exists?
+board1 = Board.find_or_create_by(title: 'TestUser1_RetroBoard')
+board2 = Board.find_or_create_by(title: 'TestUser2_RetroBoard')
+board3 = Board.find_or_create_by(title: 'TestUser3_RetroBoard')
+board4 = Board.find_or_create_by(title: 'TestUser4_RetroBoard')
+board5 = Board.find_or_create_by(title: 'TestUser5_RetroBoard')
 
 Membership.create([
-                    { user_id: 1, board_id: 1, role: 'creator', ready: false },
-                    { user_id: 2, board_id: 1, role: 'member', ready: false },
-                    { user_id: 3, board_id: 1, role: 'member', ready: false },
-                    { user_id: 4, board_id: 1, role: 'member', ready: false },
-                    { user_id: 5, board_id: 1, role: 'member', ready: false },
-                    { user_id: 6, board_id: 1, role: 'member', ready: false },
-                    { user_id: 7, board_id: 1, role: 'member', ready: false },
-                    { user_id: 8, board_id: 1, role: 'member', ready: false },
-                    { user_id: 9, board_id: 1, role: 'member', ready: false },
-                    { user_id: 2, board_id: 2, role: 'creator', ready: false },
-                    { user_id: 2, board_id: 3, role: 'creator', ready: false },
-                    { user_id: 2, board_id: 4, role: 'creator', ready: false },
-                    { user_id: 2, board_id: 5, role: 'creator', ready: false }
+                    { user_id: user1.id, board_id: board1.id, role: 'creator', ready: false },
+                    { user_id: user2.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user3.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user4.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user5.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user6.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user7.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user8.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user9.id, board_id: board1.id, role: 'member', ready: false },
+                    { user_id: user2.id, board_id: board2.id, role: 'creator', ready: false },
+                    { user_id: user2.id, board_id: board3.id, role: 'creator', ready: false },
+                    { user_id: user2.id, board_id: board4.id, role: 'creator', ready: false },
+                    { user_id: user2.id, board_id: board5.id, role: 'creator', ready: false }
                   ])
 
 permissions_data = {
@@ -76,45 +74,47 @@ end
 puts errors
 
 Permission.creator_permissions.each do |permission|
-  PermissionsUser.create([
-                           { user_id: 1, permission_id: permission.id, board_id: 1 },
-                           { user_id: 2, permission_id: permission.id, board_id: 2 },
-                           { user_id: 2, permission_id: permission.id, board_id: 3 },
-                           { user_id: 2, permission_id: permission.id, board_id: 4 },
-                           { user_id: 2, permission_id: permission.id, board_id: 5 }
-                         ])
+  BoardPermissionsUser.create([
+                                { user_id: user1.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board2.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board3.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board4.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board5.id }
+                              ])
 end
 
 Permission.member_permissions.each do |permission|
-  PermissionsUser.create([
-                           { user_id: 2, permission_id: permission.id, board_id: 1 },
-                           { user_id: 3, permission_id: permission.id, board_id: 1 },
-                           { user_id: 4, permission_id: permission.id, board_id: 1 },
-                           { user_id: 5, permission_id: permission.id, board_id: 1 },
-                           { user_id: 6, permission_id: permission.id, board_id: 1 },
-                           { user_id: 7, permission_id: permission.id, board_id: 1 },
-                           { user_id: 8, permission_id: permission.id, board_id: 1 },
-                           { user_id: 9, permission_id: permission.id, board_id: 1 }
-                         ])
+  BoardPermissionsUser.create([
+                                { user_id: user2.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user3.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user4.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user5.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user6.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user7.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user8.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user9.id, permission_id: permission.id, board_id: board1.id }
+                              ])
 end
 
-Card.create(kind: 'mad', body: 'user1 is very mad', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very mad').exists?
-Card.create(kind: 'sad', body: 'user1 is very sad', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very sad').exists?
-Card.create(kind: 'glad', body: 'user1 is very glad #1', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very glad #1').exists?
-Card.create(kind: 'glad', body: 'user1 is very glad #2', author_id: 1, board_id: 1) unless Card.where(body: 'user1 is very glad #2').exists?
-Card.create(kind: 'sad', body: 'user2 is very sad', author_id: 2, board_id: 1) unless Card.where(body: 'user2 is very sad').exists?
-Card.create(kind: 'mad', body: 'user3 is very mad', author_id: 3, board_id: 1) unless Card.where(body: 'user3 is very mad').exists?
-Card.create(kind: 'mad', body: 'user4 is very mad', author_id: 4, board_id: 1) unless Card.where(body: 'user4 is very mad').exists?
-Card.create(kind: 'mad', body: 'user5 is very mad', author_id: 5, board_id: 1) unless Card.where(body: 'user5 is very mad').exists?
+Card.create(kind: 'mad', body: 'user1 is very mad', author_id: user1.id, board_id: board1.id) unless Card.where(body: 'user1 is very mad').exists?
+Card.create(kind: 'sad', body: 'user1 is very sad', author_id: user1.id, board_id: board1.id) unless Card.where(body: 'user1 is very sad').exists?
+Card.create(kind: 'glad', body: 'user1 is very glad #1', author_id: user1.id, board_id: board1.id) unless Card.where(body: 'user1 is very glad #1').exists?
+Card.create(kind: 'glad', body: 'user1 is very glad #2', author_id: user1.id, board_id: board1.id) unless Card.where(body: 'user1 is very glad #2').exists?
+Card.create(kind: 'sad', body: 'user2 is very sad', author_id: user2.id, board_id: board1.id) unless Card.where(body: 'user2 is very sad').exists?
+Card.create(kind: 'mad', body: 'user3 is very mad', author_id: user3.id, board_id: board1.id) unless Card.where(body: 'user3 is very mad').exists?
+Card.create(kind: 'mad', body: 'user4 is very mad', author_id: user4.id, board_id: board1.id) unless Card.where(body: 'user4 is very mad').exists?
+Card.create(kind: 'mad', body: 'user5 is very mad', author_id: user5.id, board_id: board1.id) unless Card.where(body: 'user5 is very mad').exists?
 
 Card.find_each do |card|
   destroy_card_permission = Permission.find_by(identifier: 'destroy_card')
-  PermissionsUser.create(user_id: card.author.id, permission_id: destroy_card_permission.id, board_id: 1, card_id: card.id)
+  CardPermissionsUser.create(user_id: card.author.id, permission_id: destroy_card_permission.id, card_id: card.id)
 
   update_card_permission = Permission.find_by(identifier: 'update_card')
-  PermissionsUser.create(user_id: card.author.id, permission_id: update_card_permission.id, board_id: 1, card_id: card.id)
+  CardPermissionsUser.create(user_id: card.author.id, permission_id: update_card_permission.id, card_id: card.id)
 end
 
-ActionItem.create(body: 'issue should be fixed', board_id: 1, author_id: 1) unless ActionItem.where(body: 'issue should be fixed', board_id: 1, author_id: 1).exists?
-ActionItem.create(body: 'meetings should be held', board_id: 1, author_id: 1) unless ActionItem.where(body: 'meetings should be held', board_id: 1, author_id: 1).exists?
-ActionItem.create(body: 'actions should be taken', board_id: 1, author_id: 1) unless ActionItem.where(body: 'actions should be taken', board_id: 1, author_id: 1).exists?
+ActionItem.create(body: 'issue should be fixed', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'issue should be fixed', board_id: board1.id, author_id: user1.id).exists?
+ActionItem.create(body: 'meetings should be held', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'meetings should be held', board_id: board1.id, author_id: user1.id).exists?
+ActionItem.create(body: 'actions should be taken', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'actions should be taken', board_id: board1.id, author_id: user1.id).exists?
+
+Rake::Task['permissions:create_missing'].invoke

@@ -7,8 +7,10 @@ class Permission < ApplicationRecord
   MEMBER_IDENTIFIERS = %w[view_private_board create_cards toggle_ready_status].freeze
   AUTHOR_IDENTIFIERS = %w[update_card destroy_card].freeze
 
-  has_many :permissions_users, dependent: :destroy
-  has_many :users, through: :permissions_users
+  has_many :board_permissions_users, dependent: :destroy
+  has_many :board_users, through: :board_permissions_users, source: :user
+  has_many :card_permissions_users, dependent: :destroy
+  has_many :card_users, through: :card_permissions_users, source: :user
 
   validates_presence_of :description, :identifier
   validates_uniqueness_of :identifier
