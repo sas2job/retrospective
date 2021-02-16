@@ -44,10 +44,10 @@ RSpec.describe BoardPolicy do
       let(:policy) { described_class.new(private_board, user: user) }
 
       context 'when user has view_private_board permission' do
-        let!(:permissions_user) do
-          create(:permissions_user, permission: view_private_permission,
-                                    user: user,
-                                    board: private_board)
+        let!(:board_permissions_user) do
+          create(:board_permissions_user, permission: view_private_permission,
+                                          user: user,
+                                          board: private_board)
         end
 
         it { is_expected.to eq true }
@@ -72,8 +72,8 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:edit?) }
 
     context 'when user has edit_board permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: edit_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: edit_permission, user: user, board: board)
       end
 
       it { is_expected.to eq true }
@@ -97,8 +97,8 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:update?) }
 
     context 'when user has update_board permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: update_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: update_permission, user: user, board: board)
       end
 
       it { is_expected.to eq true }
@@ -114,8 +114,8 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:destroy?) }
 
     context 'when user has destroy_board permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: destroy_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: destroy_permission, user: user, board: board)
       end
 
       it { is_expected.to eq true }
@@ -131,8 +131,8 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:continue?) }
 
     context 'when user has continue_board permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: continue_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: continue_permission, user: user, board: board)
       end
 
       context 'and board has not been continued' do
@@ -156,8 +156,9 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:create_cards?) }
 
     context 'when user has create_cards permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: create_cards_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: create_cards_permission,
+                                        user: user, board: board)
       end
 
       it { is_expected.to eq true }
@@ -173,8 +174,9 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:suggestions?) }
 
     context 'when user has get_suggestions permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: get_suggestions_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: get_suggestions_permission,
+                                        user: user, board: board)
       end
 
       it { is_expected.to eq true }
@@ -190,8 +192,9 @@ RSpec.describe BoardPolicy do
     subject { policy.apply(:invite?) }
 
     context 'when user has invite_members permission' do
-      let!(:permissions_user) do
-        create(:permissions_user, permission: invite_member_permission, user: user, board: board)
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: invite_member_permission,
+                                        user: user, board: board)
       end
 
       it { is_expected.to eq true }

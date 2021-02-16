@@ -13,7 +13,7 @@ RSpec.describe Boards::InviteUsers do
   end
 
   it 'creates permissions' do
-    expect { subject }.to change(user.permissions, :count).by(1)
+    expect { subject }.to change(user.board_permissions, :count).by(1)
   end
 
   it 'returns memberships' do

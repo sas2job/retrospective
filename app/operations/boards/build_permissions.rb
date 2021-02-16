@@ -7,10 +7,9 @@ module Boards
     include Dry::Monads[:result]
     attr_reader :board, :user, :card
 
-    def initialize(board, user, card: nil)
+    def initialize(board, user)
       @board = board
       @user = user
-      @card = card
     end
 
     def call(identifiers_scope:)
@@ -21,10 +20,10 @@ module Boards
       permissions_data = Permission.public_send(
         "#{identifiers_scope}_permissions"
       ).map do |permission|
-        { permission_id: permission.id, user_id: user.id, card_id: @card&.id }
+        { permission_id: permission.id, user_id: user.id }
       end
 
-      board.permissions_users.build(permissions_data)
+      board.board_permissions_users.build(permissions_data)
       Success()
     end
   end

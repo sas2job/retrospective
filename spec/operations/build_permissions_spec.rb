@@ -18,12 +18,12 @@ RSpec.describe Boards::BuildPermissions do
 
     it 'builds permission to board' do
       build_permissions
-      expect(board.permissions_users.first.permission).to eq(permission)
+      expect(board.board_permissions_users.first.permission).to eq(permission)
     end
 
     it 'builds permission to user' do
       build_permissions
-      expect(board.permissions_users.first.user).to eq(user)
+      expect(board.board_permissions_users.first.user).to eq(user)
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Boards::BuildPermissions do
 
     it 'does not build permissions_users' do
       build_permissions
-      expect(board.permissions_users).to be_empty
+      expect(board.board_permissions_users).to be_empty
     end
   end
 end

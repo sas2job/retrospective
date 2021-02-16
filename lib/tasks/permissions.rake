@@ -5,7 +5,7 @@ namespace :permissions do
   task create_missing: :environment do
     Membership.creator.find_each do |membership|
       # rubocop:disable Metrics/LineLength
-      permission_ids = Permission.creator_permissions.where.not(id: PermissionsUser.select(:permission_id)
+      permission_ids = Permission.creator_permissions.where.not(id: BoardPermissionsUser.select(:permission_id)
         .where(user: membership.user, board: membership.board)).ids
       # rubocop:enable Metrics/LineLength
 
@@ -14,7 +14,7 @@ namespace :permissions do
 
     Membership.member.find_each do |membership|
       # rubocop:disable Metrics/LineLength
-      permission_ids = Permission.member_permissions.where.not(id: PermissionsUser.select(:permission_id)
+      permission_ids = Permission.member_permissions.where.not(id: BoardPermissionsUser.select(:permission_id)
         .where(user: membership.user, board: membership.board)).ids
       # rubocop:enable Metrics/LineLength
 
@@ -30,9 +30,9 @@ namespace :permissions do
     counter = 0
 
     permission_ids.each do |permission_id|
-      PermissionsUser.create!(user: membership.user,
-                              permission_id: permission_id,
-                              board: membership.board)
+      BoardPermissionsUser.create!(user: membership.user,
+                                   permission_id: permission_id,
+                                   board: membership.board)
       counter += 1
 
     rescue StandardError => e

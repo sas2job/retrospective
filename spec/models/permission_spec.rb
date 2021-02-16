@@ -31,7 +31,7 @@ RSpec.describe Permission, type: :model do
     end
 
     it 'has_many_permissions_users' do
-      expect(permission).to respond_to(:permissions_users)
+      expect(permission).to respond_to(:board_permissions_users)
     end
   end
 

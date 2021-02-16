@@ -23,7 +23,7 @@ RSpec.describe Mutations::InviteMembersMutation, type: :request do
     end
 
     before do
-      create(:permissions_user, permission: invite_permission, user: author, board: board)
+      create(:board_permissions_user, permission: invite_permission, user: author, board: board)
     end
 
     before do

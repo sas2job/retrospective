@@ -37,8 +37,8 @@ RSpec.describe User, type: :model do
       expect(user).to respond_to(:action_items)
     end
 
-    it 'has many permissions users' do
-      expect(user).to respond_to(:permissions_users)
+    it 'has many board permissions users' do
+      expect(user).to respond_to(:board_permissions_users)
     end
 
     it 'has many permissions' do
@@ -129,7 +129,7 @@ RSpec.describe User, type: :model do
 
     context 'permission exists' do
       let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
-      before { create(:permissions_user, user: user, board: board, permission: permission) }
+      before { create(:board_permissions_user, user: user, board: board, permission: permission) }
 
       it { is_expected.to be true }
     end

@@ -36,10 +36,10 @@ class User < ApplicationRecord
     end
   end
 
-  def allowed?(identifier, board_id, card_id: nil)
+  def allowed?(identifier, board_id)
     permission = Permission.find_by(identifier: identifier)
 
-    permissions_users.where(board_id: board_id, permission: permission, card_id: card_id).any?
+    board_permissions_users.where(board_id: board_id, permission: permission).any?
   end
 
   private
