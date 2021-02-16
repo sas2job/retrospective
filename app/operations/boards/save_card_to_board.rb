@@ -14,8 +14,7 @@ module Boards
     def call
       card.save
 
-      Boards::BuildPermissions.new(board, user, card: card)
-                              .call(identifiers_scope: 'author')
+      Boards::BuildPermissions.new(card, user).call(identifiers_scope: 'author')
 
       board.save
       Success()
