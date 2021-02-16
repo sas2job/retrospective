@@ -2,20 +2,19 @@
 
 class CardPolicy < ApplicationPolicy
   def create?
-    user.allowed?('create_cards', record.board_id)
+    user.allowed?('create_cards', record.board)
   end
 
   def update?
-    user.allowed?('update_card', record.board_id, card_id: record.id)
+    user.allowed?('update_card', record)
   end
 
   def destroy?
-    user.allowed?('destroy_card', record.board_id, card_id: record.id) ||
-      user.allowed?('destroy_cards', record.board_id)
+    user.allowed?('destroy_card', record) || user.allowed?('destroy_cards', record.board)
   end
 
   def like?
-    return false if user.allowed?('update_card', card_id: record.id)
+    return false if user.allowed?('update_card', record)
 
     true
   end

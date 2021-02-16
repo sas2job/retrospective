@@ -10,16 +10,16 @@ module Mutations
     def resolve(attributes:)
       params = attributes.to_h
       board = Board.find_by!(slug: params.delete(:board_slug))
-      card = Card.new(card_params(params, board))
-      authorize! card, to: :create?, context: { user: context[:current_user], board: board }
+      authorize! board, to: :create_cards?, context: { user: context[:current_user], board: board }
 
-      result = Boards::SaveCardToBoard.new(board, current_user, card).call
+      result = Boards::Cards::Create.new(current_user, card_params(params, board)).call
 
       if result.success?
+        card = result.value!
         RetrospectiveSchema.subscriptions.trigger('card_added', { board_slug: board.slug }, card)
         { card: card }
       else
-        { errors: { full_messages: card.errors.full_messages } }
+        { errors: { full_messages: result.failure.record.errors.full_messages } }
       end
     end
     # rubocop:enable Metrics/MethodLength

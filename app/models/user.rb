@@ -36,10 +36,12 @@ class User < ApplicationRecord
     end
   end
 
-  def allowed?(identifier, board_id)
+  def allowed?(identifier, resource)
     permission = Permission.find_by(identifier: identifier)
+    resource_name = resource.class.to_s.downcase
 
-    board_permissions_users.where(board_id: board_id, permission: permission).any?
+    public_send("#{resource_name}_permissions_users").where("#{resource_name}": resource,
+                                                            permission: permission).any?
   end
 
   private
