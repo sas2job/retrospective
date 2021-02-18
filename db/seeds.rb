@@ -55,7 +55,7 @@ permissions_data = {
   get_suggestions: 'User can get tips with info',
   toggle_ready_status: 'User can toggle ready status of board membership',
   destroy_membership: 'User can destroy membership of board',
-  destroy_cards: 'User can delete any card on a board',
+  destroy_any_card: 'User can delete any card on a board',
   destroy_card: 'User can delete a card on a board',
   update_card: 'User can update a card on a board',
   like_card: 'User can like a card on a board'

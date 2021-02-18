@@ -12,7 +12,7 @@ module Mutations
       board = Board.find_by!(slug: params.delete(:board_slug))
       authorize! board, to: :create_cards?, context: { user: context[:current_user], board: board }
 
-      result = Boards::Cards::Create.new(current_user, card_params(params, board)).call
+      result = Boards::Cards::Create.new.call(current_user, card_params(params, board))
 
       if result.success?
         card = result.value!
