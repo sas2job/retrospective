@@ -16,39 +16,58 @@ RSpec.describe 'permissions.rake' do
     Rake.application.invoke_task(task_name)
   end
 
-  describe 'create_missing' do
+  describe 'create_missing_permissions' do
     let(:user) { create(:user) }
     let_it_be(:board) { create(:board) }
     let_it_be(:creator_permission) { create(:permission, identifier: 'destroy_board') }
     let_it_be(:member_permission) { create(:permission, identifier: 'toggle_ready_status') }
+    let_it_be(:author_card_permission) { create(:permission, identifier: 'update_card') }
     let_it_be(:other_permission) { create(:permission) }
-    let_it_be(:task_name) { 'permissions:create_missing' }
 
-    context 'for creator membership' do
-      before { create(:membership, user: user, board: board, role: 'creator') }
+    context 'for boards' do
+      let_it_be(:task_name) { 'permissions:create_missing_for_boards' }
 
-      it 'connects to missing creator permissions' do
-        run_task
-        expect(user.board_permissions).to include(creator_permission, member_permission)
+      context 'with creator membership' do
+        before { create(:membership, user: user, board: board, role: 'creator') }
+
+        it 'connects to missing creator permissions' do
+          run_task
+          expect(user.board_permissions).to include(creator_permission, member_permission)
+        end
+
+        it 'does not connect to non creator_permissions' do
+          run_task
+          expect(user.board_permissions).not_to include(other_permission)
+        end
       end
 
-      it 'does not connect to non creator_permissions' do
-        run_task
-        expect(user.board_permissions).not_to include(other_permission)
+      context 'with members' do
+        before { create(:membership, user: user, board: board, role: 'member') }
+
+        it 'connects to missing member permissions' do
+          run_task
+          expect(user.board_permissions).to include(member_permission)
+        end
+
+        it 'does not connect to non member_permissions' do
+          run_task
+          expect(user.board_permissions).not_to include(other_permission, creator_permission)
+        end
       end
     end
 
-    context 'for member' do
-      before { create(:membership, user: user, board: board, role: 'member') }
+    context 'for cards' do
+      let!(:card) { create(:card, author: user) }
+      let_it_be(:task_name) { 'permissions:create_missing_for_cards' }
 
-      it 'connects to missing member permissions' do
+      it 'connects to missing card permissions' do
         run_task
-        expect(user.board_permissions).to include(member_permission)
+        expect(user.card_permissions).to include(author_card_permission)
       end
 
-      it 'does not connect to non member_permissions' do
+      it 'does not connect to non card permissions' do
         run_task
-        expect(user.board_permissions).not_to include(other_permission, creator_permission)
+        expect(user.card_permissions).not_to include(other_permission)
       end
     end
   end

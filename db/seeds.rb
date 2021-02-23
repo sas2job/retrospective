@@ -106,16 +106,9 @@ Card.create(kind: 'mad', body: 'user3 is very mad', author_id: user3.id, board_i
 Card.create(kind: 'mad', body: 'user4 is very mad', author_id: user4.id, board_id: board1.id) unless Card.where(body: 'user4 is very mad').exists?
 Card.create(kind: 'mad', body: 'user5 is very mad', author_id: user5.id, board_id: board1.id) unless Card.where(body: 'user5 is very mad').exists?
 
-Card.find_each do |card|
-  destroy_card_permission = Permission.find_by(identifier: 'destroy_card')
-  CardPermissionsUser.create(user_id: card.author.id, permission_id: destroy_card_permission.id, card_id: card.id)
-
-  update_card_permission = Permission.find_by(identifier: 'update_card')
-  CardPermissionsUser.create(user_id: card.author.id, permission_id: update_card_permission.id, card_id: card.id)
-end
-
 ActionItem.create(body: 'issue should be fixed', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'issue should be fixed', board_id: board1.id, author_id: user1.id).exists?
 ActionItem.create(body: 'meetings should be held', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'meetings should be held', board_id: board1.id, author_id: user1.id).exists?
 ActionItem.create(body: 'actions should be taken', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'actions should be taken', board_id: board1.id, author_id: user1.id).exists?
 
-Rake::Task['permissions:create_missing'].invoke
+Rake::Task['permissions:create_missing_for_boards'].invoke
+Rake::Task['permissions:create_missing_for_cards'].invoke
