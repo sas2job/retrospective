@@ -7,7 +7,11 @@ RSpec.describe Mutations::UpdateCardMutation, type: :request do
     let(:author) { create(:user) }
     let(:card) { create(:card, author: author) }
     let(:request) { post '/graphql', params: { query: query(id: card.id, body: 'New body') } }
+    let_it_be(:update_permission) { create(:permission, identifier: 'update_card') }
 
+    before do
+      create(:card_permissions_user, permission: update_permission, user: author, card: card)
+    end
     before { sign_in author }
 
     it 'updates a card' do

@@ -41,8 +41,16 @@ RSpec.describe User, type: :model do
       expect(user).to respond_to(:board_permissions_users)
     end
 
-    it 'has many permissions' do
-      expect(user).to respond_to(:permissions)
+    it 'has many board_permissions' do
+      expect(user).to respond_to(:board_permissions)
+    end
+
+    it 'has many card permissions users' do
+      expect(user).to respond_to(:card_permissions_users)
+    end
+
+    it 'has many card_permissions' do
+      expect(user).to respond_to(:card_permissions)
     end
   end
 
@@ -125,17 +133,35 @@ RSpec.describe User, type: :model do
   end
 
   context '#allowed?' do
-    subject { user.allowed?('some_identifier', board.id) }
+    context 'with board permissions' do
+      subject { user.allowed?('some_identifier', board) }
 
-    context 'permission exists' do
-      let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
-      before { create(:board_permissions_user, user: user, board: board, permission: permission) }
+      context 'when permission exists' do
+        let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
+        before { create(:board_permissions_user, user: user, board: board, permission: permission) }
 
-      it { is_expected.to be true }
+        it { is_expected.to be true }
+      end
+
+      context 'when permission does not exist' do
+        it { is_expected.to be false }
+      end
     end
 
-    context 'permission does not exist' do
-      it { is_expected.to be false }
+    context 'with card permissions' do
+      let_it_be(:card) { build_stubbed(:card) }
+      subject { user.allowed?('some_identifier', card) }
+
+      context 'when permission exists' do
+        let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
+        before { create(:card_permissions_user, user: user, card: card, permission: permission) }
+
+        it { is_expected.to be true }
+      end
+
+      context 'when permission does not exist' do
+        it { is_expected.to be false }
+      end
     end
   end
 end

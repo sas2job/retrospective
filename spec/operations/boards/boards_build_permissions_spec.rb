@@ -28,22 +28,6 @@ RSpec.describe Boards::BuildPermissions do
         expect(resource.board_permissions_users.first.user).to eq(user)
       end
     end
-
-    context 'for card' do
-      let(:resource) { create(:card) }
-
-      it { is_expected.to be_success }
-
-      it 'builds permission to card' do
-        build_permissions
-        expect(resource.card_permissions_users.first.permission).to eq(permission)
-      end
-
-      it 'builds permission to user' do
-        build_permissions
-        expect(resource.card_permissions_users.first.user).to eq(user)
-      end
-    end
   end
 
   context 'invalid identifiers scope' do

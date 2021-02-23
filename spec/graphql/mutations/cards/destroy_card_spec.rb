@@ -8,8 +8,13 @@ RSpec.describe Mutations::DestroyCardMutation, type: :request do
     let!(:creator) { create(:user) }
     let!(:board) { create(:board) }
     let!(:card) { create(:card, author: author, board: board) }
-    let!(:creatorship) do
-      create(:membership, board: board, user: creator, role: 'creator')
+
+    let_it_be(:destroy_any_card) { create(:permission, identifier: 'destroy_any_card') }
+    let_it_be(:destroy_card) { create(:permission, identifier: 'destroy_card') }
+
+    before do
+      create(:board_permissions_user, permission: destroy_any_card, user: creator, board: board)
+      create(:card_permissions_user, permission: destroy_card, user: author, card: card)
     end
 
     let(:request) { post '/graphql', params: { query: query(id: card.id) } }

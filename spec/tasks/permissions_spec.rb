@@ -29,12 +29,12 @@ RSpec.describe 'permissions.rake' do
 
       it 'connects to missing creator permissions' do
         run_task
-        expect(user.permissions).to include(creator_permission, member_permission)
+        expect(user.board_permissions).to include(creator_permission, member_permission)
       end
 
       it 'does not connect to non creator_permissions' do
         run_task
-        expect(user.permissions).not_to include(other_permission)
+        expect(user.board_permissions).not_to include(other_permission)
       end
     end
 
@@ -43,12 +43,12 @@ RSpec.describe 'permissions.rake' do
 
       it 'connects to missing member permissions' do
         run_task
-        expect(user.permissions).to include(member_permission)
+        expect(user.board_permissions).to include(member_permission)
       end
 
       it 'does not connect to non member_permissions' do
         run_task
-        expect(user.permissions).not_to include(other_permission, creator_permission)
+        expect(user.board_permissions).not_to include(other_permission, creator_permission)
       end
     end
   end

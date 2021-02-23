@@ -14,6 +14,6 @@ class CardPolicy < ApplicationPolicy
   end
 
   def like?
-    record.author_id == user.id ? false : user.allowed?('like_card', record.board)
+    record.author_id == user.id ? false : user.allowed?('like_card', record)
   end
 end

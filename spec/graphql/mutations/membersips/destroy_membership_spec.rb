@@ -34,7 +34,7 @@ RSpec.describe Mutations::DestroyMembershipMutation, type: :request do
       end
 
       it 'removes permission' do
-        expect { request }.to change { non_author.permissions.count }.by(-1)
+        expect { request }.to change { non_author.board_permissions.count }.by(-1)
       end
 
       it 'returns a membership' do

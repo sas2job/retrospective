@@ -26,12 +26,20 @@ RSpec.describe Permission, type: :model do
   end
 
   context 'associations' do
-    it 'has_many_users' do
-      expect(permission).to respond_to(:users)
+    it 'has_many_board_users' do
+      expect(permission).to respond_to(:board_users)
     end
 
-    it 'has_many_permissions_users' do
+    it 'has_many_card_users' do
+      expect(permission).to respond_to(:card_users)
+    end
+
+    it 'has_many_board_permissions_users' do
       expect(permission).to respond_to(:board_permissions_users)
+    end
+
+    it 'has_many_card_permissions_users' do
+      expect(permission).to respond_to(:card_permissions_users)
     end
   end
 
@@ -56,6 +64,18 @@ RSpec.describe Permission, type: :model do
 
     it 'excludes permissions without member identifiers' do
       expect(Permission.member_permissions).not_to include(permission)
+    end
+  end
+
+  context '.author_permissions' do
+    let_it_be(:author_permission) { create(:permission, identifier: 'update_card') }
+
+    it 'returns permissions with author identifiers' do
+      expect(Permission.author_permissions).to include(author_permission)
+    end
+
+    it 'excludes permissions without author identifiers' do
+      expect(Permission.author_permissions).not_to include(permission)
     end
   end
 end
