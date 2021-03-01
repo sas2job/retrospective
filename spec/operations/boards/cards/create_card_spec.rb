@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Boards::Cards::Create do
-  subject { described_class.new.call(user, card_params) }
+  subject { described_class.new(user).call(card_params) }
   let_it_be(:user) { create(:user) }
   let_it_be(:board) { create(:board) }
   let_it_be(:permission) { create(:permission, identifier: 'update_card') }

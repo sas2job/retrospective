@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :permissions do
-  desc 'update creators and members with missing permissions'
+  desc 'update creators and members with missing permissions for boards'
   task create_missing_for_boards: :environment do
     Membership.creator.find_each do |membership|
       # rubocop:disable Metrics/LineLength
@@ -43,7 +43,7 @@ namespace :permissions do
   end
   # rubocop:enable Metrics/MethodLength
 
-  desc 'update creators and members with missing permissions'
+  desc 'update users with missing permissions for cards'
   task create_missing_for_cards: :environment do
     counter = 0
 

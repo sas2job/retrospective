@@ -4,8 +4,13 @@ module Boards
   module Cards
     class Create
       include Dry::Monads[:result]
+      attr_reader :user
 
-      def call(user, card_params)
+      def initialize(user)
+        @user = user
+      end
+
+      def call(card_params)
         card = Card.new(card_params)
 
         card.transaction do
