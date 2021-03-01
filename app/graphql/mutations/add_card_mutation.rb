@@ -19,7 +19,7 @@ module Mutations
         RetrospectiveSchema.subscriptions.trigger('card_added', { board_slug: board.slug }, card)
         { card: card }
       else
-        { errors: { full_messages: result.failure.record.errors.full_messages } }
+        { errors: { full_messages: result.failure.message } }
       end
     end
     # rubocop:enable Metrics/MethodLength
