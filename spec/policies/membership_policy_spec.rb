@@ -17,7 +17,8 @@ RSpec.describe MembershipPolicy do
 
     context 'with perrmission' do
       before do
-        create(:permissions_user, permission: toggle_permission, user: test_user, board: board)
+        create(:board_permissions_user, permission: toggle_permission,
+                                        user: test_user, board: board)
       end
 
       context 'as a member of board' do
@@ -54,7 +55,8 @@ RSpec.describe MembershipPolicy do
 
     context 'with permission' do
       before do
-        create(:permissions_user, permission: destroy_permission, user: test_user, board: board)
+        create(:board_permissions_user, permission: destroy_permission,
+                                        user: test_user, board: board)
       end
 
       context 'targets another membership' do

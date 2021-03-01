@@ -78,7 +78,8 @@ RSpec.describe BoardsController do
       let_it_be(:view_permission) { create(:permission, identifier: 'view_private_board') }
 
       before do
-        create(:permissions_user, permission: view_permission, user: member, board: private_board)
+        create(:board_permissions_user, permission: view_permission,
+                                        user: member, board: private_board)
       end
 
       context 'user is not a member' do
@@ -97,7 +98,9 @@ RSpec.describe BoardsController do
     subject(:response) { get :edit, params: { slug: board.slug } }
     let_it_be(:edit_permission) { create(:permission, identifier: 'edit_board') }
 
-    before { create(:permissions_user, permission: edit_permission, user: creator, board: board) }
+    before do
+      create(:board_permissions_user, permission: edit_permission, user: creator, board: board)
+    end
 
     context 'when user is not logged in' do
       it_behaves_like :controllers_unauthenticated_action
@@ -152,7 +155,7 @@ RSpec.describe BoardsController do
     let_it_be(:update_permission) { create(:permission, identifier: 'update_board') }
 
     before do
-      create(:permissions_user, permission: update_permission, user: creator, board: board)
+      create(:board_permissions_user, permission: update_permission, user: creator, board: board)
     end
 
     context 'when user is not logged in' do
@@ -194,7 +197,7 @@ RSpec.describe BoardsController do
     let_it_be(:destroy_permission) { create(:permission, identifier: 'destroy_board') }
 
     before do
-      create(:permissions_user, permission: destroy_permission, user: creator, board: board)
+      create(:board_permissions_user, permission: destroy_permission, user: creator, board: board)
     end
 
     context 'when user is not logged in' do
@@ -225,7 +228,7 @@ RSpec.describe BoardsController do
     let_it_be(:params) { { slug: board.slug } }
 
     before do
-      create(:permissions_user, permission: continue_permission, user: creator, board: board)
+      create(:board_permissions_user, permission: continue_permission, user: creator, board: board)
     end
 
     context 'when user is not logged in' do

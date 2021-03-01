@@ -16,7 +16,7 @@ RSpec.describe Mutations::ToggleReadyStatusMutation, type: :request do
 
     context 'with permission' do
       before do
-        create(:permissions_user, permission: permission, board: board, user: author)
+        create(:board_permissions_user, permission: permission, board: board, user: author)
       end
 
       it 'toggles membership status' do

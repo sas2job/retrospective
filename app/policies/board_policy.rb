@@ -14,7 +14,7 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def show?
-    record.private ? user.allowed?('view_private_board', record.id) : true
+    record.private ? user.allowed?('view_private_board', record) : true
   end
 
   def new?
@@ -22,7 +22,7 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.allowed?('edit_board', record.id)
+    user.allowed?('edit_board', record)
   end
 
   def create?
@@ -30,27 +30,27 @@ class BoardPolicy < ApplicationPolicy
   end
 
   def update?
-    user.allowed?('update_board', record.id)
+    user.allowed?('update_board', record)
   end
 
   def destroy?
-    user.allowed?('destroy_board', record.id)
+    user.allowed?('destroy_board', record)
   end
 
   def continue?
-    user.allowed?('continue_board', record.id) && can_continue?
+    user.allowed?('continue_board', record) && can_continue?
   end
 
   def create_cards?
-    user.allowed?('create_cards', record.id)
+    user.allowed?('create_cards', record)
   end
 
   def suggestions?
-    user.allowed?('get_suggestions', record.id)
+    user.allowed?('get_suggestions', record)
   end
 
   def invite?
-    user.allowed?('invite_members', record.id)
+    user.allowed?('invite_members', record)
   end
 
   def can_continue?

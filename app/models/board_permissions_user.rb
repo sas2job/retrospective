@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PermissionsUser < ApplicationRecord
+class BoardPermissionsUser < ApplicationRecord
   belongs_to :user
   belongs_to :permission
   belongs_to :board

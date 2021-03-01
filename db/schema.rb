@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_131736) do
+ActiveRecord::Schema.define(version: 2021_02_15_220017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,18 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
     t.index ["board_id"], name: "index_action_items_on_board_id"
   end
 
+  create_table "board_permissions_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "permission_id"
+    t.bigint "board_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_board_permissions_users_on_board_id"
+    t.index ["permission_id", "user_id", "board_id"], name: "index_permissions_users_on_user_board_permission", unique: true
+    t.index ["permission_id"], name: "index_board_permissions_users_on_permission_id"
+    t.index ["user_id"], name: "index_board_permissions_users_on_user_id"
+  end
+
   create_table "boards", force: :cascade do |t|
     t.string "title", null: false
     t.datetime "created_at", null: false
@@ -40,6 +52,18 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
     t.integer "users_count", default: 0
     t.index ["previous_board_id"], name: "index_boards_on_previous_board_id", unique: true
     t.index ["slug"], name: "index_boards_on_slug", unique: true
+  end
+
+  create_table "card_permissions_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "permission_id"
+    t.bigint "card_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["card_id"], name: "index_card_permissions_users_on_card_id"
+    t.index ["permission_id", "user_id", "card_id"], name: "index_card_permissions_users_on_user_card_permission", unique: true
+    t.index ["permission_id"], name: "index_card_permissions_users_on_permission_id"
+    t.index ["user_id"], name: "index_card_permissions_users_on_user_id"
   end
 
   create_table "cards", force: :cascade do |t|
@@ -83,18 +107,6 @@ ActiveRecord::Schema.define(version: 2020_12_25_131736) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["identifier"], name: "index_permissions_on_identifier", unique: true
-  end
-
-  create_table "permissions_users", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "permission_id"
-    t.bigint "board_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["board_id"], name: "index_permissions_users_on_board_id"
-    t.index ["permission_id", "user_id", "board_id"], name: "index_permissions_users_on_user_board_permission", unique: true
-    t.index ["permission_id"], name: "index_permissions_users_on_permission_id"
-    t.index ["user_id"], name: "index_permissions_users_on_user_id"
   end
 
   create_table "teams", force: :cascade do |t|

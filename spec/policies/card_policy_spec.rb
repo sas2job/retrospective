@@ -3,41 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe CardPolicy do
-  let_it_be(:author) { create(:user) }
-  let_it_be(:not_an_author) { build_stubbed(:user) }
+  let_it_be(:user) { create(:user) }
   let_it_be(:board) { create(:board) }
-  let_it_be(:card) { build_stubbed(:card, board: board, author: author) }
-  let(:policy) { described_class.new(card, user: test_user) }
-  let_it_be(:member) { create(:user) }
-  let_it_be(:not_a_member) { build_stubbed(:user) }
-  let_it_be(:membership) { create(:membership, user_id: member.id, board_id: board.id) }
-  let_it_be(:creator) { create(:user) }
-  let_it_be(:creatorship) { create(:membership, user: creator, board: board, role: 'creator') }
+  let_it_be(:card) { create(:card, board: board) }
+  let(:policy) { described_class.new(card, user: user) }
 
   describe '#create?' do
     subject { policy.apply(:create?) }
 
-    context 'when user is a member' do
-      let(:test_user) { member }
+    context 'with permission' do
+      let_it_be(:create_cards_permission) { create(:permission, identifier: 'create_cards') }
+      before do
+        create(:board_permissions_user, board: board,
+                                        user: user,
+                                        permission: create_cards_permission)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is not a member' do
-      let(:test_user) { not_a_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_member?' do
-    subject { policy.apply(:user_is_member?) }
-
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a member' do
-      let(:test_user) { not_a_member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -45,23 +30,31 @@ RSpec.describe CardPolicy do
   describe '#destroy?' do
     subject { policy.apply(:destroy?) }
 
-    context 'when user is the card author' do
-      let(:test_user) { author }
-      it { is_expected.to eq true }
+    context 'with permission' do
+      context 'as a creator of board' do
+        let(:test_permission) { create(:permission, identifier: 'destroy_any_card') }
+        before do
+          create(:board_permissions_user, board: board,
+                                          user: user,
+                                          permission: test_permission)
+        end
+
+        it { is_expected.to eq true }
+      end
+
+      context 'as an author of card' do
+        let(:test_permission) { create(:permission, identifier: 'destroy_card') }
+        before do
+          create(:card_permissions_user, card: card,
+                                         user: user,
+                                         permission: test_permission)
+        end
+
+        it { is_expected.to eq true }
+      end
     end
 
-    context 'when user is creator of a board' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not the card author' do
-      let(:test_user) { not_an_author }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is neither creator nor author' do
-      let(:test_user) { member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -69,13 +62,18 @@ RSpec.describe CardPolicy do
   describe '#update?' do
     subject { policy.apply(:update?) }
 
-    context 'when user is the card author' do
-      let(:test_user) { author }
+    context 'with permission' do
+      let_it_be(:update_card_permission) { create(:permission, identifier: 'update_card') }
+      before do
+        create(:card_permissions_user, card: card,
+                                       user: user,
+                                       permission: update_card_permission)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is not the card author' do
-      let(:test_user) { not_an_author }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -83,41 +81,32 @@ RSpec.describe CardPolicy do
   describe '#like?' do
     subject { policy.apply(:like?) }
 
-    context 'when user is the card author' do
-      let(:test_user) { author }
-      it { is_expected.to eq false }
+    context 'with permission' do
+      let_it_be(:like_card_permission) { create(:permission, identifier: 'like_card') }
+
+      context 'as an author of card' do
+        let(:card_with_author) { create(:card, author: user) }
+        let(:policy) { described_class.new(card_with_author, user: user) }
+        before do
+          create(:card_permissions_user, card: card_with_author,
+                                         user: user,
+                                         permission: like_card_permission)
+        end
+        it { is_expected.to eq false }
+      end
+
+      context 'not author of card' do
+        before do
+          create(:card_permissions_user, card: card,
+                                         user: user,
+                                         permission: like_card_permission)
+        end
+
+        it { is_expected.to eq true }
+      end
     end
 
-    context 'when user is not the card author' do
-      let(:test_user) { not_an_author }
-      it { is_expected.to eq true }
-    end
-  end
-
-  describe '#user_is_author?' do
-    subject { policy.apply(:user_is_author?) }
-
-    context 'when user is the card author' do
-      let(:test_user) { author }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not the card author' do
-      let(:test_user) { not_an_author }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_creator?' do
-    subject { policy.apply(:user_is_creator?) }
-
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not the board creator' do
-      let(:test_user) { member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end

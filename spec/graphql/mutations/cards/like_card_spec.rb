@@ -9,8 +9,16 @@ RSpec.describe Mutations::LikeCardMutation, type: :request do
     let(:non_author) { create(:user) }
     let(:request) { post '/graphql', params: { query: query(id: card.id) } }
 
+    let_it_be(:like_permission) { create(:permission, identifier: 'like_card') }
+
+    before do
+      create(:card_permissions_user, permission: like_permission, user: author, card: card)
+      create(:card_permissions_user, permission: like_permission, user: non_author, card: card)
+    end
+
     context 'when logged as not card author' do
       before { sign_in non_author }
+
       it 'updates a card' do
         expect { request.to change { Card.likes }.by(1) }
       end
@@ -31,6 +39,7 @@ RSpec.describe Mutations::LikeCardMutation, type: :request do
     end
     context 'when logged as author' do
       before { sign_in author }
+
       it 'doesn\'t update a card' do
         expect { request.to not_change { Card.likes } }
       end

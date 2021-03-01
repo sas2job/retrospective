@@ -22,12 +22,6 @@ Team.create(name: 'Wolves', user_ids: [user1.id, user2.id, user3.id, user4.id, u
 Team.create(name: 'Tigers', user_ids: [user1.id, user5.id]) unless Team.where(name: 'Tigers').exists?
 Team.create(name: 'Eagles', user_ids: [user2.id, user3.id, user4.id]) unless Team.where(name: 'Eagles').exists?
 
-Board.create(title: 'TestUser1_RetroBoard') unless Board.where(title: 'TestUser1_RetroBoard').exists?
-Board.create(title: 'TestUser2_RetroBoard') unless Board.where(title: 'TestUser2_RetroBoard').exists?
-Board.create(title: 'TestUser3_RetroBoard') unless Board.where(title: 'TestUser3_RetroBoard').exists?
-Board.create(title: 'TestUser4_RetroBoard') unless Board.where(title: 'TestUser4_RetroBoard').exists?
-Board.create(title: 'TestUser5_RetroBoard') unless Board.where(title: 'TestUser5_RetroBoard').exists?
-
 board1 = Board.find_or_create_by(title: 'TestUser1_RetroBoard')
 board2 = Board.find_or_create_by(title: 'TestUser2_RetroBoard')
 board3 = Board.find_or_create_by(title: 'TestUser3_RetroBoard')
@@ -60,12 +54,16 @@ permissions_data = {
   invite_members: 'User can invite members to board',
   get_suggestions: 'User can get tips with info',
   toggle_ready_status: 'User can toggle ready status of board membership',
-  destroy_membership: 'User can destroy membership of board'
+  destroy_membership: 'User can destroy membership of board',
+  destroy_any_card: 'User can delete any card on a board',
+  destroy_card: 'User can delete a card on a board',
+  update_card: 'User can update a card on a board',
+  like_card: 'User can like a card on a board'
 }
 
 errors = []
 
-(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS).each do |identifier|
+(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::AUTHOR_IDENTIFIERS).each do |identifier|
   next if Permission.exists?(identifier: identifier)
 
   begin
@@ -77,26 +75,26 @@ end
 puts errors
 
 Permission.creator_permissions.each do |permission|
-  PermissionsUser.create([
-                           { user_id: user1.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user2.id, permission_id: permission.id, board_id: board2.id },
-                           { user_id: user2.id, permission_id: permission.id, board_id: board3.id },
-                           { user_id: user2.id, permission_id: permission.id, board_id: board4.id },
-                           { user_id: user2.id, permission_id: permission.id, board_id: board5.id }
-                         ])
+  BoardPermissionsUser.create([
+                                { user_id: user1.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board2.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board3.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board4.id },
+                                { user_id: user2.id, permission_id: permission.id, board_id: board5.id }
+                              ])
 end
 
 Permission.member_permissions.each do |permission|
-  PermissionsUser.create([
-                           { user_id: user2.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user3.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user4.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user5.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user6.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user7.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user8.id, permission_id: permission.id, board_id: board1.id },
-                           { user_id: user9.id, permission_id: permission.id, board_id: board1.id }
-                         ])
+  BoardPermissionsUser.create([
+                                { user_id: user2.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user3.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user4.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user5.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user6.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user7.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user8.id, permission_id: permission.id, board_id: board1.id },
+                                { user_id: user9.id, permission_id: permission.id, board_id: board1.id }
+                              ])
 end
 
 Card.create(kind: 'mad', body: 'user1 is very mad', author_id: user1.id, board_id: board1.id) unless Card.where(body: 'user1 is very mad').exists?
@@ -112,4 +110,5 @@ ActionItem.create(body: 'issue should be fixed', board_id: board1.id, author_id:
 ActionItem.create(body: 'meetings should be held', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'meetings should be held', board_id: board1.id, author_id: user1.id).exists?
 ActionItem.create(body: 'actions should be taken', board_id: board1.id, author_id: user1.id) unless ActionItem.where(body: 'actions should be taken', board_id: board1.id, author_id: user1.id).exists?
 
-Rake::Task['permissions:create_missing'].invoke
+Rake::Task['permissions:create_missing_for_boards'].invoke
+Rake::Task['permissions:create_missing_for_cards'].invoke

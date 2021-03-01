@@ -30,6 +30,10 @@ RSpec.describe Card, type: :model do
     it 'belongs to board' do
       expect(card).to respond_to(:board)
     end
+
+    it 'has many card_permissions_users' do
+      expect(card).to respond_to(:card_permissions_users)
+    end
   end
 
   describe '#author?' do

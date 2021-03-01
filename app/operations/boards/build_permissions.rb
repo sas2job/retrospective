@@ -2,7 +2,7 @@
 
 module Boards
   class BuildPermissions
-    IDENTIFIERS_SCOPES = %w[creator member].freeze
+    IDENTIFIERS_SCOPES = %w[creator member author].freeze
 
     include Dry::Monads[:result]
     attr_reader :board, :user
@@ -23,7 +23,7 @@ module Boards
         { permission_id: permission.id, user_id: user.id }
       end
 
-      board.permissions_users.build(permissions_data)
+      board.board_permissions_users.build(permissions_data)
       Success()
     end
   end

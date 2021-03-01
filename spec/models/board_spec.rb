@@ -39,8 +39,8 @@ RSpec.describe Board, type: :model do
       expect(board).to respond_to(:users)
     end
 
-    it 'has many permissions_users' do
-      expect(board).to respond_to(:permissions_users)
+    it 'has many board_permissions_users' do
+      expect(board).to respond_to(:board_permissions_users)
     end
   end
 end
