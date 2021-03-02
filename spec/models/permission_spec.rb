@@ -67,15 +67,15 @@ RSpec.describe Permission, type: :model do
     end
   end
 
-  context '.author_permissions' do
-    let_it_be(:author_permission) { create(:permission, identifier: 'update_card') }
+  context '.card_permissions' do
+    let_it_be(:card_permission) { create(:permission, identifier: 'update_card') }
 
-    it 'returns permissions with author identifiers' do
-      expect(Permission.author_permissions).to include(author_permission)
+    it 'returns permissions with card identifiers' do
+      expect(Permission.card_permissions).to include(card_permission)
     end
 
-    it 'excludes permissions without author identifiers' do
-      expect(Permission.author_permissions).not_to include(permission)
+    it 'excludes permissions without card identifiers' do
+      expect(Permission.card_permissions).not_to include(permission)
     end
   end
 end

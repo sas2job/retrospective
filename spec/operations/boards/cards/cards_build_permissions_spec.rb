@@ -11,7 +11,7 @@ RSpec.describe Boards::Cards::BuildPermissions do
   let!(:permission) { create(:permission, identifier: 'update_card') }
 
   context 'valid identifiers scope' do
-    let(:identifiers_scope) { 'author' }
+    let(:identifiers_scope) { 'card' }
 
     context 'for card' do
       let(:resource) { create(:card) }

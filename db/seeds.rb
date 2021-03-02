@@ -58,12 +58,16 @@ permissions_data = {
   destroy_any_card: 'User can delete any card on a board',
   destroy_card: 'User can delete a card on a board',
   update_card: 'User can update a card on a board',
-  like_card: 'User can like a card on a board'
+  like_card: 'User can like a card on a board',
+  create_comments: 'User can create comments on board',
+  update_comment: 'User can update a card comment',
+  destroy_comment: 'User can delete a card comment',
+  like_comment: 'User can like a card comment'
 }
 
 errors = []
 
-(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::AUTHOR_IDENTIFIERS).each do |identifier|
+(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::CARD_IDENTIFIERS | Permission::COMMENT_IDENTIFIERS).each do |identifier|
   next if Permission.exists?(identifier: identifier)
 
   begin

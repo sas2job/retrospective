@@ -3,7 +3,7 @@
 module Boards
   module Cards
     class BuildPermissions
-      IDENTIFIERS_SCOPES = %w[author].freeze
+      IDENTIFIERS_SCOPES = %w[card].freeze
 
       include Dry::Monads[:result]
       attr_reader :card, :user

@@ -48,7 +48,7 @@ namespace :permissions do
     counter = 0
 
     Card.find_each do |card|
-      Permission.author_permissions.each do |permission|
+      Permission.card_permissions.each do |permission|
         permissions_users_data = { card: card, permission: permission, user: card.author }
         next if CardPermissionsUser.exists?(permissions_users_data)
 
