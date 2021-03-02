@@ -45,6 +45,10 @@ class BoardPolicy < ApplicationPolicy
     user.allowed?('create_cards', record)
   end
 
+  def create_comments?
+    user.allowed?('create_comments', record)
+  end
+
   def suggestions?
     user.allowed?('get_suggestions', record)
   end

@@ -9,18 +9,29 @@ module Mutations
     # rubocop:disable Metrics/MethodLength
     def resolve(attributes:)
       params = attributes.to_h
-      comment = Comment.new(params.merge(author: context[:current_user]))
-      authorize! comment, to: :create?, context: { user: context[:current_user] }
+      board = find_card(params).board
+      authorize! board, to: :create_comments?, context: { user: context[:current_user] }
 
-      if comment.save
+      result = Boards::Cards::Comments::Create.new(current_user).call(comment_params(params))
+
+      if result.success?
+        comment = result.value!
         card = comment.card
         RetrospectiveSchema.subscriptions.trigger('card_updated',
                                                   { board_slug: card.board.slug }, card)
         { comment: comment }
       else
-        { errors: { full_messages: comment.errors.full_messages } }
+        { errors: { full_messages: result.failure.message } }
       end
     end
     # rubocop:enable Metrics/MethodLength
+
+    def find_card(params)
+      Card.find_by!(id: params[:card_id].to_i)
+    end
+
+    def comment_params(params)
+      params.merge(author: context[:current_user])
+    end
   end
 end

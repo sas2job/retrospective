@@ -2,26 +2,22 @@
 
 class CommentPolicy < ApplicationPolicy
   def create?
-    check?(:user_is_member?)
+    user.allowed?('create_comments', record.card.board)
   end
 
   def update?
-    check?(:user_is_author?)
+    user.allowed?('update_comment', record)
   end
 
   def destroy?
-    check?(:user_is_author?)
+    user.allowed?('destroy_comment', record)
   end
 
   def like?
-    !check?(:user_is_author?)
+    check?(:user_not_author?)
   end
 
-  def user_is_member?
-    record.card.board.memberships.exists?(user_id: user.id)
-  end
-
-  def user_is_author?
-    record.author?(user)
+  def user_not_author?
+    !record.author?(user)
   end
 end
