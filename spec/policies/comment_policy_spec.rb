@@ -9,15 +9,15 @@ RSpec.describe CommentPolicy do
   let_it_be(:comment) { create(:comment, card: card) }
   let(:policy) { described_class.new(comment, user: user) }
 
-  describe '#create?' do
-    subject { policy.apply(:create?) }
+  describe '#update?' do
+    subject { policy.apply(:update?) }
 
     context 'with permission' do
-      let_it_be(:create_comments_permission) { create(:permission, identifier: 'create_comments') }
+      let_it_be(:update_comment_permission) { create(:permission, identifier: 'update_comment') }
       before do
-        create(:board_permissions_user, board: board,
-                                        user: user,
-                                        permission: create_comments_permission)
+        create(:comment_permissions_user, comment: comment,
+                                          user: user,
+                                          permission: update_comment_permission)
       end
 
       it { is_expected.to eq true }
@@ -37,25 +37,6 @@ RSpec.describe CommentPolicy do
         create(:comment_permissions_user, comment: comment,
                                           user: user,
                                           permission: destroy_comment_permission)
-      end
-
-      it { is_expected.to eq true }
-    end
-
-    context 'without permission' do
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#update?' do
-    subject { policy.apply(:update?) }
-
-    context 'with permission' do
-      let_it_be(:update_comment_permission) { create(:permission, identifier: 'update_comment') }
-      before do
-        create(:comment_permissions_user, comment: comment,
-                                          user: user,
-                                          permission: update_comment_permission)
       end
 
       it { is_expected.to eq true }
@@ -93,11 +74,5 @@ RSpec.describe CommentPolicy do
     context 'when user is a comment author' do
       it { is_expected.to eq false }
     end
-  end
-
-  describe '#find_board' do
-    subject { policy.apply(:find_board) }
-
-    it { is_expected.to eq board }
   end
 end

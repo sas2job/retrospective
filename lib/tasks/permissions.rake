@@ -64,4 +64,26 @@ namespace :permissions do
       puts "#{counter} cards permissions successfully updated"
     end
   end
+
+  desc 'update users with missing permissions for comments'
+  task create_missing_for_comments: :environment do
+    counter = 0
+
+    Comment.find_each do |comment|
+      Permission.comment_permissions.each do |permission|
+        permissions_users_data = { comment: comment, permission: permission, user: comment.author }
+        next if CommentPermissionsUser.exists?(permissions_users_data)
+
+        CommentPermissionsUser.create!(permissions_users_data)
+        counter += 1
+
+      rescue StandardError => e
+        puts "Failed to add #{permission.identifier} for#{comment.author.email}: #{e.message}"
+      end
+    end
+
+    if !Rails.env.test? && counter.positive?
+      puts "#{counter} comment permissions successfully updated"
+    end
+  end
 end
