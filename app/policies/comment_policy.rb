@@ -2,7 +2,7 @@
 
 class CommentPolicy < ApplicationPolicy
   def create?
-    user.allowed?('create_comments', record.card.board)
+    check?(:create_comments?, find_board)
   end
 
   def update?
@@ -19,5 +19,9 @@ class CommentPolicy < ApplicationPolicy
 
   def user_not_author?
     !record.author?(user)
+  end
+
+  def find_board
+    Comment.includes(:card).find(record.id).card.board
   end
 end

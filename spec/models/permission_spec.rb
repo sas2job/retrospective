@@ -34,12 +34,20 @@ RSpec.describe Permission, type: :model do
       expect(permission).to respond_to(:card_users)
     end
 
+    it 'has_many_comment_users' do
+      expect(permission).to respond_to(:comment_users)
+    end
+
     it 'has_many_board_permissions_users' do
       expect(permission).to respond_to(:board_permissions_users)
     end
 
     it 'has_many_card_permissions_users' do
       expect(permission).to respond_to(:card_permissions_users)
+    end
+
+    it 'has_many_comment_permissions_users' do
+      expect(permission).to respond_to(:comment_permissions_users)
     end
   end
 
