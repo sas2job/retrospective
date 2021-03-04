@@ -4,42 +4,34 @@ class ActionItemPolicy < ApplicationPolicy
   authorize :board, allow_nil: true
 
   def create?
-    check?(:user_is_member?)
+    user.allowed?('create_action_items', board)
   end
 
   def update?
-    check?(:user_is_creator?)
+    user.allowed?('update_action_items', current_board)
   end
 
   def destroy?
-    check?(:user_is_creator?)
+    user.allowed?('destroy_action_items', current_board)
   end
 
   def move?
-    check?(:user_is_creator?) && record.pending?
+    user.allowed?('move_action_items', current_board) && record.pending?
   end
 
   def close?
-    check?(:user_is_creator?) && record.may_close?
+    user.allowed?('close_action_items', current_board) && record.may_close?
   end
 
   def complete?
-    check?(:user_is_creator?) && record.may_complete?
+    user.allowed?('complete_action_items', current_board) && record.may_complete?
   end
 
   def reopen?
-    check?(:user_is_creator?) && record.may_reopen?
+    user.allowed?('reopen_action_items', current_board) && record.may_reopen?
   end
 
-  def user_is_creator?
-    if board
-      board.memberships.exists?(user_id: user.id, role: 'creator')
-    else
-      record.board.memberships.exists?(user_id: user.id, role: 'creator')
-    end
-  end
-
-  def user_is_member?
-    board.memberships.where(user_id: user.id).exists?
+  def current_board
+    board || record.board
   end
 end

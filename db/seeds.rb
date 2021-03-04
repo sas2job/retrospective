@@ -58,7 +58,14 @@ permissions_data = {
   destroy_any_card: 'User can delete any card on a board',
   destroy_card: 'User can delete a card on a board',
   update_card: 'User can update a card on a board',
-  like_card: 'User can like a card on a board'
+  like_card: 'User can like a card on a board',
+  create_action_items: 'User can create action items on a board',
+  update_action_items: 'User can destroy action items on a board',
+  destroy_action_items: 'User can destroy action items on a board',
+  move_action_items: 'User can move action items',
+  close_action_items: 'User can close action items',
+  complete_action_items: 'User can mark action items as complete',
+  reopen_action_items: 'User can reopen action items'
 }
 
 errors = []
