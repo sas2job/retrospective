@@ -7,10 +7,11 @@ module Mutations
     field :comment, Types::CommentType, null: true
 
     # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def resolve(attributes:)
       params = attributes.to_h
-      board = find_card(params).board
-      authorize! board, to: :create_comments?, context: { user: context[:current_user] }
+      card = Card.find(params[:card_id])
+      authorize! card.board, to: :create_comments?, context: { user: context[:current_user] }
 
       result = Boards::Cards::Comments::Create.new(current_user).call(comment_params(params))
 
@@ -25,10 +26,7 @@ module Mutations
       end
     end
     # rubocop:enable Metrics/MethodLength
-
-    def find_card(params)
-      Card.find_by!(id: params[:card_id].to_i)
-    end
+    # rubocop:enable Metrics/AbcSize
 
     def comment_params(params)
       params.merge(author: context[:current_user])
