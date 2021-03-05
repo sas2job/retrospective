@@ -3,143 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe ActionItemPolicy do
-  let_it_be(:creator) { create(:user) }
-  let_it_be(:admin) { create(:user) }
-  let_it_be(:host) { create(:user) }
-  let_it_be(:member) { create(:user) }
-  let_it_be(:not_member) { build_stubbed(:user) }
-  let_it_be(:board) { create(:board) }
-  let_it_be(:membership) do
-    create(:membership, user_id: member.id, board_id: board.id, role: 'member')
-  end
-  let_it_be(:creatorship) do
-    create(:membership, user_id: creator.id, board_id: board.id, role: 'creator')
-  end
-  let_it_be(:adminship) do
-    create(:membership, user_id: admin.id, board_id: board.id, role: 'admin')
-  end
-  let_it_be(:hostship) do
-    create(:membership, user_id: host.id, board_id: board.id, role: 'host')
-  end
+  let_it_be(:user) { build_stubbed(:user) }
+  let_it_be(:board) { build_stubbed(:board) }
   let_it_be(:action_item) { build_stubbed(:action_item, board: board) }
   let_it_be(:closed_action_item) { build_stubbed(:action_item, board: board, status: 'closed') }
-  let(:policy) { described_class.new(action_item, user: test_user, board: board) }
+  let(:policy) { described_class.new(action_item, user: user, board: board) }
 
   describe '#create?' do
     subject { policy.apply(:create?) }
 
-    context 'when user is a creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:create_permission) { create(:permission, identifier: 'create_action_items') }
+      before do
+        create(:board_permissions_user, permission: create_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a admin' do
-      let(:test_user) { admin }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a host' do
-      let(:test_user) { host }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a member' do
-      let(:test_user) { member }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#move?' do
-    subject { policy.apply(:move?) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#close?' do
-    subject { policy.apply(:close?) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#complete?' do
-    subject { policy.apply(:complete?) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#reopen?' do
-    let(:policy) { described_class.new(closed_action_item, user: test_user, board: board) }
-    subject { policy.apply(:reopen?) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#user_is_creator?' do
-    subject { policy.apply(:user_is_creator?) }
-
-    context 'when user is a creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is not a creator' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
-    end
-  end
-
-  describe '#destroy?' do
-    subject { policy.apply(:destroy?) }
-
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
-      it { is_expected.to eq true }
-    end
-
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -147,18 +29,33 @@ RSpec.describe ActionItemPolicy do
   describe '#update?' do
     subject { policy.apply(:update?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:update_permission) { create(:permission, identifier: 'update_action_items') }
+      before do
+        create(:board_permissions_user, permission: update_permission, user: user, board: board)
+      end
+
       it { is_expected.to eq true }
     end
 
-    context 'when user is a board member' do
-      let(:test_user) { member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
+  end
 
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+  describe '#destroy?' do
+    subject { policy.apply(:destroy?) }
+
+    context 'with permission' do
+      let_it_be(:destroy_permission) { create(:permission, identifier: 'destroy_action_items') }
+      before do
+        create(:board_permissions_user, permission: destroy_permission, user: user, board: board)
+      end
+
+      it { is_expected.to eq true }
+    end
+
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -166,24 +63,28 @@ RSpec.describe ActionItemPolicy do
   describe '#move?' do
     subject { policy.apply(:move?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:move_permission) { create(:permission, identifier: 'move_action_items') }
+      before do
+        create(:board_permissions_user, permission: move_permission, user: user, board: board)
+      end
 
-      it 'returns true if aasm state pending?' do
+      it 'if aasm state may transition to pending?' do
         allow(action_item).to receive(:pending?).and_return(true)
 
         is_expected.to eq true
         expect(action_item).to have_received(:pending?)
       end
+
+      it 'if aasm state may not transition to pending?' do
+        allow(action_item).to receive(:pending?).and_return(false)
+
+        is_expected.to eq false
+        expect(action_item).to have_received(:pending?)
+      end
     end
 
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -191,24 +92,28 @@ RSpec.describe ActionItemPolicy do
   describe '#close?' do
     subject { policy.apply(:close?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:close_permission) { create(:permission, identifier: 'close_action_items') }
+      before do
+        create(:board_permissions_user, permission: close_permission, user: user, board: board)
+      end
 
-      it 'returns true if aasm state may transition to closed' do
+      it 'if aasm state may transition to closed' do
         allow(action_item).to receive(:may_close?).and_return(true)
 
         is_expected.to eq true
         expect(action_item).to have_received(:may_close?)
       end
+
+      it 'if aasm state may not transition to closed?' do
+        allow(action_item).to receive(:may_close?).and_return(false)
+
+        is_expected.to eq false
+        expect(action_item).to have_received(:may_close?)
+      end
     end
 
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -217,24 +122,28 @@ RSpec.describe ActionItemPolicy do
     let(:action_item) { build_stubbed(:action_item, board: board, status: 'pending') }
     subject { policy.apply(:complete?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:complete_permission) { create(:permission, identifier: 'complete_action_items') }
+      before do
+        create(:board_permissions_user, permission: complete_permission, user: user, board: board)
+      end
 
-      it 'returns true if aasm state may transition to completed' do
+      it 'if aasm state may transition to completed' do
         allow(action_item).to receive(:may_complete?).and_return(true)
 
         is_expected.to eq true
         expect(action_item).to have_received(:may_complete?)
       end
+
+      it 'if aasm state may not transition to completed' do
+        allow(action_item).to receive(:may_complete?).and_return(false)
+
+        is_expected.to eq false
+        expect(action_item).to have_received(:may_complete?)
+      end
     end
 
-    context 'when user is a board member' do
-      let(:test_user) { member }
-      it { is_expected.to eq false }
-    end
-
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
   end
@@ -243,25 +152,45 @@ RSpec.describe ActionItemPolicy do
     let(:action_item) { build_stubbed(:action_item, board: board, status: 'closed') }
     subject { policy.apply(:reopen?) }
 
-    context 'when user is the board creator' do
-      let(:test_user) { creator }
+    context 'with permission' do
+      let_it_be(:reopen_permission) { create(:permission, identifier: 'reopen_action_items') }
+      before do
+        create(:board_permissions_user, permission: reopen_permission, user: user, board: board)
+      end
 
-      it 'returns true if aasm state may transition to pending' do
+      it 'if aasm state may transition to pending' do
         allow(action_item).to receive(:may_reopen?).and_return(true)
 
         is_expected.to eq true
         expect(action_item).to have_received(:may_reopen?)
       end
+
+      it 'if aasm state may not transition to completed' do
+        allow(action_item).to receive(:may_reopen?).and_return(false)
+
+        is_expected.to eq false
+        expect(action_item).to have_received(:may_reopen?)
+      end
     end
 
-    context 'when user is a board member' do
-      let(:test_user) { member }
+    context 'without permission' do
       it { is_expected.to eq false }
     end
+  end
 
-    context 'when user is not a board member' do
-      let(:test_user) { not_member }
-      it { is_expected.to eq false }
+  describe '#current_board' do
+    subject { policy.apply(:current_board) }
+
+    context 'a board from context is provided' do
+      it { is_expected.to eq board }
+    end
+
+    context 'a board from context is not provided' do
+      let(:other_board) { create(:board) }
+      let(:action_item) { create(:action_item, board: other_board) }
+      let(:policy) { described_class.new(action_item, user: user, board: nil) }
+
+      it { is_expected.to eq other_board }
     end
   end
 end
