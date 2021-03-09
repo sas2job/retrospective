@@ -8,13 +8,15 @@ RSpec.describe Mutations::UpdateActionItemMutation, type: :request do
     let!(:board) { create(:board) }
     let!(:new_assignee) { create(:user) }
     let!(:action_item) { create(:action_item, board: board, assignee: author) }
+    let(:update_permission) { create(:permission, identifier: 'update_action_items') }
     let(:request) do
       post '/graphql', params: { query: query(id: action_item.id,
                                               body: 'New body',
                                               assignee_id: new_assignee.id) }
     end
-    let!(:creatorship) do
-      create(:membership, board: board, user: author, role: 'creator')
+
+    before do
+      create(:board_permissions_user, permission: update_permission, user: author, board: board)
     end
     before { sign_in author }
 

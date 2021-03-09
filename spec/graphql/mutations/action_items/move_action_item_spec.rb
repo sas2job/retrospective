@@ -4,26 +4,23 @@ require 'rails_helper'
 
 RSpec.describe Mutations::MoveActionItemMutation, type: :request do
   describe '.resolve' do
-    let_it_be(:author) { create(:user) }
-    let_it_be(:non_author) { create(:user) }
+    let_it_be(:user) { create(:user) }
     let_it_be(:old_board) { create(:board) }
     let_it_be(:board) { create(:board) }
     let_it_be(:action_item) { create(:action_item, board: old_board) }
-
+    let(:move_permission) { create(:permission, identifier: 'move_action_items') }
     let(:request) do
       post '/graphql', params: { query: query(id: action_item.id,
                                               board_slug: board.slug) }
     end
-    let_it_be(:creatorship) do
-      create(:membership, board: board, user: author, role: 'creator')
-    end
 
-    let_it_be(:old_creatorship) do
-      create(:membership, board: old_board, user: author, role: 'creator')
-    end
+    before { sign_in user }
 
-    context 'when logged as author' do
-      before { sign_in author }
+    context 'with permission' do
+      before do
+        create(:board_permissions_user, permission: move_permission, user: user, board: board)
+      end
+
       it 'updates an action item' do
         expect { request }.to change { action_item.reload.times_moved }.by 1
       end
@@ -39,9 +36,8 @@ RSpec.describe Mutations::MoveActionItemMutation, type: :request do
       end
     end
 
-    context 'when logged as non-author' do
-      before { sign_in non_author }
-      it 'updates an action item' do
+    context 'without permission' do
+      it 'does not update an action item' do
         expect { request }.to_not change { action_item.reload.times_moved }
       end
     end
