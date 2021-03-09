@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class CardPolicy < ApplicationPolicy
-  def create?
-    user.allowed?('create_cards', record.board)
-  end
-
   def update?
     user.allowed?('update_card', record)
   end

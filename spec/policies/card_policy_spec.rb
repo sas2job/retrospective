@@ -8,25 +8,6 @@ RSpec.describe CardPolicy do
   let_it_be(:card) { create(:card, board: board) }
   let(:policy) { described_class.new(card, user: user) }
 
-  describe '#create?' do
-    subject { policy.apply(:create?) }
-
-    context 'with permission' do
-      let_it_be(:create_cards_permission) { create(:permission, identifier: 'create_cards') }
-      before do
-        create(:board_permissions_user, board: board,
-                                        user: user,
-                                        permission: create_cards_permission)
-      end
-
-      it { is_expected.to eq true }
-    end
-
-    context 'without permission' do
-      it { is_expected.to eq false }
-    end
-  end
-
   describe '#destroy?' do
     subject { policy.apply(:destroy?) }
 

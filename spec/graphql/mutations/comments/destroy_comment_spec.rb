@@ -4,15 +4,19 @@ require 'rails_helper'
 
 RSpec.describe Mutations::DestroyCommentMutation, type: :request do
   describe '.resolve' do
-    let(:author) { create(:user) }
-    let(:card) { create(:card, author: author) }
-    let(:comment) { create(:comment, author: author, card: card) }
+    let(:user) { create(:user) }
+    let(:comment) { create(:comment, author: user) }
+    let_it_be(:destroy_permission) { create(:permission, identifier: 'destroy_comment') }
     let(:request) { post '/graphql', params: { query: query(id: comment.id) } }
 
-    before { sign_in author }
+    before do
+      create(:comment_permissions_user, permission: destroy_permission,
+                                        user: user, comment: comment)
+    end
+    before { sign_in user }
 
     it 'deletes a comment' do
-      expect { request.to change { Comment.count }.by(-1) }
+      expect { request }.to change { Comment.count }.by(-1)
     end
 
     it 'returns a comment' do

@@ -37,20 +37,28 @@ RSpec.describe User, type: :model do
       expect(user).to respond_to(:action_items)
     end
 
-    it 'has many board permissions users' do
-      expect(user).to respond_to(:board_permissions_users)
-    end
-
     it 'has many board_permissions' do
       expect(user).to respond_to(:board_permissions)
+    end
+
+    it 'has many card_permissions' do
+      expect(user).to respond_to(:card_permissions)
+    end
+
+    it 'has many comment_permissions' do
+      expect(user).to respond_to(:comment_permissions)
+    end
+
+    it 'has many board permissions users' do
+      expect(user).to respond_to(:board_permissions_users)
     end
 
     it 'has many card permissions users' do
       expect(user).to respond_to(:card_permissions_users)
     end
 
-    it 'has many card_permissions' do
-      expect(user).to respond_to(:card_permissions)
+    it 'has many comment permissions users' do
+      expect(user).to respond_to(:comment_permissions_users)
     end
   end
 
@@ -155,6 +163,24 @@ RSpec.describe User, type: :model do
       context 'when permission exists' do
         let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
         before { create(:card_permissions_user, user: user, card: card, permission: permission) }
+
+        it { is_expected.to be true }
+      end
+
+      context 'when permission does not exist' do
+        it { is_expected.to be false }
+      end
+    end
+
+    context 'with comment permissions' do
+      let_it_be(:comment) { build_stubbed(:comment) }
+      subject { user.allowed?('some_identifier', comment) }
+
+      context 'when permission exists' do
+        let_it_be(:permission) { create(:permission, identifier: 'some_identifier') }
+        before do
+          create(:comment_permissions_user, user: user, comment: comment, permission: permission)
+        end
 
         it { is_expected.to be true }
       end

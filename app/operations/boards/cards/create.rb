@@ -14,7 +14,7 @@ module Boards
         card = Card.new(card_params)
 
         card.transaction do
-          BuildPermissions.new(card, user).call(identifiers_scope: 'author')
+          BuildPermissions.new(card, user).call(identifiers_scope: 'card')
           card.save!
         end
 

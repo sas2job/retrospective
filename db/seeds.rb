@@ -47,6 +47,7 @@ Membership.create([
 permissions_data = {
   view_private_board: 'User can view private board',
   create_cards: 'User can create cards on board',
+  create_comments: 'User can create comments on board',
   edit_board: 'User can edit board',
   update_board: 'User can update board',
   destroy_board: 'User can destroy board',
@@ -59,6 +60,9 @@ permissions_data = {
   destroy_card: 'User can delete a card on a board',
   update_card: 'User can update a card on a board',
   like_card: 'User can like a card on a board',
+  update_comment: 'User can update a card comment',
+  destroy_comment: 'User can delete a card comment',
+  like_comment: 'User can like a card comment',
   create_action_items: 'User can create action items on a board',
   update_action_items: 'User can destroy action items on a board',
   destroy_action_items: 'User can destroy action items on a board',
@@ -70,7 +74,7 @@ permissions_data = {
 
 errors = []
 
-(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::AUTHOR_IDENTIFIERS).each do |identifier|
+(Permission::CREATOR_IDENTIFIERS | Permission::MEMBER_IDENTIFIERS | Permission::CARD_IDENTIFIERS | Permission::COMMENT_IDENTIFIERS).each do |identifier|
   next if Permission.exists?(identifier: identifier)
 
   begin
@@ -119,3 +123,4 @@ ActionItem.create(body: 'actions should be taken', board_id: board1.id, author_i
 
 Rake::Task['permissions:create_missing_for_boards'].invoke
 Rake::Task['permissions:create_missing_for_cards'].invoke
+Rake::Task['permissions:create_missing_for_comments'].invoke
