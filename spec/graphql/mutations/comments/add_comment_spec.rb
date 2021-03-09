@@ -4,18 +4,23 @@ require 'rails_helper'
 
 RSpec.describe Mutations::AddCommentMutation, type: :request do
   describe '.resolve' do
-    let_it_be(:author) { create(:user) }
+    let_it_be(:user) { create(:user) }
     let_it_be(:board) { create(:board) }
-    let_it_be(:card) { create(:card, author: author, board: board) }
-    let_it_be(:creatorship) do
-      create(:membership, board: board, user: author, role: 'creator')
-    end
+    let_it_be(:card) { create(:card, author: user, board: board) }
+    let_it_be(:create_comments_permission) { create(:permission, identifier: 'create_comments') }
+
     let(:request) do
       post '/graphql', params: { query: query(card_id: card.id,
                                               content: 'Updated') }
     end
 
-    before { sign_in author }
+    before do
+      create(:board_permissions_user, permission: create_comments_permission,
+                                      user: user, board: board)
+    end
+
+    before { sign_in user }
+
     it 'adds a comment' do
       expect { request }.to change { Comment.count }.by 1
     end
@@ -29,7 +34,7 @@ RSpec.describe Mutations::AddCommentMutation, type: :request do
       expect(data).to include(
         'id' => be_present,
         'content' => 'Updated',
-        'author' => { 'id' => author.id.to_s }
+        'author' => { 'id' => user.id.to_s }
       )
     end
   end

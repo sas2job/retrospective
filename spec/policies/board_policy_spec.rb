@@ -164,7 +164,25 @@ RSpec.describe BoardPolicy do
       it { is_expected.to eq true }
     end
 
-    context 'when user does not have update_board permission' do
+    context 'when user does not have create_cards permission' do
+      it { is_expected.to eq false }
+    end
+  end
+
+  describe '#create_comments?' do
+    let_it_be(:create_comments_permission) { create(:permission, identifier: 'create_comments') }
+    subject { policy.apply(:create_comments?) }
+
+    context 'when user has create_comments permission' do
+      let!(:board_permissions_user) do
+        create(:board_permissions_user, permission: create_comments_permission,
+                                        user: user, board: board)
+      end
+
+      it { is_expected.to eq true }
+    end
+
+    context 'when user does not have create_comments permission' do
       it { is_expected.to eq false }
     end
   end
